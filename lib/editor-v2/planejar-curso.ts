@@ -30,7 +30,7 @@ import { lerPgnsDoEstudo } from "../repertorio/pgn.ts";
 import { idDaLinha } from "../repertorio/linhas.ts";
 import { gerarPgnDoEstudo, type PgnGerado } from "../repertorio/gerar-do-estudo.ts";
 import {
-  AULAS_DO_CURSO, TITULO_DA_AULA, chaveDoLance, comentarioDoRepertorio, lanceEscrito, lerComentario, lerCursoDeAbertura, marcaBoa, marcaRuim, semContadores,
+  AULAS_DO_CURSO, adversarioDo, chaveDoLance, comentarioDoRepertorio, lanceEscrito, lerComentario, lerCursoDeAbertura, marcaBoa, marcaRuim, semContadores, tituloDaAula,
   type AulaDoCurso, type AvisoDoCurso, type CapituloDoCurso, type LanceDoEstudo, type LeituraDoCurso, type Parada, type Percurso,
 } from "./curso-de-abertura.ts";
 import { idDaAulaDeAbertura, type CorDoCurso } from "./dominio.ts";
@@ -377,7 +377,7 @@ function montarTreinoGuiado(m: Montagem, leitura: LeituraDoCurso, bloco: AulaDoC
       const lance = lanceDoNo.get(filhoId)!;
       const feedback = nos[filhoId].comentario ?? "Isso.";
       const defesas = nos[filhoId].filhos;
-      if (defesas.length > 4) avisos.push({ codigo: "DEFESAS_DEMAIS", mensagem: `no treino guiado da aula ${ROTULO_DA_AULA[bloco]}, depois de ${lanceEscrito(lance)} há ${defesas.length} respostas das Pretas; o defensor gira só entre as 4 primeiras` });
+      if (defesas.length > 4) avisos.push({ codigo: "DEFESAS_DEMAIS", mensagem: `no treino guiado da aula ${ROTULO_DA_AULA[bloco]}, depois de ${lanceEscrito(lance)} há ${defesas.length} respostas das ${adversarioDo(leitura.cor)}; o defensor gira só entre as 4 primeiras` });
       const jogo = new Chess(copia[id].fen);
       jogo.move({ from: lance.uci.slice(0, 2), to: lance.uci.slice(2, 4), promotion: lance.uci.slice(4) || undefined });
       const efeito: RespostaTreinoV2["efeito"] = defesas.length
@@ -500,7 +500,7 @@ export function planejarCursoDeAbertura(texto: string, opcoes: OpcoesDoCurso): C
     const aula: AulaV2 = {
       schemaVersion: 2,
       id: idDaAulaDeAbertura({ cor: opcoes.cor, abertura: opcoes.abertura, bloco }),
-      titulo: `${opcoes.nomeDaAbertura} — aula ${ROTULO_DA_AULA[bloco]}: ${TITULO_DA_AULA[bloco]}`,
+      titulo: `${opcoes.nomeDaAbertura} — aula ${ROTULO_DA_AULA[bloco]}: ${tituloDaAula(bloco, opcoes.cor)}`,
       metadados: {
         orientacaoPadrao: opcoes.cor === "brancas" ? "white" : "black",
         criterioDominio: "D1",

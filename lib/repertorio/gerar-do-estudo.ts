@@ -62,7 +62,9 @@ export function fonteDoEstudo(leitura: LeituraDoCurso): string {
   const id = leitura.estudo.link?.match(/study\/([A-Za-z0-9]{8})/)?.[1];
   const evento = leitura.capitulos[0]?.partida.tags.Event ?? "";
   const versao = evento.match(/\bv\d+(?:\.\d+)*\b/)?.[0];
-  return ["estudo", id ?? "do Lichess", versao, leitura.estudo.nome ? `— ${leitura.estudo.nome}` : null].filter(Boolean).join(" ");
+  // Sem link, o estudo não veio do Lichess: é o arquivo local de `rascunhos/` (a Siciliana, 18/9/2026).
+  const origem = id ?? (leitura.estudo.link ? "do Lichess" : "local");
+  return ["estudo", origem, versao, leitura.estudo.nome ? `— ${leitura.estudo.nome}` : null].filter(Boolean).join(" ");
 }
 
 export function gerarPgnDoEstudo(leitura: LeituraDoCurso, dados: DadosDoRepertorio, agora = new Date()): PgnGerado {
@@ -132,7 +134,9 @@ export function gerarPgnDoEstudo(leitura: LeituraDoCurso, dados: DadosDoRepertor
   const preambulo = [
     `; GERADO — não editar. Sai de ${fonte}${leitura.estudo.link ? ` (${leitura.estudo.link})` : ""},`,
     `; por lib/repertorio/gerar-do-estudo.ts, em ${agora.toISOString().slice(0, 10)}.`,
-    "; Para mudar uma linha, um comentário ou um símbolo: corrija o estudo no Lichess e",
+    leitura.estudo.link
+      ? "; Para mudar uma linha, um comentário ou um símbolo: corrija o estudo no Lichess e"
+      : `; Para mudar uma linha, um comentário ou um símbolo: corrija content/repertorio/rascunhos/estudo-${cor}-${dados.abertura}.pgn e`,
     "; reimporte em /editor/v2/curso-de-abertura. Editar aqui se perde na próxima importação.",
   ].join("\n");
   return { texto: `${preambulo}\n\n${jogos.join("\n\n")}\n`, problemas, linhas: jogos.length, fonte };

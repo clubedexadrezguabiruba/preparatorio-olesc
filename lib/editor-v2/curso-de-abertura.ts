@@ -68,13 +68,20 @@ export function aulaDoCodigo(codigo: string): AulaDoCurso | null {
   return null;
 }
 
-export const TITULO_DA_AULA: Record<AulaDoCurso, string> = {
-  A: "A defesa e nossa arma",
-  B: "Armadilhas e punições",
-  C: "Quando as Pretas jogam bem",
-  D: "Partida modelo",
-  EF: "Treino final e revisão",
-};
+/** O adversário do curso, como o aluno lê: "as Pretas" num curso das brancas, e vice-versa. */
+export const adversarioDo = (cor: CorDoCurso) => (cor === "brancas" ? "Pretas" : "Brancas");
+
+/** O título de cada aula depende da cor: num curso das pretas, quem "joga bem" são as Brancas. */
+export function tituloDaAula(bloco: AulaDoCurso, cor: CorDoCurso): string {
+  const titulos: Record<AulaDoCurso, string> = {
+    A: cor === "brancas" ? "A defesa e nossa arma" : "Nossa defesa e nossa arma",
+    B: "Armadilhas e punições",
+    C: `Quando as ${adversarioDo(cor)} jogam bem`,
+    D: "Partida modelo",
+    EF: "Treino final e revisão",
+  };
+  return titulos[bloco];
+}
 
 // ---------------------------------------------------------------------------------------------
 // Marcadores (§13.3.5)

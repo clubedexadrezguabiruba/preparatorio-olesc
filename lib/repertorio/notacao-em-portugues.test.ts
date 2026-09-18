@@ -148,7 +148,8 @@ test("a tela devolve a prosa das aulas sem nenhum N, Q ou K sobrando", () => {
  *
  * Este teste não reprova um `R` novo: ele reprova quando a **conta** muda, que é
  * quando a decisão precisa ser relida. Dez torres em inglês nas aulas de
- * abertura contra vinte e nove reis já em português nas de finais foi o que
+ * abertura contra vinte e nove reis já em português nas de finais (46 desde a
+ * Siciliana, 18/9/2026, que nasceu em português) foi o que
  * mandou deixar a letra quieta; se um dia as torres passarem dos reis, a troca
  * automática passa a valer a pena e alguém tem de vir aqui refazer a conta.
  *
@@ -156,14 +157,17 @@ test("a tela devolve a prosa das aulas sem nenhum N, Q ou K sobrando", () => {
  * republicadas, `torres` cai para zero — e aí este teste é o que avisa que a
  * pendência fechou.
  */
-test("o `R` da prosa: dez torres em inglês contra vinte e nove reis em português", () => {
+test("o `R` da prosa: dez torres em inglês contra quarenta e seis reis em português", () => {
   const comR = prosaDasAulasPublicadas().filter((t) => t.lance.startsWith("R"));
-  const torres = comR.filter((t) => t.aula.startsWith("AB-"));
-  const reis = comR.filter((t) => !t.aula.startsWith("AB-"));
+  // Só a Francesa escreve a prosa em inglês. A Siciliana (18/9/2026) já nasceu em português: o `R`
+  // dela é rei (14.Rd2, 10...Rxf7), como nas aulas de finais.
+  const torres = comR.filter((t) => t.aula.startsWith("AB-BRANCAS-FRANCESA"));
+  const reis = comR.filter((t) => !t.aula.startsWith("AB-BRANCAS-FRANCESA"));
 
   assert.deepEqual([...new Set(torres.map((t) => t.lance))], ["Rg1"], "a única torre escrita em inglês na prosa");
   assert.equal(torres.length, 10, "pendência: viram Tg1 no estudo, e as aulas B e E+F republicam");
-  assert.equal(reis.length, 29, "os reis das aulas de finais já estão em português e passam intactos");
+  // 29 até 18/9/2026, só os de finais; mais 17 reis da Siciliana.
+  assert.equal(reis.length, 46, "os reis das aulas de finais e da Siciliana já estão em português e passam intactos");
   assert.ok(reis.length > torres.length, "enquanto houver mais rei que torre, a tela não troca o R");
 
   for (const rei of reis) assert.equal(textoEmPortugues(rei.lance), rei.lance, `${rei.aula}: ${rei.lance} é rei e tem de passar inteiro`);
@@ -240,14 +244,15 @@ test("os nomes que tinham torre e rei em inglês saem certos, um por um", () => 
   }
 });
 
-test("o desempate do nome de linha cobre os onze `R` e `K` do repertório", () => {
+test("o desempate do nome de linha cobre os dezesseis `R` e `K` do repertório", () => {
   const comRouK = linhasCompiladas().flatMap(({ arquivo, linha }) =>
     (linha.nome.match(LANCE_QUALQUER) ?? [])
       .filter((l) => /^[RK]/.test(l))
       .map((lance) => ({ arquivo, lance, nosSans: new Set(linha.sans).has(lance), nome: linha.nome })),
   );
 
-  assert.equal(comRouK.length, 11, "a conta de 17/9/2026; mudou, releia o cabeçalho de `textoEmPortugues`");
+  // 11 em 17/9/2026; 16 desde 18/9/2026, com as 74 linhas da Siciliana. Todos seguem nos lances da própria linha.
+  assert.equal(comRouK.length, 16, "a conta de 18/9/2026; mudou, releia o cabeçalho de `textoEmPortugues`");
   assert.deepEqual(
     comRouK.filter((t) => !t.nosSans).map((t) => `${t.arquivo}: ${t.lance} em «${t.nome}»`),
     [],

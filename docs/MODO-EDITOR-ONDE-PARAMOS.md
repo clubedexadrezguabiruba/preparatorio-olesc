@@ -7451,3 +7451,41 @@ frase — "o rei preto em g8 não tem casa" —, que é mudança de fala e não 
 
 Com a regra nova, o rei mateado devia estar em vermelho nos oito. **Não foi feito:** pôr os oito é
 autoria, não restauração, e o Doug decidiu um caso nomeado. Fica a lista.
+
+## Siciliana no modelo da Francesa — Dragão Acelerado, 18/9/2026 (madrugada)
+
+Plano em `~/.claude/plans/quero-arrumar-as-aberturas-quiet-hamster.md` (decisões do Doug: eu escrevo o estudo, faixa
+Lichess 1000–1800, commit só dos arquivos de abertura). Executado direto, sem paradas.
+
+**Passo 0 — leitor para curso das Pretas.** `TITULO_DA_AULA` virou `tituloDaAula(bloco, cor)` e o aviso
+`DEFESAS_DEMAIS` usa `adversarioDo(cor)`: num curso das Pretas a aula C é "Quando as Brancas jogam bem". A Francesa
+não muda. Teste em `planejar-curso.test.ts` ("curso das Pretas…"): antes ✖ `Mini — aula C: Quando as Pretas jogam
+bem`; depois 43/43 no par `planejar-curso` + `curso-de-abertura`. `gerar-do-estudo.ts`: estudo sem link sai como
+`estudo local v1.0 — …`, e o preâmbulo manda corrigir o arquivo de `rascunhos/`, não o Lichess.
+
+**Passo 1 — o estudo.** `content/repertorio/rascunhos/estudo-pretas-siciliana.pgn`, 54 capítulos, escrito a partir do
+rascunho do ChatGPT (auditado) e das fontes: A (00, A00, A01), B (B02 respostas; B03–B10 oito golpes: Plichta #7, #8,
+#10, #11, #4, #5, #1 e o ataque cedo em f7; B11 laboratório com 7 CASOS; B12 quando o golpe não funciona — bispo em
+b3), C (C13–C25: troca em c6, linha principal, bispo em b3, Maróczy com 7.Cb5/7.Cb3/8.Cc3 no mesmo capítulo, bispo em
+c4 cedo, Alapin, Rossolimo, 2.Cc3, Grande Prêmio/3.Bb5/Fechada, 2.d4 3.Dxd4, Smith-Morra, 2.f4, esqueci a teoria),
+D26 Mazi × Mohr 1997 (banco de mestres do Lichess, `oCjpswlb`), E27 encontre o lance, E28A–X move trainer, F29.
+Linhas sem fonte têm `[REFERENCIA]` com o número do Stockfish 18 (3.Dh5 e6 +0,93; 3.Df3 Cf6 4.c3 Ce5 +1,24;
+3.Bxf7+ +2,52; 4.Cg5 e6 +1,07; 8.Bb3 Cxe4? brancas +2,23; 9.Ce2?? Db4+ +3,64; 9.Cf5?? Dxb2 +3,55; 9.Dd2? Cxe4 +1,01;
+4.cxd4 Cxe4 +0,64). Medido no banco 1000–1800: 4.Cg5 é 19% depois de 2.Bc4 Cc6 3.Cf3 Cf6, e 3.Dxd4 é 53% depois de
+2.d4 cxd4 — os dois entraram. Smith-Morra recusado com link público (Chess.com e Chessable).
+Números: leitor **0 lances ilegais, 0 marcadores desconhecidos**; símbolos do Plichta que estão em posições do
+estudo: **0 faltando** (o 9.f3! foi devolvido); 6 avisos `DEFESAS_DEMAIS` do planejador, informativos (mais de 4
+respostas das Brancas em 1...c5, 2...Cc6, 4...g6 e 6...Cf6; o treino guiado gira entre 4, o move trainer tem todas).
+
+**Passo 2 — o move trainer.** `pretas-siciliana.pgn` agora é gerado do estudo: 6 → **74 linhas**; **morrem 0** — os
+6 ids antigos continuam (as linhas foram copiadas lance a lance, com os irmãos marcados 5...dxc6?! e os cinco do
+2.c3). `marcas-das-fontes.test.ts` 3/3.
+
+**Passo 3 — publicado.** `AB-PRETAS-SICILIANA-{A,B,C,D,EF}` pelo caminho de script da tela (planejar 2× idêntico →
+gravar → conferir → preparar → publicar). Conferência das 5: **verde, 0 erros, 0 avisos** (três falas passavam de 20
+palavras e foram encurtadas). Paradas por aula: A 5, B 35, C 45, D 0, E+F 6; linhas do move trainer: 3, 23, 48, 0,
+74. Publicações: A `pub-6ad29473ca03ace0`, B `pub-a47c3415f111cb8b`, C `pub-677fb0ecdbc77d83`, D
+`pub-6fe39bdbce9c84ef`, EF `pub-865dbaf2135bb67a`.
+
+**Pendente:** o Doug testar com a mão (arrastar só se prova com a mão); a aula C é longa (13 capítulos, 45 paradas) —
+decidir se divide; Escocesa (passo 4) para a `FILA-DO-DOUG.md`.

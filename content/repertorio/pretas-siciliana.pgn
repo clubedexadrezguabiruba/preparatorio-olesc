@@ -1,379 +1,1578 @@
-; ESTICADAS EM 8/9/2026 pela régua do término (seção 24 do docs/REVISAO-FONTES.md).
-; As seis linhas tinham 8, 7, 11, 8, 6 e 11 lances nossos; agora têm 12, 14, 14,
-; 12, 13 e 12. Quatro fecham inteiras; duas terminam com [%plano].
-;
-; Cinco das seis caudas são DEGRAU 0 em quase toda a extensão — o Plichta e o
-; Sielecki continuam jogando e explicando muito além de onde as linhas paravam.
-; A variante do 5.Cxc6 que a §17 dava por perdida é justamente uma delas: o
-; Plichta cobre os dez lances da cauda, com prosa em todos.
-;
-; Duas ESCOLHAS DECLARADAS, as duas contra o curso e as duas pela régua: no
-; Dragão do 2.Cc3 e na Alapin o roque entra no lugar do lance de reagrupamento
-; que o curso joga. Na Alapin custa zero centésimos; no Jobava do outro arquivo,
-; 33. As tags [Fonte] dão a conta de cada uma.
-;
-; Siciliana pelas pretas. Um jogo por sistema: Dragão Acelerado, Rossolimo,
-; 2.Cc3, Alapin e o Morra declinado.
-;
-; O que NÃO está aqui é decisão, e é a maior deste arquivo: o ramo do bispo em
-; c4 — 2.Bc4 e 2.Cf3 Cc6 3.Bc4, ~31 por cento das sicilianas — saiu do treinador
-; e virou página de princípios, em content/repertorio/notas.json, slug
-; "bispo-em-c4". Ele era o mais frequente do repertório inteiro e mesmo assim
-; não rende linha: depois de 2.Bc4 Cc6 as quatro respostas mais comuns das
-; brancas somam 73,2 por cento, o número mais espalhado da tabela da seção 6, e
-; nenhum dos onze cursos do corpus entra na posição — os autores escrevem para
-; 1200+, e nessa faixa o lance quase não aparece. Decorar oito meios-lances de
-; uma posição que se dispersa em quatro não ensina nada; a ideia ensina, e cabe
-; numa frase: ...e6 fecha a diagonal c4-f7 e prepara o ...d5 que expulsa o
-; bispo. Seção 16 do docs/REVISAO-FONTES.md.
+; GERADO — não editar. Sai de estudo local v1.0 — Siciliana: Dragão Acelerado,
+; por lib/repertorio/gerar-do-estudo.ts, em 2026-09-18.
+; Para mudar uma linha, um comentário ou um símbolo: corrija content/repertorio/rascunhos/estudo-pretas-siciliana.pgn e
+; reimporte em /editor/v2/curso-de-abertura. Editar aqui se perde na próxima importação.
 
 [Abertura "siciliana"]
-[Nome "Siciliana — Dragão Acelerado"]
+[Nome "Siciliana: Dragão Acelerado"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), variantes #12 (9.h3) e #13 (9.f3 d5!). Os 16 meios-lances batem um a um com as duas. O draft do Grigoryan dá os mesmos lances mas tem zero prosa; o Plichta explica o 8...Te8 e nomeia o erro 8...Ca5?? 9.e5. Medido em 7/9/2026. || CAUDA DA §24 (8/9/2026), do 9.O-O ao 12...b5: DEGRAU 0 DO 9.O-O AO 11...a6 — o Plichta joga e comenta os seis lances. Dele são: a leitura do 9.O-O (com o bispo em b3 a intenção dele era rocar GRANDE e atacar; rocar curto é uma pequena vitória nossa); o 9...d6 como o lance mais flexível, ameaçando ...Cg4; o 10...Ca5 batendo no bispo de b3; e a sequência ...a6, ...b5, ...Bb7, ...Dc7, com a regra de quando aplicá-la (se ele joga devagar, siga; se ele ataca, largue tudo e responda). O 12.Tad1 e o 12...b5 são degrau 3 (23 e 10 jogos); o 12...b5 é a PRIMEIRA variante do motor na posição, igualdade. O [%plano] declara c8>b7, que é o terceiro item da sequência do próprio curso — e na variante principal do motor o bispo chega a b7 no lance 15. Ponta brancas +0,44 -> igual."]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Arma: ...Cc6 e ...g6"]
+[Categoria "arma"]
+[Ordem "1"]
+[Capitulo "E28A"]
 [Result "*"]
 
-1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. d4 cxd4 {Coma. Ele vai recapturar de peça, e não de peão — e é essa a troca que a Siciliana quer: sai o nosso peão da ala da dama, sai um peão central dele. A coluna c abre para a nossa torre, e é por ela que o nosso jogo corre o resto da partida.} 4. Nxd4 g6 {…g6, e não …d6. É daqui que vem o
-"Acelerado" do nome: o bispo vai para g7 e olha o tabuleiro inteiro pela
-diagonal grande, enquanto o peão de d7 fica guardado em casa para depois dar
-dois passos de uma vez.} 5. Nc3
-Bg7 {O bispo vai para a diagonal grande, e é ele que dá nome ao Dragão. De g7 ele
-atravessa o tabuleiro inteiro até a2, e mira justamente o cavalo de c3 dele — a
-peça que segura o centro. Guarde este bispo: ele é a melhor peça que você tem,
-e trocá-lo por qualquer cavalo é mau negócio.} 6. Be3
-Nf6 {Repare no que a gente NÃO joga: …d6. É disto que vem o "Acelerado" — o peão
-de d7 fica em casa o máximo possível, para depois dar os dois passos de uma vez.
-O curso é direto: desenvolvemos o cavalo, rocamos em seguida e jogamos …d5
-assim que ele deixar. E, segundo o autor, ele deixa.} 7. Bc4
-O-O {Rei seguro ANTES de bater no centro, e aqui a ordem não é conselho geral, é
-concreto: 7…d5 já, sem rocar, esbarra em 8.Bb5! e de repente todas as peças
-brancas fazem sentido. Rocando primeiro, mantemos tudo flexível e decidimos o
-plano depois de ver o oitavo lance dele.} 8. Bb3 Re8 {A torre sai para e8 preparando …e6 e depois …d5 de uma vez só. É este
-o motivo do nome "Acelerado": nós guardamos o peão de d7 em casa para jogá-lo
-dois passos num lance só, em vez de gastar …d6 e depois …d5 em dois.} 9. O-O
-d6 {Ele rocou pequeno, e o curso manda tratar isso como uma pequena vitória: com
-o bispo em b3, apontado para f7, a intenção dele era rocar GRANDE e atacar. Rocou
-curto, não vai haver ataque. Então o peão anda um passo só — é o lance mais
-flexível — e nós ameaçamos …Cg4.} 10. h3
-Na5 {Ele tapou a casa g4, e o cavalo muda de alvo na hora: de a5 ele bate no
-bispo de b3, que é a peça mais perigosa que ele tem. O plano que vem atrás está
-escrito no curso — …a6 e depois …b5, tomando conta do lado da dama.} 11. Qd2
-a6 {O plano em ação. O …a6 prepara o …b5, e o …b5 prepara o …Bb7: as três coisas
-são um lance só, dividido em três. E o curso dá a regra que vale para a linha
-inteira — se ele jogar devagar, siga com o contrajogo do lado da dama; se ele
-começar um ataque, largue tudo e responda ao ataque.} 12. Rad1
-b5 {O segundo dos três lances, e ele é o melhor da posição segundo o motor. O
-peão em b5 tira do bispo de b3 a casa c4 e prepara a última peça a sair — o
-bispo de c8, que vai para b7 e passa a olhar a diagonal grande inteira. Conte a
-posição: rei no canto desde o sétimo lance, três peças pequenas fora e os peões
-da ala da dama andando. Falta uma peça, e o comentário aqui embaixo diz onde ela
-mora.
-[%plano
-c8>b7: o proprio curso escreve a sequencia — ...a6, ...b5, ...Bb7 e ...Dc7 — e na variante principal do motor nesta posicao o bispo chega a b7 no lance 15, depois de ...Dc7 e ...e6 abrirem espaco
-]} *
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+*
 
 [Abertura "siciliana"]
-[Nome "Siciliana — Dragão Acelerado, o 5º lance dele"]
+[Nome "Siciliana: Dragão Acelerado"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "5.Be3 e 5.Bc4: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), tronco 5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O das variantes #2 a #13. As duas transpõem para ele: a do 5.Be3 volta a bater em 6...Bg7 e a do 5.Bc4 em 7.Cc3, e é ali que o curso explica o Be3 (o único lance que defende o cavalo de d4 e desenvolve no mesmo tempo) e o roque (preferido ao 7...Da5 que o autor jogou por anos). O motor prefere 6...Da5+ nas duas, cerca de um terço de peão melhor; repetir os lances do curso foi escolha de propósito, para não acrescentar ideia nova. Conferido em 7/9/2026. || 5.Cxc6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 3 da seção 8 de docs/REPERTORIO.md: 5.Cxc6 é 36 por cento das respostas a 4...g6, mais que o 5.Cc3. O 5...bxc6 empata e o 5...dxc6 fica meio peão atrás. O Plichta cobre o 5.Cxc6 na variante #5, mas sai da nossa linha no 8.Cc3 dele; ver a seção 17 de docs/REVISAO-FONTES.md. || CAUDA DA §24 (8/9/2026), do 8.e6 ao 14...Dxe8+: DEGRAU 0 DO 8.e6 AO 12...Bb4+ — o Plichta joga e comenta os dez lances, e a variante dele que a §17 dava por perdida É ESTA. Dele são: a lista das regras que as brancas quebram para chegar aqui (mesmo cavalo três vezes, mesmo peão três vezes, dama cedo, sem desenvolver); a escolha de TAPAR com 8...Cf6 em vez de comer com o peão; o rei em f7 sendo relativamente seguro, com o roque artificial ...Rg7 vindo depois; o 10...d5 obrigando-o a escolher entre trocar damas e jogar com o rei no centro; e o 12...Bb4+ com o aviso de que o ...Te8 vem a seguir com consequências fatais. Do 13.c3 em diante é degrau 2 (660, 375 e 342 jogos) e os lances são forçados: o 13...Te8 é 99,7 por cento e vale +4,01, e o 14...Dxe8+ é 99,6 por cento e vale +4,38. O [%plano] tem DUAS entradas, e as duas vêm do curso: rei-fica porque o rei comeu em f7 e o roque artificial é ...Rg7, e c8>f5 para o bispo que ainda não saiu. Ponta igual -> pretas +4,85."]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Esquema: ...Bg7, ...Cf6, roque e ...d5 — d5"]
+[Categoria "esquema"]
+[Ordem "2"]
+[Capitulo "E28B"]
 [Result "*"]
 
-1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. d4 cxd4 {Coma. Ele vai recapturar de peça, e não de peão — e é essa a troca que a Siciliana quer: sai o nosso peão da ala da dama, sai um peão central dele. A coluna c abre para a nossa torre, e é por ela que o nosso jogo corre o resto da partida.} 4. Nxd4 g6 {Os mesmos …g6 e …Bg7 da linha de
-cima. Este jogo reúne os quintos lances dele que não são o 5.Cc3 — e a graça é
-que quase todos dão na mesma posição, com os lances em outra ordem.} 5. Nxc6
-5... bxc6 (5... dxc6 $6) {Repare em qual peão recaptura. Com o de b7 os nossos peões ficam
-feios, mas o de d7 continua livre para ir a d5 ou d6; com o de d7 o motor põe as
-brancas meio peão à frente, porque a nossa dama sai do tabuleiro e o rei não
-roca mais.} 6. Qd4
-Nf6 {Cerca de um em cada cinco entra em pânico aqui e joga 6…f6, que enfraquece
-o rei de graça. Não precisa: desenvolva. Sim, o cavalo vai ser expulso na hora
-com 7.e5 — mas ele vai para uma casa melhor do que a de agora, e enquanto isso
-a dama dele em d4 é que vai ter de se explicar.} 7. e5 Nd5 {O cavalo vai para d5 no estilo Alekhine, e o curso avisa: não o
-ponha em h5 nem o devolva a g8, que é o que a maioria faz — as duas dão às
-brancas jogo excelente. De d5 ele fica no meio do tabuleiro, e é ELE quem tem de
-tomar cuidado agora para igualar.} 8. e6
-Nf6 {Ele empurra o peão até e6 para atrapalhar tudo, e o curso escolhe TAPAR a
-diagonal com o cavalo em vez de comer com o peão de f7. O motivo é de gosto
-declarado — depois de 8…f6 a posição vira uma bagunça, e depois de 8…Cf6 vira
-uma bagunça em que nós é que mandamos no ritmo.} 9. exf7+
-Kxf7 {O rei come em f7, e é seguro ali: repare em quantas regras ele já quebrou
-para chegar aqui — mexeu no mesmo cavalo três vezes, no mesmo peão três vezes,
-tirou a dama cedo e não desenvolveu ninguém. O nosso rei anda um passo e depois
-vai para g7, atrás do bispo; é o que o curso chama de roque artificial.}
-10. Bc4+
-d5 {Tape o xeque ganhando o centro. O peão em d5 fecha a diagonal do bispo e
-constrói a parede de peões que o rei em f7 precisa. E repare no que a jogada faz
-com ele: ou ele aceita a troca de damas, ou joga com o rei no meio do tabuleiro
-— e nenhuma das duas era o que ele queria.} 11. Bb3
-e5 {O segundo peão da parede, e ele vem com uma oferta: o peão de e5 está
-atacado pela dama de d4. Se ele comer, cai na conta que vem nos próximos três
-lances. É o preço de a dama dele estar no meio do tabuleiro desde o sexto
-lance.} 12. Qxe5
-Bb4+ {E aqui está a cobrança. O bispo sai com xeque, e o xeque é o que dá tempo
-para o lance seguinte — …Te8, pregando a dama contra o rei dele. O curso escreve
-isso com todas as letras: o …Te8 vem a seguir, com consequências fatais.}
-13. c3
-Re8 {A torre entra na coluna e e prega a dama contra o rei em e1. Ela não tem
-para onde ir que não custe: qualquer casa em que ela pare continua na coluna, e
-a única saída é comer a torre — o que devolve dama por torre.} 14. Qxe8+
-Qxe8+ {Recapture com a dama, e conte o material: ele deu a dama por uma torre.
-O motor dá quatro peões e meio de vantagem para as pretas. O rei em f7 não vai
-rocar nunca mais, e o bispo de c8 ainda está em casa — o comentário aqui embaixo
-diz o que fazer com os dois.
-[%plano
-rei-fica: o rei comeu em f7 no nono lance e perdeu o direito ao roque ali; o endereco dele e g7, atras do bispo, e o proprio curso chama isso de roque artificial
-c8>f5: com a dama fora do tabuleiro e a coluna e aberta, o bispo sai para f5 assim que o rei chegar a g7 e a torre de a8 tiver casa
-]} *
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+*
 
 [Abertura "siciliana"]
-[Nome "Siciliana — Rossolimo 3.Bb5"]
+[Nome "Siciliana: Dragão Acelerado"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Rossolimo', a do 4.Bxc6 dxc6 5.d3 Bg7 6.h3 Dc7. Os 22 meios-lances batem um a um com o curso, que segue além até o 14...g5. Executa a decisão da seção 13 de docs/REVISAO-FONTES.md, de 7/9/2026: o Rossolimo passa a ser do Sielecki e sai do draft 'Nightmare of Rossolimo' do Grigoryan, que dava o tronco 6.h3 Cf6 7.Cc3 Cd7 8.Be3 e5 sem explicar lance nenhum. Dele são: o motivo do 4...dxc6 (o peão de c6 toma conta de d5, então o defeito habitual da estrutura Botvinnik não existe nesta versão); o 6...Dc7 e o abandono do ...Cf6 cedo, que ele descreve como mudança do próprio campeão do mundo em 2019 — jogar antes os lances úteis e só depois decidir onde o cavalo fica, o que abre o ...Cf6-h5 que o caminho antigo tornava impossível; o motivo do h3 DELE; os dois trabalhos do 9...h6; e a leitura do 11...f5. DECLARADO, com o número: o motor NÃO prefere esta troca. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 6.h3 — o nosso 6...Cf6 antigo dá brancas +0,34 e o 6...Dc7 do curso dá +0,43. A troca é de fonte, não de posição, e o Doug decidiu assim em 7/9/2026 sabendo desses nove centésimos. || CAUDA DA §24 (8/9/2026), do 12.Dc1 ao 14...g5: DEGRAU 0 DO PRIMEIRO AO ÚLTIMO LANCE — o Sielecki joga os seis e comenta dois. Dele são: o motivo do 12.Dc1 (a dama antecipa a abertura da ala da dama e mira b2 ou a3, e precisava sair de qualquer jeito porque o ...f4 vinha); e a leitura da posição final — as pretas têm boas chances do lado do rei e é ELE quem precisa provar alguma coisa do outro lado, porque o rei dele é o alvo. O [%plano] tem DUAS entradas. c8>b7: a casa já está aberta desde o ...b6 do oitavo lance. rei-fica: quem está empurrando os peões da ala do rei somos nós, então rocar para g8 seria pôr o rei no meio do nosso próprio ataque — o endereço dele é f7 ou d8. Ponta igual -> igual."]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Esquema: ...Bg7, ...Cf6, roque e ...d5 — Nf6"]
+[Categoria "esquema"]
+[Ordem "3"]
+[Capitulo "E28B"]
 [Result "*"]
 
-1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. Bb5
-g6 {Contra o Rossolimo há dois caminhos, …e6 e …g6, e o campeão do mundo jogou
-os dois — mas na esmagadora maioria das partidas ele fianchetou. É o que fazemos
-aqui, e o motivo aparece nos próximos lances: o bispo vai para g7 e nós montamos
-a estrutura Botvinnik, com peões em c5 e e5, que é a favorita dele.}
-4. Bxc6 dxc6 {Ficamos com peão dobrado em c5 e c6,
-e isso não é problema: o de c6 toma conta de b5 e de d5, que são exatamente as
-duas casas de onde o cavalo dele gostaria de incomodar. Peão feio que faz
-trabalho não é peão fraco.} 5. d3
-Bg7 {A melhor peça da posição vai para a melhor casa que ela tem. E repare no
-que o …dxc6 do lance anterior fez por ela: com o peão em c6 tomando conta de
-d5, o cavalo dele não tem casa de onde incomodar essa diagonal.} 6. h3
-Qc7 {A dama sai antes do cavalo, e é aí que está a ideia inteira. O caminho
-antigo — o que este arquivo jogava até 7/9/2026 — era …Cf6 e depois …Cd7: dois
-lances com o mesmo cavalo, só para abrir a diagonal do bispo de g7 antes do
-…e5. O Sielecki conta que o campeão do mundo jogou assim durante anos e mudou em
-2019. Primeiro os lances que são úteis de qualquer jeito — a dama em c7, que já
-apoia o …e5 que vem —, e só depois se decide onde o cavalo fica. Guardar a
-decisão abre casas que o caminho antigo fechava: o cavalo pode ir a f6 e de lá a
-h5, o que é impossível quando ele já teve de recuar para d7.} 7. Nc3
-e5 {Agora sim. O …Dc7 esperava ele se comprometer, e o 7.Cc3 é o compromisso:
-com o cavalo em c3 ele não vai mais montar o plano de Cb1-d2-c4, e avisa que não
-tem pressa de rocar pequeno. Então fechamos a estrutura Botvinnik — peões em c5
-e e5, o centro travado — e o nosso jogo passa a ser o …f5, mais adiante.}
-8. Be3
-b6 {Lance pequeno e obrigatório: o bispo que ele acabou de pôr em e3 está
-olhando para o nosso peão de c5, e ninguém defendia aquele peão. Agora defende.
-De brinde, o …b6 abre a casa b7 para o bispo de c8, que é a peça que ainda não
-tem endereço.} 9. Qd2
-h6 {Um lance pequeno com dois trabalhos, e os dois são do curso. O primeiro: tira
-o Bh6 da jogada. Assim que o nosso cavalo de g8 sair, o bispo dele iria a h6
-oferecer a troca do nosso bispo de g7 — que é a melhor peça desta estrutura, o
-dono da diagonal grande. O segundo é mais simples: o peão em h6 toma conta de
-g5.} 10. a3
-Ne7 {Só agora o cavalo escolhe onde morar, e escolhe e7 em vez de f6 — que é o
-ponto de toda a linha. De e7 ele vai a g6, apoia o …f5 e, principalmente, NÃO
-tapa a casa f6, por onde o peão de f7 tem de passar. Ele gastou os lances 10 e
-11 preparando o avanço b4 no flanco da dama; nós gastamos os nossos preparando o
-avanço na ala do rei. Cada um no seu lado, e o nosso lado é o do rei dele.}
-11. b4
-f5 {Cada um ataca de um lado, e o nosso é o lado do rei dele. Ele gastou os
-lances 10 e 11 em a3 e b4, mirando o nosso peão de c5; nós gastamos os mesmos
-dois em …h6 e …Ce7, e agora vem o …f5. Repare no que torna esse lance possível:
-com um cavalo em f6, o peão de f7 não teria por onde passar — f6 é a casa que
-ele precisa atravessar. Foi o …Dc7 do lance 6 que deixou o cavalo livre para ir
-a e7 em vez de f6, e é aqui que aquele lance de dama se paga.} 12. Qc1
-f4 {Ele tirou a dama de d2 porque o …f4 vinha de qualquer jeito, e agora ele
-vem. O peão trava o bispo de e3 fora do jogo e fecha o centro de vez: com peões
-em e5, f4, c5 e h6, não há mais nada para acontecer do lado da dama sem que a
-gente deixe. A partir daqui a partida é uma corrida de peões, e a nossa já
-começou.} 13. Bd2
-cxb4 {Abra a coluna c ANTES de empurrar mais peões do lado do rei. É a mesma
-ideia do repertório inteiro vista pelo outro lado: quando os dois vão atacar em
-lados opostos, cada troca no lado dele é uma linha aberta para as nossas peças e
-um lance a menos para ele.} 14. axb4
-g5 {E o ataque começa de verdade. O curso fecha a variante aqui dizendo que as
-pretas têm boas chances do lado do rei e que ele é quem tem de provar alguma
-coisa do outro lado — porque o rei DELE é o alvo. Duas peças nossas ainda não
-estão no lugar, e o comentário aqui embaixo diz onde elas ficam.
-[%plano
-c8>b7: o ...b6 do oitavo lance ja abriu a casa, e o bispo vai para b7 assim que a coluna c aberta deixar de pedir a torre de a8 naquele canto
-rei-fica: quem esta empurrando os peoes da ala do rei somos nos, entao rocar para g8 seria por o rei bem no meio do nosso proprio ataque; o endereco dele e f7 ou d8, atras dos peoes que nao andaram
-]} *
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Be3 {A ordem muda, a posição não.} 5... Bg7 6. Nc3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+*
 
 [Abertura "siciliana"]
-[Nome "Siciliana — Rossolimo com 4.O-O"]
-[Cor "pretas"]
-[Nivel "avancado"]
-[Fonte "Recomendação do professor, assinada pelo Doug em 7/9/2026 — a segunda do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md). O argumento tem três pernas, e as três estão medidas. (1) A fonte natural desta posição declara que está chutando: no 5.c3, o IM Christof Sielecki ('Short & Sweet: Magnus Sicilian', variante 'S&S Magnus Sicilian - Rossolimo' do 4.O-O) escreve que o lance 'ainda não foi tentado contra o Magnus Carlsen, então não sabemos o que ele teria planejado', e que ELE decidiu recomendar 5...e5 por coerência com o resto do curso dele. (2) O motor põe a nossa linha inteira como variante principal: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 5...Cf6 dá brancas +0,32 com a continuação 6.Te1 O-O 7.d4 d5 8.e5 Ce4, que é esta linha lance por lance até o fim; o 5...e5 do curso dá +0,34 e fica em segundo. (3) A linha do curso pede que o aluno segure um peão a mais contra compensação que o próprio autor declara suficiente, por um 8...a6 que ele chama de 'menos comum' e apostando que as brancas não saberão conduzir a posição sem preparação de computador, e termina com o rei preto em f8 sem direito a roque. Não é posição para 12 a 15 anos. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 de docs/REPERTORIO.md. || CAUDA DA §24 (8/9/2026), do 9.Cbd2 ao 12...gxf5: o curso já não acompanha desde o quinto lance, então a cauda inteira sai da escada. Degrau 1 no 9.Cbd2 (276 jogos), degrau 2 no 9...Bf5 e degrau 3 do 10.Cxe4 em diante — 33, 15, 8, 6 e 4 jogos. ESCOLHA DECLARADA no 9...Bf5: o 9...cxd4 é o mais jogado (42,6 por cento) e vale 13 centésimos a mais para nós; o 9...Bf5 resolve o bispo de c8, que é a peça que a Siciliana sempre deixa para trás, e sem ele a linha não fecha a régua. Treze centésimos não decidem partida nesta faixa. Fecha no lance 12, sem [%plano]. Ponta brancas +0,36 -> igual."]
-[Result "*"]
-
-1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. Bb5
-g6 {O mesmo fianqueto da outra linha do Rossolimo, e pelo mesmo motivo: contra
-3.Bb5 há dois caminhos, …e6 e …g6, e o campeão do mundo escolheu o fianqueto na
-esmagadora maioria das partidas. O Sielecki para de nos acompanhar dois lances
-adiante; até aqui a citação é dele.} 4. O-O
-Bg7 {O bispo na diagonal grande. Ele não trocou em c6 — guardou o bispo e rocou
-—, e o curso trata o …Bg7 como a resposta natural: seja o que for que ele
-prepare, esta peça vai para g7 de qualquer jeito. É a diferença entre um lance
-que responde e um lance que a gente jogaria de todo modo.} 5. c3 Nf6 {O c3 dele anuncia o que vem:
-d2-d4 e um centro grande de peões. Nós desenvolvemos e ficamos de olho — no
-lance em que o peão pisar em d4, respondemos …d5 na hora, antes que esse centro
-tenha tempo de crescer.} 6. Re1
-O-O {Rei para o canto enquanto ele arruma a torre. Este é o último lance
-tranquilo da linha, e é bom gastá-lo com o rei: no próximo ele empurra d4, o
-centro abre, e a partir daí quem ainda estiver com o rei no meio joga o resto
-apavorado.} 7. d4
-d5 {AGORA, no mesmo lance. O peão pisou em d4 e nós respondemos …d5 na hora,
-antes que ele consiga somar c3, d4 e e4 num centro grande. Esperar um lance que
-fosse já seria tarde. Medido no Stockfish 18 lite-single, profundidade 20, em
-7/9/2026: esta linha inteira — 5…Cf6 6.Te1 O-O 7.d4 d5 8.e5 Ce4 — é a variante
-PRINCIPAL do motor, brancas +0,32, e fica à frente do 5…e5 que o curso
-recomenda, +0,34.} 8. e5
-Ne4 {Ele guardou o bispo e montou o centro com c3 e d4. A resposta é …d5 na
-hora, antes que esse centro fique grande. Depois de 8.e5 o cavalo pula para e4:
-casa central, defendida, e para expulsá-lo dali ele só tem f3 — que abre a casa
-do próprio rei.} 9. Nbd2
-Bf5 {O bispo que ainda não tinha saído sai agora, e a casa é a melhor que ele
-vai ter na partida inteira: de f5 ele guarda o cavalo de e4 pela segunda vez.
-Há lances mais frequentes aqui — …cxd4 e …Cxd2 —, e o motor os põe treze
-centésimos à frente. A gente escolhe este porque ele resolve a peça que a
-Siciliana sempre deixa para trás, e treze centésimos não decidem partida
-nenhuma nesta faixa.} 10. Nxe4
-dxe4 {Recapture com o PEÃO, não com o bispo. Com o peão em e4 o cavalo de f3
-dele perde a melhor casa que tinha e o nosso bispo de f5 continua vivo; com o
-bispo, ficaríamos com um peão a menos no centro e o motor já dá quase um peão
-de vantagem para as brancas.} 11. Nh4
-cxd4 {Ele foi caçar o nosso bispo com o cavalo, e nós usamos o tempo para
-resolver o centro. Não corra atrás do bispo: ele vale o que valia, e o peão de
-d4 dele é que era o dono da posição.} 12. Nxf5
-gxf5 {Recapture com o peão de g, e não tenha medo do buraco: os peões e4 e f5
-formam uma dupla que toma conta de d3, e3, g4 e f3 — quatro casas centrais, e
-nenhum cavalo dele consegue pousar em nenhuma. Conte a posição: rei no canto
-desde o sexto lance, as quatro peças pequenas resolvidas, um peão passado em d4
-e o centro nosso. A abertura acabou.} *
-
-[Abertura "siciliana"]
-[Nome "Siciliana — 2.Cc3"]
+[Nome "Siciliana: Dragão Acelerado"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "2...Cc6 e 3.Cf3 g6: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), variantes #30 a #32. O curso recomenda o 2...Cc6 justamente para poder responder 3.Cf3 com 3...g6, e escreve que, ao pôr o cavalo em c3 cedo, as brancas abrem mão do Maróczy. A linha transpõe para o tronco do Acelerado a partir do 5.Cxd4. Conferido em 7/9/2026. || 3.Bc4 e6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...e6 é lance do motor e transpõe para a estrutura do bispo em c4, que saiu deste arquivo e virou a página de princípios de slug 'bispo-em-c4'; a ideia está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação. Nenhum curso do corpus entra no 3.Bc4 — ver a seção 17 de docs/REVISAO-FONTES.md. || CAUDA DA §24 (8/9/2026), do 7.Be2 ao 13...Bf5: DEGRAU 0 DO 7.Be2 AO 12...Bxf6 — o Plichta joga e comenta os doze lances, e são muitos comentários. Dele são: a regra de rocar PRIMEIRO e só então bater com ...d5; o ...d5 como o lance para o qual o Acelerado existe; o motivo de recapturar em c6 com o peão de b7 (a estrutura melhora e a coluna b abre); o ...Ce8 em vez do natural ...Cd7, com a linha concreta que refuta o segundo (11.f4 f6 12.Cxd5!); o ...f6 como o único contrajogo; e a escolha entre as TRÊS recapturas em f6, com o argumento de cada uma — ...exf6 obriga ao ...f5 depois e deixa e5 fraca para sempre, ...Cxf6 põe o cavalo na casa por onde o bispo quer passar, e o ...Bxf6 devolve o bispo à diagonal grande. O 13.Bd4 e o 13...Bf5 são degrau 3 (53 e 24 jogos), e o ...Bf5 é nomeado no plano do próprio curso (...Cd6, ...Bf5 e depois ...e5). Fecha a régua no lance 13, sem [%plano]. Ponta brancas +0,41 -> pretas +0,39."]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 1: f3 e Dd2 — Qh4+"]
+[Categoria "golpe"]
+[Ordem "4"]
+[Capitulo "E28C"]
 [Result "*"]
 
-1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nc3 Nc6 {Ele guardou o cavalo em c3 antes de abrir o centro. O curso
-responde …Cc6 e escreve o motivo: é este lance, e não outro, que nos deixa
-responder 3.Cf3 com 3…g6 e cair no Dragão Acelerado de sempre. Com um segundo
-lance qualquer, ele teria como nos empurrar para uma Siciliana aberta que você
-não treinou. Os dois lances que ele tem daqui levam a posições que já estão
-neste mesmo arquivo.} 3. Nf3
-g6 {O lance que o …Cc6 comprou. Ele voltou à ideia de abrir o centro com d4, e
-nós fianchetamos na hora: seja qual for a ordem, o que sai daqui é o Dragão
-Acelerado que você já treina na primeira linha desta página.} 4. d4
-cxd4 {Coma, como sempre. É a troca que a Siciliana quer — sai um peão nosso da
-ala da dama, sai um peão central dele, e a coluna c abre para a nossa torre. E
-guarde: nesta estrutura a gente pega em d4 com o PEÃO sempre que puder; comer
-com peça ali é entregar o centro de volta.} 5. Nxd4
-Bg7 {O bispo vai para a diagonal grande, e é ele que dá nome ao Dragão. De g7 ele atravessa o tabuleiro inteiro até a2, e mira justamente o cavalo de c3 dele — a peça que segura o centro. Guarde este bispo: ele é a melhor peça que você tem, e trocar ele por qualquer cavalo é mau negócio.} 6. Be3 Nf6 {Ele pôs o cavalo em c3 antes de d4 e
-mesmo assim caiu no Dragão Acelerado: esta é a mesma posição da linha do 5.Cc3,
-com os lances em outra ordem. E ele pagou caro pela ordem. O curso diz que o
-maior teste do Acelerado é o Maróczy, quando as brancas juntam um peão em c4 ao
-de e4 e o nosso …d5 nunca mais sai — só que, para chegar a c4, o peão de c2 tem
-de passar por c3, e o cavalo dele está justamente ali. Quem joga Cc3 cedo abre
-mão do Maróczy sozinho.} 7. Be2
-O-O {Rei primeiro, sempre. O curso é explícito: rocamos e SÓ ENTÃO batemos com
-o …d5. Na ordem contrária o …d5 leva um susto, e o susto custa a partida.}
-8. O-O
-d5 {Boom. É para este lance que o Dragão Acelerado existe: o peão dá os dois
-passos de uma vez, o que só é possível porque ele nunca gastou o …d6. O curso
-diz que aqui as pretas já igualaram e libertaram a posição, e ele tem razão —
-com o peão em d5 nós ameaçamos …dxe4 e …Cxe4, e ele é obrigado a responder.}
-9. Nxc6
-bxc6 {Recapture com o peão de b7. A nossa estrutura MELHOROU: o peão de c6
-segura d5, que é o nosso peão avançado, e a coluna b abre para a torre de a8. E
-já ameaçamos comer em e4.} 10. e5
-Ne8 {Para e8, e o curso avisa por quê: o natural é …Cd7, e aí vem 11.f4 f6
-12.Cxd5! e o peão de d5 cai com xeque no fim da conta. Em e8 o cavalo não fica
-bonito, mas fica seguro — e é ele que vai defender a casa f6 no lance seguinte.}
-11. f4
-f6 {O único contra-ataque que existe aqui, e o próprio curso diz que joga por
-falta de coisa melhor. O peão de e5 dele é a cabeça de tudo: enquanto ele
-estiver ali, o nosso bispo de g7 não enxerga nada. Então nós o atacamos.}
-12. exf6
-Bxf6 {Das três recapturas possíveis, esta. O curso explica as outras duas:
-…exf6 obriga a jogar …f5 depois para soltar o bispo, e o par de peões d5 e f5
-deixa a casa e5 fraca para sempre; …Cxf6 põe o cavalo justamente na casa por
-onde o bispo quer passar. Com …Bxf6 o bispo volta à diagonal grande e o cavalo
-de e8 continua livre para ir a g7 ou d6.} 13. Bd4
-Bf5 {O último bispo sai, e sai para a casa que o próprio curso nomeia no plano:
-…Cd6, …Bf5 e depois …e5. Conte a posição — rei no canto desde o sétimo lance,
-as quatro peças pequenas fora de casa, o peão em d5 firme no meio e os dois
-bispos apontados para o lado dele. A abertura acabou.} *
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Qd2 {As Brancas querem rocar grande e atacar. Qual é o nosso lance?} 8... d5
+$1 {O centro abre enquanto o rei dele ainda está em e1.} 9. Nxc6 $2 {Troca natural, mas ela melhora a nossa estrutura.}
+9... bxc6 10. e5 Nd7 {O cavalo sai do ataque e já olha para e5.} 11. f4 e6 $1 {O peão de e6 segura d5. Assim o nosso centro fica firme.}
+(11... f6 $2 {Parece ativo, mas 12.Cxd5! ganha o peão, que ficou sem o apoio de ...e6.})
+12. Na4 $2 {O cavalo foi para a borda e ficou sem defesa. Existe um golpe no peão de e5?}
+12... Nxe5 $1 {Se 13.fxe5, abre a diagonal da nossa dama até h4.} 13. fxe5 Qh4+ {Xeque, e no lance seguinte a dama pega o cavalo de a4 pela quarta fileira. É um garfo. Contra f3 e Dd2: roque, ...d5 e peças contra o centro. Se ele descuidar de e5: ...Cxe5! e ...Dh4+.}
+*
 
 [Abertura "siciliana"]
-[Nome "Siciliana — Alapin 2.c3"]
+[Nome "Siciliana: Dragão Acelerado"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "2.c3 e 2...Cf6: IM Andras Toth — 'Short & Sweet: 1.e4 for Club Players' (Chess.com). É repertório de BRANCAS, e é de propósito: quem explica o que o 2.c3 quer é quem o joga. O curso escreve que com 2.c3 as brancas sinalizam a vontade de tomar o centro inteiro com d2-d4, e que as duas respostas principais, 2...d5 e 2...Cf6, atacam e4 justamente para impedir esse par de peões. Do 6...Cc6 ao 11...Bxd6: IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Alapin'. Ele joga 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 d6 e escreve com todas as letras que a NOSSA ordem — 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 — chega na mesma posição; daí em diante bate lance a lance até o fim da nossa linha, que para dois meios-lances antes do fim da variante dele — o 12...Cb4, citado no comentário do 11...Bxd6 como o lance seguinte. Dele são: a observação de que os dois peões de c sumiram e por isso o c4 não existe para expulsar o cavalo de d5, escrita na posição depois do nosso 6...Cc6 e trazida para o comentário do 5...d6; o 8...Bd7, que ele prefere ao 8...dxe5 mesmo chamando este de linha principal das pretas, porque guarda mais chances de jogar para ganhar e foi o que o campeão do mundo jogou; e o motivo da troca de peças menores que ele escreve no 12...Cb4 — dominar as casas claras, em especial d5, a que fica na frente do peão isolado. DECLARADO: o comentário do 9...e6 é NOSSO. O curso joga o lance sem explicá-lo, e o número é do Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 9...e6 é o único lance que segura a igualdade, o natural 9...exd6 põe as brancas +0,35 e o 9...a6, +0,55. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha terminava em 8...dxe5, com o argumento do peão isolado escrito por nós e a pendência declarada nesta tag. O professor recusou assinar aquele argumento e mandou seguir o curso. O peão isolado de d4 não se perdeu na troca: ele continua isolado na posição final, e agora quem ensina a cobrá-lo é o Sielecki. || CAUDA DA §24 (8/9/2026), do 12.Cc3 ao 12...O-O: degrau 0 no lance dele e ESCOLHA DECLARADA no nosso. O curso joga 12...Cb4 — o reagrupamento que domina as casas claras, em especial d5, a que fica na frente do peão isolado — e o motor dá IGUALDADE tanto para o ...Cb4 quanto para o ...O-O; as duas são variante principal dele nesta posição. Escrevi o roque porque a régua da §24 diz que a abertura acaba com o rei guardado, e o ...Cb4 continua sendo o plano, agora com a torre de f8 já ligada. Custo: zero centésimos. Fecha no lance 12, sem [%plano]. Ponta igual -> igual."]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 1: f3 e Dd2 — d5"]
+[Categoria "golpe"]
+[Ordem "5"]
+[Capitulo "E28C"]
 [Result "*"]
 
-1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. c3 Nf6 $1 {O 2.c3 não desenvolve nada e não ataca nada. Ele quer uma
-coisa só: jogar d4 no lance seguinte e ficar com os dois peões lado a lado em
-e4 e d4, que é o centro com que todo mundo sonha. O …Cf6 ataca e4 antes que
-isso aconteça e obriga a escolher. Ele quase sempre responde 3.e5 — e é o que
-queremos: o peão sai da fila e vai sozinho para a frente, onde deixa de ser
-muralha e vira alvo. É esse peão de e5 que a linha inteira persegue.} (2... g6 $6) (2... e5 $5) (2... d6 $6) (2... d5 $1) 3. e5
-Nd5 {Para d5, e nunca para e4. Em e4 o cavalo fica sem casa no lance seguinte:
-ele joga 4.d3, e as duas fugas que parecem naturais — f6 e d6 — são justamente
-as duas casas que o peão de e5 come. Em d5 é o contrário, o cavalo para firme no
-meio do tabuleiro.} (3... Ne4 $4)
-4. d4
-cxd4 {Coma na hora. Este é o lance mais importante da linha e o motivo não se vê
-agora, se vê daqui a dez lances: quando ele recapturar com 5.cxd4, os DOIS peões
-da coluna c terão sumido do tabuleiro. Sem peão em c2 ele nunca vai poder jogar
-c4, que é o lance normal para expulsar um cavalo de d5 — e o nosso cavalo mora
-lá. O Sielecki chega nesta mesma posição pela ordem 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 e
-escreve que a nossa ordem dá no mesmo.} 5. cxd4 d6 {Este …d6 é a conta que apresentamos ao peão de e5. Ou
-ele come em d6 e abre o jogo cedo, ou fica parado esperando a hora em que somos
-nós que comemos — que é como esta linha termina. E repare numa coisa que vale
-daqui até o fim da partida: na troca do lance 4 os dois peões de c sumiram do
-tabuleiro. Sem peão em c2, ele não tem como jogar c4, que é o lance normal para
-expulsar um cavalo de d5. Sobra fazer isso com peça — é o que ele tenta no
-lance 7 com Bc4 —, e aí nós recuamos …Cb6 atacando o bispo e ganhamos o tempo
-de volta.} 6. Nf3
-Nc6 {Cavalo para a casa dele, batendo em d4 — que é o peão que vai ficar isolado
-no fim desta linha, e é bom começar a cobrá-lo cedo. Daqui ele quase sempre
-combina d4 com Bc4, ocupando o centro e saindo com a ala do rei.} 7. Bc4
-Nb6 {Ele não tem peão para expulsar o nosso cavalo, então tentou com peça. O
-cavalo recua UM passo e, no mesmo lance, ataca o bispo que veio expulsá-lo:
-recuo com juros. Ele gastou um lance, nós gastamos um lance, e o bispo dele vai
-ter de andar de novo.} 8. Bb5 Bd7 {O mérito deste bispo é não decidir nada. Ele sai de casa, defende o cavalo
-de c6 pela segunda vez e deixa a tensão no centro de pé — trocar em e5 agora
-seria nós resolvermos a estrutura no tempo dele, e assim quem tem de escolher é
-quem tem o peão em e5. O Sielecki é honesto sobre o preço: ele mesmo chama o
-8…dxe5 de linha principal das pretas, e escolhe este lance porque guarda mais
-chances de jogar para ganhar — foi o que o campeão do mundo jogou.} 9. exd6
-e6 {Não recapture. Parece óbvio pegar o peão de volta na hora, e é justamente
-aqui que a linha se decide: deixamos o peão dele em d6 por dois lances e
-preparamos comê-lo com o BISPO, que agora tem a casa e7 aberta para passar.
-Medido no Stockfish 18, profundidade 20: o …e6 é o único lance que segura a
-igualdade; o natural 9…exd6 já põe as brancas 0,35 à frente e o 9…a6, 0,55. A
-diferença é a estrutura — recapturando com peça, os nossos peões ficam limpos em
-a7, b7, e6, f7, g7 e h7, e o bispo chega de graça a uma casa boa. Ele vai tentar
-usar a diagonal que o …e6 abriu: 10.Bg5 ataca a nossa dama, e a resposta é …f6,
-que fecha a diagonal e obriga o bispo a recuar para h4.} 10. Bg5
-f6 {O …e6 abriu a diagonal d8-h4 e ele foi buscá-la na hora, atacando a nossa
-dama. O …f6 fecha a porta e obriga o bispo a recuar para h4, onde ele fica longe
-de tudo. Sim, o peão de f6 tira a casa f6 do nosso cavalo — mas o cavalo de d5
-não quer sair de d5 mesmo, e o de b8 nunca vai passar por ali.} 11. Bh4
-Bxd6 {O peão volta, e volta com peça: o bispo sai de f8 direto para d6, que é
-casa boa, e a nossa estrutura fica limpa. Agora olhe os peões dele: a2, b2, d4,
-f2, g2, h2. O de d4 ficou sozinho — os dois peões de c sumiram na troca do lance
-4, e o de e foi trocado no lance 9. Isso é um peão isolado, e peão isolado se
-trata sempre do mesmo jeito: bloqueia-se a casa da frente e cobra-se o peão com
-as peças. A casa da frente é d5, e é dela que trata o plano do curso: …Cb4, que
-ele explica assim — trocar peças aqui não nos incomoda, porque trocar ajuda a
-dominar as casas claras, em especial a que fica na frente do peão isolado. Não é
-ataque, é cobrança.} 12. Nc3
-O-O {Antes da cobrança, o rei. O curso joga …Cb4 aqui e nós rocamos primeiro: o
-motor dá igualdade nos dois, e uma partida se perde muito mais por rei no meio
-do que por um lance de reagrupamento adiado. O …Cb4 continua sendo o plano, e
-ele fica melhor com a torre já ligada em f8. Conte a posição: rei no canto, as
-quatro peças pequenas fora de casa desde o décimo primeiro lance, e um peão
-isolado dele em d4 para cobrar o resto da partida. A abertura acabou.} *
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Qd2 {A dama sai antes do f3.} 7... O-O {Regra 1: bispo em g7, cavalo em f6, rei rocado.}
+8. f3 d5 $1 {O centro abre enquanto o rei dele ainda está em e1.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 2: roque grande e a coluna c — Rb1#"]
+[Categoria "golpe"]
+[Ordem "6"]
+[Capitulo "E28D"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Qd2 {As Brancas querem rocar grande e atacar. Qual é o nosso lance?} 8... d5
+$1 {O centro abre enquanto o rei dele ainda está em e1.} 9. Nxc6 $2 {Troca natural, mas ela melhora a nossa estrutura.}
+9... bxc6 10. O-O-O {O rei foi para c1 com o centro ainda aberto.} 10... Qc7 {A dama entra na coluna c, de olho no rei.}
+11. exd5 Nxd5 12. Nxd5 $2 {Esta troca abre linhas perto do rei dele.} 12... cxd5
+13. Qxd5 {Ele pegou um peão. Qual peça entra com ameaça?} 13... Bf5 $1 {O bispo mira c2 e b1, as casas do rei.}
+14. Qc5 Qb7 $1 {A dama vai para b7 e mira b2.} 15. Qb5 {Ele oferece a troca de damas. Qual torre vai para c8?}
+15... Rac8 $3 {A torre de a8! Se ele trocar as damas, vem o mate.} (15... Rfc8
+$4 {A torre de f8 saiu e a oitava fileira ficou sem defesa: 16.Td8+!}) 16. Qxb7
+Rxc2+ 17. Kb1 Rxb2+ $1 18. Ka1 Rb1# {Mate, e é xeque duplo: a torre e o bispo de g7 dão xeque juntos. Rei dele em c1 e coluna c aberta: dama, torre e bispo na coluna.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 2: roque grande e a coluna c — Rab8"]
+[Categoria "golpe"]
+[Ordem "7"]
+[Capitulo "E28D"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Qd2 {As Brancas querem rocar grande e atacar. Qual é o nosso lance?} 8... d5
+$1 {O centro abre enquanto o rei dele ainda está em e1.} 9. Nxc6 $2 {Troca natural, mas ela melhora a nossa estrutura.}
+9... bxc6 10. O-O-O {O rei foi para c1 com o centro ainda aberto.} 10... Qc7 {A dama entra na coluna c, de olho no rei.}
+11. exd5 Nxd5 12. Nxd5 $2 {Esta troca abre linhas perto do rei dele.} 12... cxd5
+13. Qxd5 {Ele pegou um peão. Qual peça entra com ameaça?} 13... Bf5 $1 {O bispo mira c2 e b1, as casas do rei.}
+14. Qc5 Qb7 $1 {A dama vai para b7 e mira b2.} 15. c3 Rab8 {De novo a torre de a8 entra no ataque.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 2: roque grande e a coluna c — Rd8"]
+[Categoria "golpe"]
+[Ordem "8"]
+[Capitulo "E28D"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Qd2 {As Brancas querem rocar grande e atacar. Qual é o nosso lance?} 8... d5
+$1 {O centro abre enquanto o rei dele ainda está em e1.} 9. Nxc6 $2 {Troca natural, mas ela melhora a nossa estrutura.}
+9... bxc6 10. O-O-O {O rei foi para c1 com o centro ainda aberto.} 10... Qc7 {A dama entra na coluna c, de olho no rei.}
+11. exd5 Nxd5 12. Bd4 {Melhor para as Brancas.} 12... e5 13. Bc5 Rd8 $1 {O bispo sai com tempo e a torre ocupa a coluna d. O jogo é bom para nós também aqui.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 3: f3 e Bc4, ...Db6 — c5"]
+[Categoria "golpe"]
+[Ordem "9"]
+[Capitulo "E28E"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Bc4 {O bispo saiu, e o cavalo de d4 ficou menos protegido. Qual lance de dama ataca duas coisas?}
+8... Qb6 $1 {A dama ataca d4 e b2.} 9. Bb3 $1 {A melhor defesa.} 9... Nxe4 $1 {Mesmo assim o peão de e4 cai. Se 10.fxe4, a troca em d4 devolve a peça e ficamos com um peão a mais.}
+(9... Ng4 $6) 10. Nd5 {O cavalo ataca a nossa dama e o peão de e7.} 10... Qa5+ {Xeque primeiro.}
+11. c3 Nf6 $5 12. Nxc6 dxc6 13. Nxe7+ Kh8 14. Nxc8 Raxc8 15. O-O c5 {Contra f3 e Bc4: ...Db6!. Se ele errar, ganhamos material na hora; se acertar, pegamos e4 e jogamos com peças ativas.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 3: f3 e Bc4, ...Db6 — Qb4+"]
+[Categoria "golpe"]
+[Ordem "10"]
+[Capitulo "E28E"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Bc4 {O bispo saiu, e o cavalo de d4 ficou menos protegido. Qual lance de dama ataca duas coisas?}
+8... Qb6 $1 {A dama ataca d4 e b2.} 9. Nce2 $4 {O cavalo protegeu d4, mas saiu de c3. Qual xeque ganha material?}
+9... Qb4+ {Xeque e ataque ao bispo de c4: um garfo.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 3: f3 e Bc4, ...Db6 — Nxe4"]
+[Categoria "golpe"]
+[Ordem "11"]
+[Capitulo "E28E"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Bc4 {O bispo saiu, e o cavalo de d4 ficou menos protegido. Qual lance de dama ataca duas coisas?}
+8... Qb6 $1 {A dama ataca d4 e b2.} 9. Qd2 $2 {A dama defende b2 e d4. O que ficou solto?}
+9... Nxe4 $1 {O cavalo come e4 e ataca a dama de d2.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 3: f3 e Bc4, ...Db6 — Qxb2"]
+[Categoria "golpe"]
+[Ordem "12"]
+[Capitulo "E28E"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
+(7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
+8. Bc4 {O bispo saiu, e o cavalo de d4 ficou menos protegido. Qual lance de dama ataca duas coisas?}
+8... Qb6 $1 {A dama ataca d4 e b2.} 9. Nf5 $4 {O cavalo fugiu de d4. Qual peão ficou sem defesa?}
+9... Qxb2 {A dama come b2 e ataca o cavalo de c3 e a torre de a1.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 4: roque cedo com o bispo em c4 — h6"]
+[Categoria "golpe"]
+[Ordem "13"]
+[Capitulo "E28F"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. O-O {O rei dele rocou antes de guardar o bispo. Qual peão ficou fraco?} 8... Nxe4 {O cavalo come o peão. Se 9.Cxe4, vem ...d5 e atacamos duas peças.}
+9. Bxf7+ Rxf7 10. Nxe4 {Qual lance pequeno impede o cavalo de ir para g5?} 10... h6 {Isso: ...h6 tira g5 do cavalo. Ficamos com os dois bispos. Bispo em c4 e roque cedo: ...Cxe4!. Depois ...d5 ou ...h6.}
+(10... d5 $6 {Com o cavalo em g5, as Brancas atacam: 11.Cg5 Tf6 12.f4!.}) *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 4: roque cedo com o bispo em c4 — d5"]
+[Categoria "golpe"]
+[Ordem "14"]
+[Capitulo "E28F"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. O-O {O rei dele rocou antes de guardar o bispo. Qual peão ficou fraco?} 8... Nxe4 {O cavalo come o peão. Se 9.Cxe4, vem ...d5 e atacamos duas peças.}
+9. Nxe4 {Ele recuperou a peça? Ainda não. Qual peão ataca duas peças?} 9... d5 {Garfo de peão: bispo e cavalo atacados. Recuperamos a peça.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 5: Dd2 e o peão de g2 — Qd5"]
+[Categoria "golpe"]
+[Ordem "15"]
+[Capitulo "E28G"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. Qd2 $6 {A dama saiu de d1. Qual é o nosso lance de centro?} 8... d5 $1 9. exd5
+Nxd5 {Recapturamos com o cavalo.} (9... Nb4 $2 {Aqui ...Cb4 não funciona: 10.d6! Dxd6 11.Ccb5 e o cavalo ataca c7 e d6. Com a dama dele em d2, recapture com o cavalo de f6.})
+10. Nxd5 $6 {Ele tomou o cavalo. Antes de recapturar, existe um lance melhor?}
+10... Nxd4 $1 {Primeiro trocamos em d4. O cavalo dele em d5 continua pendurado.}
+11. Bxd4 $2 Qxd5 {A dama ataca o bispo de d4 e o peão de g2 ao mesmo tempo.} 12. Bxg7 {Ele trocou os bispos. O que a nossa dama pode pegar com ameaça?}
+12... Qxg2 $1 {Pegamos g2 e atacamos a torre de h1.} 13. Qd4 {A torre de h1 está atacada. Pegamos já?}
+13... e5 $3 {Não pegue a torre ainda! Primeiro ...e5 afasta a dama dele de d4.}
+(13... Qxh1+ $4 {Cedo demais: 14.Rd2 Dxa1 15.Bxf8 e a dama dele ameaça mate em g7 e h8.})
+14. Qxe5 Qxh1+ $1 {Agora sim, a torre.} 15. Kd2 Rd8+ $1 {A torre entra com xeque e salva a nossa dama.}
+16. Bd3 Qd5 {Dd2 cedo deixa g2 fraco: ...d5, ...Cxd4 antes de recapturar, e ...Dxg2. Pegue a torre só depois de ...e5.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 5: Dd2 e o peão de g2 — Bg4"]
+[Categoria "golpe"]
+[Ordem "16"]
+[Capitulo "E28G"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. Qd2 $6 {A dama saiu de d1. Qual é o nosso lance de centro?} 8... d5 $1 9. exd5
+Nxd5 {Recapturamos com o cavalo.} (9... Nb4 $2 {Aqui ...Cb4 não funciona: 10.d6! Dxd6 11.Ccb5 e o cavalo ataca c7 e d6. Com a dama dele em d2, recapture com o cavalo de f6.})
+10. Nxd5 $6 {Ele tomou o cavalo. Antes de recapturar, existe um lance melhor?}
+10... Nxd4 $1 {Primeiro trocamos em d4. O cavalo dele em d5 continua pendurado.}
+11. Bxd4 $2 Qxd5 {A dama ataca o bispo de d4 e o peão de g2 ao mesmo tempo.} 12. Bxg7 {Ele trocou os bispos. O que a nossa dama pode pegar com ameaça?}
+12... Qxg2 $1 {Pegamos g2 e atacamos a torre de h1.} 13. Qd4 {A torre de h1 está atacada. Pegamos já?}
+13... e5 $3 {Não pegue a torre ainda! Primeiro ...e5 afasta a dama dele de d4.}
+(13... Qxh1+ $4 {Cedo demais: 14.Rd2 Dxa1 15.Bxf8 e a dama dele ameaça mate em g7 e h8.})
+14. Qxe5 Qxh1+ $1 {Agora sim, a torre.} 15. Bf1 Bg4 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 5: Dd2 e o peão de g2 — Kxg7"]
+[Categoria "golpe"]
+[Ordem "17"]
+[Capitulo "E28G"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. Qd2 $6 {A dama saiu de d1. Qual é o nosso lance de centro?} 8... d5 $1 9. exd5
+Nxd5 {Recapturamos com o cavalo.} (9... Nb4 $2 {Aqui ...Cb4 não funciona: 10.d6! Dxd6 11.Ccb5 e o cavalo ataca c7 e d6. Com a dama dele em d2, recapture com o cavalo de f6.})
+10. Nxd5 $6 {Ele tomou o cavalo. Antes de recapturar, existe um lance melhor?}
+10... Nxd4 $1 {Primeiro trocamos em d4. O cavalo dele em d5 continua pendurado.}
+11. Bxd4 $2 Qxd5 {A dama ataca o bispo de d4 e o peão de g2 ao mesmo tempo.} 12. Bxg7 {Ele trocou os bispos. O que a nossa dama pode pegar com ameaça?}
+12... Qxg2 $1 {Pegamos g2 e atacamos a torre de h1.} 13. O-O-O Kxg7 {Simples: pegamos o bispo e ficamos com uma peça a mais.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 5: Dd2 e o peão de g2 — cxd5"]
+[Categoria "golpe"]
+[Ordem "18"]
+[Capitulo "E28G"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. Qd2 $6 {A dama saiu de d1. Qual é o nosso lance de centro?} 8... d5 $1 9. exd5
+Nxd5 {Recapturamos com o cavalo.} (9... Nb4 $2 {Aqui ...Cb4 não funciona: 10.d6! Dxd6 11.Ccb5 e o cavalo ataca c7 e d6. Com a dama dele em d2, recapture com o cavalo de f6.})
+10. Nxc6 bxc6 11. Nxd5 cxd5 {Aqui é só recapturar.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 6: 5.Cxc6 e Dd4 — Qxe8+"]
+[Categoria "golpe"]
+[Ordem "19"]
+[Capitulo "E28H"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nxc6 {Ele trocou o nosso cavalo. Com qual peão recapturamos?} 5... bxc6 {Isso: ...bxc6. O peão de c6 segura d5, e a coluna b abre para a torre.}
+(5... dxc6 $6 {Com ...dxc6 as damas se trocam cedo e o nosso rei perde o roque. Recapture com o peão b.})
+6. Qd4 {A dama ataca a torre de h8. Como defendemos?} 6... Nf6 {Isso: o cavalo tapa a diagonal e desenvolve.}
+(6... f6 $2 {Enfraquece o nosso rei de graça. Desenvolva o cavalo.}) 7. e5 Nd5 {O cavalo vai para o centro.}
+8. e6 {Ele avança o mesmo peão pela terceira vez.} 8... Nf6 {Tapamos a diagonal de novo.}
+9. exf7+ Kxf7 {O rei está seguro em f7: as Brancas quase não desenvolveram.} 10. Bc4+
+$2 {Xeque. Como tapar e ganhar o centro ao mesmo tempo?} 10... d5 {Isso: ...d5 tapa o xeque e ocupa o centro.}
+11. Bb3 e5 $1 {O segundo peão central, e uma isca para a dama.} 12. Qxe5 $2 {Ela comeu o peão. Qual peça entra com xeque?}
+12... Bb4+ {Xeque, e no lance seguinte a torre vai para e8.} 13. c3 {Qual torre crava a dama no rei?}
+13... Re8 {A dama está cravada na coluna e.} 14. Qxe8+ Qxe8+ {Dama por torre. Contra 5.Cxc6 e Dd4: ...bxc6, ...Cf6 e cobrar a dama com lances de tempo.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 6: 5.Cxc6 e Dd4 — Qb6"]
+[Categoria "golpe"]
+[Ordem "20"]
+[Capitulo "E28H"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nxc6 {Ele trocou o nosso cavalo. Com qual peão recapturamos?} 5... bxc6 {Isso: ...bxc6. O peão de c6 segura d5, e a coluna b abre para a torre.}
+(5... dxc6 $6 {Com ...dxc6 as damas se trocam cedo e o nosso rei perde o roque. Recapture com o peão b.})
+6. Qd4 {A dama ataca a torre de h8. Como defendemos?} 6... Nf6 {Isso: o cavalo tapa a diagonal e desenvolve.}
+(6... f6 $2 {Enfraquece o nosso rei de graça. Desenvolva o cavalo.}) 7. e5 Nd5 {O cavalo vai para o centro.}
+8. c4 Qb6 $1 {A dama oferece a troca e mira f2 e b2.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 7: 5.c3"]
+[Categoria "golpe"]
+[Ordem "21"]
+[Capitulo "E28I"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. c3 $6 {O peão ocupa c3, a casa do cavalo de b1.} 5... Nf6 {Desenvolvemos atacando e4.}
+6. Bd3 Bg7 7. O-O O-O 8. Be3 {Tudo desenvolvido. Qual é o lance?} 8... d5 {O centro é nosso: o 5.c3 custou um tempo. Lance lento? Desenvolva e jogue ...d5.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 8: ataque cedo em f7 — d5"]
+[Categoria "golpe"]
+[Ordem "22"]
+[Capitulo "E28J"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Bc4 {A outra ordem.} 2... Nc6 3. Qh5 {Ameaça mate em f7. Como defendemos?}
+3... e6 {Isso: ...e6 fecha a diagonal do bispo. Agora f7 está seguro.} (3... g6
+$6 {Defende f7, mas 4.Dxc5 pega o peão de c5. O ...e6 defende sem perder nada.})
+4. Nf3 {Qual peça sai atacando a dama?} 4... Nf6 {Isso: desenvolvemos com tempo na dama.}
+5. Qh4 d5 $1 {O centro é nosso, e o bispo de c4 está atacado. Ataque cedo em f7: feche com ...e6 ou ...Cf6 e ganhe tempo atacando a dama. Se ele sacrificar em f7, conte: é uma peça a mais para nós.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 8: ataque cedo em f7 — d5"]
+[Categoria "golpe"]
+[Ordem "23"]
+[Capitulo "E28J"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Bc4 {A outra ordem.} 2... Nc6 3. Qf3 {Dama em f3, de novo mirando f7. Qual peça tapa a coluna f?}
+3... Nf6 {Isso: o cavalo em f6 tapa a coluna e desenvolve.} 4. c3 {Qual cavalo pula com ameaça na dama e no bispo?}
+4... Ne5 $1 {O cavalo ataca a dama e o bispo de c4.} 5. Qe2 Nxc4 6. Qxc4 d5 {Ficamos com os dois bispos e o centro.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 8: ataque cedo em f7 — d5"]
+[Categoria "golpe"]
+[Ordem "24"]
+[Capitulo "E28J"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Bc4 {A outra ordem.} 2... Nc6 3. Qf3 {Dama em f3, de novo mirando f7. Qual peça tapa a coluna f?}
+3... Nf6 {Isso: o cavalo em f6 tapa a coluna e desenvolve.} 4. d3 Nd4 {O cavalo pula para d4 com ameaça na dama e em c2.}
+5. Qd1 d5 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Golpe 8: ataque cedo em f7 — d5"]
+[Categoria "golpe"]
+[Ordem "25"]
+[Capitulo "E28J"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Bc4 {A outra ordem.} 2... Nc6 3. Bxf7+ $2 {O sacrifício: ele entrega o bispo por um peão.}
+3... Kxf7 4. Qh5+ g6 5. Qxc5 {Ele recuperou um peão. Qual peça sai primeiro?}
+5... Nf6 {O rei está seguro em f7, e temos uma peça a mais.} 6. Nf3 d5 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Quando o golpe não funciona: bispo em b3"]
+[Categoria "nao-funciona"]
+[Ordem "26"]
+[Capitulo "E28K"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. Bb3 {O lance certo. Aqui ...Cxe4 não funciona: é o capítulo «Quando o golpe não funciona».}
+8... Re8 {Isso: ...Te8. A torre prepara ...d5 ou ...d6, conforme o que ele jogar. Golpe não é reflexo. Antes de ...Cxe4, confira: o bispo está em c4? O rei dele rocou?}
+(8... Nxe4 $2 {Não funciona: 9.Cxe4 d5 10.Cg3, e a peça não volta.}) (8... Na5
+$4 {Parece bom atacar o bispo, mas 9.e5! Ce8 10.Bxf7+! Rxf7 11.Ce6! e a nossa dama cai.})
+(8... Ng4 $2 {9.Dxg4 Cxd4 10.Dd1: o cavalo de g4 foi para nada.}) (8... d6 $5 {Também é bom: a mesma ideia, com outra ordem.})
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 1: troca em c6 — Qb6"]
+[Categoria "defesa"]
+[Ordem "27"]
+[Capitulo "E28L"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Nxc6 {Troca em c6. Com qual peão?} 7... bxc6 8. e5 {O peão ataca o cavalo. Para onde ele vai?}
+8... Ng8 $1 {Isso: ...Cg8. Parece estranho, mas dali ele volta a f6 ou h6, e o peão de e5 vira alvo.}
+(8... Nd5 $2 {Em d5 o cavalo é trocado: 9.Cxd5 cxd5 10.Dxd5 e as Brancas ganham um peão.})
+9. Bd4 {O bispo defende e5. Qual peça entra com ameaça?} 9... Qa5 $1 {A dama ataca e5 pela quinta fileira.}
+10. e6 $6 Nf6 $1 {O cavalo volta. O peão de e6 vai cair.} 11. exf7+ Kxf7 12. Bc4+
+d5 13. Bb3 e5 {Os dois peões centrais.} 14. Bxe5 $6 Re8 {A torre crava o bispo na coluna e.}
+15. f4 Qb6 {Troca em c6: ...bxc6. Se o peão atacar o cavalo: ...Cg8!, ...Da5! e depois o centro.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 1: troca em c6 — Re8"]
+[Categoria "defesa"]
+[Ordem "28"]
+[Capitulo "E28L"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Nxc6 {Troca em c6. Com qual peão?} 7... bxc6 8. e5 {O peão ataca o cavalo. Para onde ele vai?}
+8... Ng8 $1 {Isso: ...Cg8. Parece estranho, mas dali ele volta a f6 ou h6, e o peão de e5 vira alvo.}
+(8... Nd5 $2 {Em d5 o cavalo é trocado: 9.Cxd5 cxd5 10.Dxd5 e as Brancas ganham um peão.})
+9. Bd4 {O bispo defende e5. Qual peça entra com ameaça?} 9... Qa5 $1 {A dama ataca e5 pela quinta fileira.}
+10. e6 $6 Nf6 $1 {O cavalo volta. O peão de e6 vai cair.} 11. exf7+ Kxf7 12. Bc4+
+d5 13. Be2 Re8 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 1: troca em c6 — Bxd7"]
+[Categoria "defesa"]
+[Ordem "29"]
+[Capitulo "E28L"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Nxc6 {Troca em c6. Com qual peão?} 7... bxc6 8. e5 {O peão ataca o cavalo. Para onde ele vai?}
+8... Ng8 $1 {Isso: ...Cg8. Parece estranho, mas dali ele volta a f6 ou h6, e o peão de e5 vira alvo.}
+(8... Nd5 $2 {Em d5 o cavalo é trocado: 9.Cxd5 cxd5 10.Dxd5 e as Brancas ganham um peão.})
+9. Bd4 {O bispo defende e5. Qual peça entra com ameaça?} 9... Qa5 $1 {A dama ataca e5 pela quinta fileira.}
+10. e6 $6 Nf6 $1 {O cavalo volta. O peão de e6 vai cair.} 11. exd7+ Bxd7 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 1: troca em c6 — Rb8"]
+[Categoria "defesa"]
+[Ordem "30"]
+[Capitulo "E28L"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Nxc6 {Troca em c6. Com qual peão?} 7... bxc6 8. e5 {O peão ataca o cavalo. Para onde ele vai?}
+8... Ng8 $1 {Isso: ...Cg8. Parece estranho, mas dali ele volta a f6 ou h6, e o peão de e5 vira alvo.}
+(8... Nd5 $2 {Em d5 o cavalo é trocado: 9.Cxd5 cxd5 10.Dxd5 e as Brancas ganham um peão.})
+9. f4 Nh6 10. Qd2 O-O 11. O-O-O d6 12. exd6 {Qual cavalo entra com tempo?} 12... Nf5
+$1 13. Bf2 Rb8 $1 $146 {A torre na coluna b, contra o rei que rocou grande.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 1: troca em c6 — Qa5"]
+[Categoria "defesa"]
+[Ordem "31"]
+[Capitulo "E28L"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Nxc6 {Troca em c6. Com qual peão?} 7... bxc6 8. e5 {O peão ataca o cavalo. Para onde ele vai?}
+8... Ng8 $1 {Isso: ...Cg8. Parece estranho, mas dali ele volta a f6 ou h6, e o peão de e5 vira alvo.}
+(8... Nd5 $2 {Em d5 o cavalo é trocado: 9.Cxd5 cxd5 10.Dxd5 e as Brancas ganham um peão.})
+9. Bf4 $2 Qa5 $1 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 1: troca em c6 — d6"]
+[Categoria "defesa"]
+[Ordem "32"]
+[Capitulo "E28L"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nxc6 {Ele trocou o nosso cavalo. Com qual peão recapturamos?} 5... bxc6 {Isso: ...bxc6. O peão de c6 segura d5, e a coluna b abre para a torre.}
+(5... dxc6 $6 {Com ...dxc6 as damas se trocam cedo e o nosso rei perde o roque. Recapture com o peão b.})
+6. Qd4 {A dama ataca a torre de h8. Como defendemos?} 6... Nf6 {Isso: o cavalo tapa a diagonal e desenvolve.}
+(6... f6 $2 {Enfraquece o nosso rei de graça. Desenvolva o cavalo.}) 7. Nc3 {Aqui ele desenvolve em vez de avançar o peão.}
+7... d6 {Desenvolvemos com calma: ...d6, ...Bg7 e roque. O bispo de g7 vai atacar a dama de d4.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Linha crítica: Be2 e roque — Bf5"]
+[Categoria "linha-critica"]
+[Ordem "33"]
+[Capitulo "E28M"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+9. Nxc6 bxc6 10. e5 {O cavalo foi atacado. Para onde?} 10... Ne8 $1 {Isso: em e8 o cavalo fica seguro e deixa o peão de f7 livre para ...f6.}
+(10... Nd7 $6 {Natural, mas 11.f4 f6 12.Cxd5! e o peão de d5 cai.}) 11. f4 f6 $1 {O único contra-ataque: atacar a ponta da corrente, o peão de e5.}
+12. exf6 Bxf6 {O bispo volta à diagonal grande.} 13. Bd4 Bf5 {Rei primeiro, ...d5, ...Ce8 e ...f6. Os dois bispos apontam para o lado dele. Se ele tomar em d5: ...Cb4!?.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Linha crítica: Be2 e roque — Qc7"]
+[Categoria "linha-critica"]
+[Ordem "34"]
+[Capitulo "E28M"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+9. exd5 {Ele tomou em d5, com o rei já rocado. Qual é o golpe?} 9... Nb4 $5 $1 {Com o rei dele rocado e a dama em d1, ...Cb4 funciona: o peão de d5 vai cair. No golpe 5 era diferente, porque a dama estava em d2.}
+10. d6 Qxd6 11. Ncb5 $1 Qd7 $1 12. c4 {O cavalo de d4 está forte. Qual peão o expulsa?}
+12... e5 $146 {Isso: ...e5 expulsa o cavalo.} (12... a6 $2 {13.Da4! crava o nosso cavalo.})
+(12... b6 $2 {13.a3 e o cavalo de b4 fica sem casa.}) 13. Nb3 a6 $1 14. Nc3 Qc7 {Peças no lugar e o centro nosso.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Linha crítica: Be2 e roque — a6"]
+[Categoria "linha-critica"]
+[Ordem "35"]
+[Capitulo "E28M"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+9. exd5 {Ele tomou em d5, com o rei já rocado. Qual é o golpe?} 9... Nb4 $5 $1 {Com o rei dele rocado e a dama em d1, ...Cb4 funciona: o peão de d5 vai cair. No golpe 5 era diferente, porque a dama estava em d2.}
+10. d6 Qxd6 11. Ncb5 $1 Qd7 $1 12. Nb3 a6 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Linha crítica: Be2 e roque — Nbd5"]
+[Categoria "linha-critica"]
+[Ordem "36"]
+[Capitulo "E28M"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+9. exd5 {Ele tomou em d5, com o rei já rocado. Qual é o golpe?} 9... Nb4 $5 $1 {Com o rei dele rocado e a dama em d1, ...Cb4 funciona: o peão de d5 vai cair. No golpe 5 era diferente, porque a dama estava em d2.}
+10. d6 Qxd6 11. Ncb5 $1 Qd7 $1 12. c3 Nbd5 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Linha crítica: Be2 e roque — Qb8"]
+[Categoria "linha-critica"]
+[Ordem "37"]
+[Capitulo "E28M"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+9. exd5 {Ele tomou em d5, com o rei já rocado. Qual é o golpe?} 9... Nb4 $5 $1 {Com o rei dele rocado e a dama em d1, ...Cb4 funciona: o peão de d5 vai cair. No golpe 5 era diferente, porque a dama estava em d2.}
+10. d6 Qxd6 11. Ndb5 $2 Qb8 $1 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Linha crítica: Be2 e roque — Nbxd5"]
+[Categoria "linha-critica"]
+[Ordem "38"]
+[Capitulo "E28M"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+9. exd5 {Ele tomou em d5, com o rei já rocado. Qual é o golpe?} 9... Nb4 $5 $1 {Com o rei dele rocado e a dama em d1, ...Cb4 funciona: o peão de d5 vai cair. No golpe 5 era diferente, porque a dama estava em d2.}
+10. Qd2 Nbxd5 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 2: bispo em b3 — b5"]
+[Categoria "defesa"]
+[Ordem "39"]
+[Capitulo "E28N"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. Bb3 {O lance certo. Aqui ...Cxe4 não funciona: é o capítulo «Quando o golpe não funciona».}
+8... Re8 {Isso: ...Te8. A torre prepara ...d5 ou ...d6, conforme o que ele jogar. Golpe não é reflexo. Antes de ...Cxe4, confira: o bispo está em c4? O rei dele rocou?}
+(8... Nxe4 $2 {Não funciona: 9.Cxe4 d5 10.Cg3, e a peça não volta.}) (8... Na5
+$4 {Parece bom atacar o bispo, mas 9.e5! Ce8 10.Bxf7+! Rxf7 11.Ce6! e a nossa dama cai.})
+(8... Ng4 $2 {9.Dxg4 Cxd4 10.Dd1: o cavalo de g4 foi para nada.}) (8... d6 $5 {Também é bom: a mesma ideia, com outra ordem.})
+9. O-O {Ele rocou pequeno. Qual avanço de peão é o mais flexível?} 9... d6 $1
+10. h3 $1 {Ele tirou g4 do cavalo. Qual peça ataca o bispo de b3?} 10... Na5 $1 {Isso: ...Ca5 ataca o bispo mais perigoso dele.}
+11. Qd2 a6 {...a6, ...b5 e ...Bb7: espaço na ala da dama.} 12. Rad1 b5 {Bispo em b3: ...Te8, depois ...d6 e ...Ca5 com ...a6 e ...b5. Contra f3: ...d5!.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 2: bispo em b3 — b6"]
+[Categoria "defesa"]
+[Ordem "40"]
+[Capitulo "E28N"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. Bb3 {O lance certo. Aqui ...Cxe4 não funciona: é o capítulo «Quando o golpe não funciona».}
+8... Re8 {Isso: ...Te8. A torre prepara ...d5 ou ...d6, conforme o que ele jogar. Golpe não é reflexo. Antes de ...Cxe4, confira: o bispo está em c4? O rei dele rocou?}
+(8... Nxe4 $2 {Não funciona: 9.Cxe4 d5 10.Cg3, e a peça não volta.}) (8... Na5
+$4 {Parece bom atacar o bispo, mas 9.e5! Ce8 10.Bxf7+! Rxf7 11.Ce6! e a nossa dama cai.})
+(8... Ng4 $2 {9.Dxg4 Cxd4 10.Dd1: o cavalo de g4 foi para nada.}) (8... d6 $5 {Também é bom: a mesma ideia, com outra ordem.})
+9. O-O {Ele rocou pequeno. Qual avanço de peão é o mais flexível?} 9... d6 $1
+10. h3 $1 {Ele tirou g4 do cavalo. Qual peça ataca o bispo de b3?} 10... Na5 $1 {Isso: ...Ca5 ataca o bispo mais perigoso dele.}
+11. f4 b6 $1 {O peão de b6 protege o cavalo de a5.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 2: bispo em b3 — Rxe3"]
+[Categoria "defesa"]
+[Ordem "41"]
+[Capitulo "E28N"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. Bb3 {O lance certo. Aqui ...Cxe4 não funciona: é o capítulo «Quando o golpe não funciona».}
+8... Re8 {Isso: ...Te8. A torre prepara ...d5 ou ...d6, conforme o que ele jogar. Golpe não é reflexo. Antes de ...Cxe4, confira: o bispo está em c4? O rei dele rocou?}
+(8... Nxe4 $2 {Não funciona: 9.Cxe4 d5 10.Cg3, e a peça não volta.}) (8... Na5
+$4 {Parece bom atacar o bispo, mas 9.e5! Ce8 10.Bxf7+! Rxf7 11.Ce6! e a nossa dama cai.})
+(8... Ng4 $2 {9.Dxg4 Cxd4 10.Dd1: o cavalo de g4 foi para nada.}) (8... d6 $5 {Também é bom: a mesma ideia, com outra ordem.})
+9. f3 $1 {Agora ele jogou f3. Qual é o lance?} 9... d5 $1 {Isso: ...d5, mesmo contra a preparação certa.}
+10. Nxd5 Nxd5 11. exd5 Nb4 12. c4 {Qual peão ataca d5?} 12... e6 $1 13. dxe6 $4
+Bxe6 14. O-O {Qual peça come em c4?} 14... Bxc4 $1 15. Bxc4 Rxe3 $19 {O bispo de e3 caiu e ganhamos material.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 2: bispo em b3 — e6"]
+[Categoria "defesa"]
+[Ordem "42"]
+[Capitulo "E28N"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. Bb3 {O lance certo. Aqui ...Cxe4 não funciona: é o capítulo «Quando o golpe não funciona».}
+8... Re8 {Isso: ...Te8. A torre prepara ...d5 ou ...d6, conforme o que ele jogar. Golpe não é reflexo. Antes de ...Cxe4, confira: o bispo está em c4? O rei dele rocou?}
+(8... Nxe4 $2 {Não funciona: 9.Cxe4 d5 10.Cg3, e a peça não volta.}) (8... Na5
+$4 {Parece bom atacar o bispo, mas 9.e5! Ce8 10.Bxf7+! Rxf7 11.Ce6! e a nossa dama cai.})
+(8... Ng4 $2 {9.Dxg4 Cxd4 10.Dd1: o cavalo de g4 foi para nada.}) (8... d6 $5 {Também é bom: a mesma ideia, com outra ordem.})
+9. f3 $1 {Agora ele jogou f3. Qual é o lance?} 9... d5 $1 {Isso: ...d5, mesmo contra a preparação certa.}
+10. Nxd5 Nxd5 11. Bxd5 $4 Nxd4 12. Bxd4 Bxd4 13. Qxd4 e6 {O bispo de d5 está cravado na frente da dama. Ganhamos uma peça.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 2: bispo em b3 — e6"]
+[Categoria "defesa"]
+[Ordem "43"]
+[Capitulo "E28N"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Bc4 $1 {Com o bispo em c4, ele mira f7.} 7... O-O $1 {Rei primeiro, também aqui. Depois olhamos o peão de e4.}
+8. Bb3 {O lance certo. Aqui ...Cxe4 não funciona: é o capítulo «Quando o golpe não funciona».}
+8... Re8 {Isso: ...Te8. A torre prepara ...d5 ou ...d6, conforme o que ele jogar. Golpe não é reflexo. Antes de ...Cxe4, confira: o bispo está em c4? O rei dele rocou?}
+(8... Nxe4 $2 {Não funciona: 9.Cxe4 d5 10.Cg3, e a peça não volta.}) (8... Na5
+$4 {Parece bom atacar o bispo, mas 9.e5! Ce8 10.Bxf7+! Rxf7 11.Ce6! e a nossa dama cai.})
+(8... Ng4 $2 {9.Dxg4 Cxd4 10.Dd1: o cavalo de g4 foi para nada.}) (8... d6 $5 {Também é bom: a mesma ideia, com outra ordem.})
+9. f3 $1 {Agora ele jogou f3. Qual é o lance?} 9... d5 $1 {Isso: ...d5, mesmo contra a preparação certa.}
+10. exd5 Nb4 11. Nde2 e6 $1 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 3: Maróczy — d6"]
+[Categoria "defesa"]
+[Ordem "44"]
+[Capitulo "E28O"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. c4 $1 {O Maróczy: os peões de c4 e e4 seguram d5. Aqui o ...d5 não sai tão cedo.}
+5... Bg7 6. Be3 {O bispo de e3 deixou b2 sem defesa. Qual lance de dama ataca d4 e b2?}
+6... Qb6 {Isso: ...Db6.} 7. Nb5 {O cavalo sai com tempo e mira c7.} 7... Qa5+ $1
+8. N1c3 Nf6 $1 9. f3 O-O 10. Be2 $1 {O cavalo de b5 incomoda. Qual peão o expulsa?}
+10... a6 $1 11. Nd4 {O cavalo muda de rota. Para onde vai o nosso cavalo de f6?}
+11... Nh5 $1 12. O-O Nf4 $1 {O cavalo em f4 ataca o bispo de e2 e casas perto do rei.}
+13. Kh1 Nxd4 14. Bxd4 Bxd4 15. Qxd4 d6 $10 {Maróczy: ...Db6 contra Be3; ...Da5+ contra Cb5; ...Dd8 contra Cb3. Depois ataque as peças que seguram o centro.}
+(15... Qxc3 $1 {Também vale: a troca em c3 simplifica.}) *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 3: Maróczy — Qb4"]
+[Categoria "defesa"]
+[Ordem "45"]
+[Capitulo "E28O"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. c4 $1 {O Maróczy: os peões de c4 e e4 seguram d5. Aqui o ...d5 não sai tão cedo.}
+5... Bg7 6. Be3 {O bispo de e3 deixou b2 sem defesa. Qual lance de dama ataca d4 e b2?}
+6... Qb6 {Isso: ...Db6.} 7. Nb3 {O cavalo recuou. Para onde a dama volta?} 7... Qd8
+$1 {Isso: a dama volta. Com o cavalo em b3, o bispo de g7 ficou livre de novo.}
+(7... Qb4+ $6 {Xeque que não dá nada: 8.Bd2 e a dama tem de voltar.}) (7... Qc7
+$2 {A dama fica exposta em c7: 8.Dd2 e depois Bf4 vem com tempo.}) 8. Qd2 Nf6 $1
+9. f3 O-O 10. Nc3 d6 11. Be2 {Qual peão ganha espaço na ala da dama?} 11... a5
+$1 {Isso: ...a5 e depois ...a4 empurram o cavalo de b3.} 12. O-O a4 $1 13. Nd4
+Nxd4 14. Bxd4 Qa5 15. Rab1 Bd7 16. b4 axb3 17. axb3 Qb4 {A dama ativa, e o plano é ...Bc6 e ...Cd7-c5.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Defesa 3: Maróczy — O-O"]
+[Categoria "defesa"]
+[Ordem "46"]
+[Capitulo "E28O"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. c4 $1 {O Maróczy: os peões de c4 e e4 seguram d5. Aqui o ...d5 não sai tão cedo.}
+5... Bg7 6. Be3 {O bispo de e3 deixou b2 sem defesa. Qual lance de dama ataca d4 e b2?}
+6... Qb6 {Isso: ...Db6.} 7. Nb3 {O cavalo recuou. Para onde a dama volta?} 7... Qd8
+$1 {Isso: a dama volta. Com o cavalo em b3, o bispo de g7 ficou livre de novo.}
+(7... Qb4+ $6 {Xeque que não dá nada: 8.Bd2 e a dama tem de voltar.}) (7... Qc7
+$2 {A dama fica exposta em c7: 8.Dd2 e depois Bf4 vem com tempo.}) 8. Nc3 {O bispo de g7 pode trocar em c3?}
+8... Bxc3+ $1 {Isso: peões dobrados em c3 e c4, e o Maróczy perde a força.} 9. bxc3
+Nf6 10. f3 d6 $1 11. Be2 O-O $1 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: bispo em c4 cedo — d5"]
+[Categoria "desvio"]
+[Ordem "47"]
+[Capitulo "E28P"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. Bc4 {O bispo mira f7. Qual peça sai atacando e4?} 3... Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. d3 {Ele protegeu e4. Qual peão fecha a diagonal do bispo?}
+4... e6 {Isso: ...e6. O bispo de c4 bate na parede, e ...d5 vem a seguir.} 5. O-O
+d5 {O centro é nosso, e o bispo tem de andar de novo. Bispo em c4: ...Cf6 e ...e6, depois ...d5. Se o peão vier a e5: ...d5 na hora.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: bispo em c4 cedo — d5"]
+[Categoria "desvio"]
+[Ordem "48"]
+[Capitulo "E28P"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. Bc4 {O bispo mira f7. Qual peça sai atacando e4?} 3... Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. Nc3 e6 {A mesma regra: ...e6, e depois ...d5.}
+5. d4 d5 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: bispo em c4 cedo — d5"]
+[Categoria "desvio"]
+[Ordem "49"]
+[Capitulo "E28P"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. Bc4 {O bispo mira f7. Qual peça sai atacando e4?} 3... Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. Ng5 {O cavalo ataca f7 junto com o bispo. Como defendemos?}
+4... e6 $1 {Isso: f7 está seguro, e ...d5 vem com tempo no bispo.} 5. d3 d5 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: bispo em c4 cedo — Nd7"]
+[Categoria "desvio"]
+[Ordem "50"]
+[Capitulo "E28P"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. Bc4 {O bispo mira f7. Qual peça sai atacando e4?} 3... Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. e5 {O peão ataca o cavalo. Há algo melhor do que recuar?}
+4... d5 $1 {Isso: ...d5 ataca o bispo.} 5. Bb5 Nd7 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: bispo em c4 cedo — dxc4"]
+[Categoria "desvio"]
+[Ordem "51"]
+[Capitulo "E28P"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. Bc4 {O bispo mira f7. Qual peça sai atacando e4?} 3... Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. e5 {O peão ataca o cavalo. Há algo melhor do que recuar?}
+4... d5 $1 {Isso: ...d5 ataca o bispo.} 5. exf6 dxc4 {Trocamos e ficamos com o par de bispos.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: bispo em c4 cedo — Nf6"]
+[Categoria "desvio"]
+[Ordem "52"]
+[Capitulo "E28P"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Bc4 {A outra ordem.} 2... Nc6 3. Nf3 Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Alapin 2.c3"]
+[Categoria "desvio"]
+[Ordem "53"]
+[Capitulo "E28Q"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. c3 {Ele quer jogar d4 e ter dois peões no centro. Qual peça ataca e4 agora?}
+2... Nf6 $1 {Isso: ...Cf6. Ele quase sempre responde 3.e5, e o peão avançado vira alvo.}
+(2... d5 $1 {Também é uma boa resposta, mas a aula segue por ...Cf6.}) (2... e5
+$5 {Jogável, mas ...Cf6 rende mais na faixa de vocês.}) (2... g6 $6 {Deixa 3.d4 e o centro grande.})
+(2... d6 $6 {Lento: 3.d4 e o centro é dele.}) 3. e5 {O cavalo foi atacado. Para onde?}
+3... Nd5 {Isso: em d5 o cavalo fica firme.} (3... Ne4 $4 {Em e4 o cavalo fica sem casa: 4.d3, e as fugas f6 e d6 são tomadas pelo peão de e5.})
+4. d4 cxd4 {Coma já: os dois peões de c somem, e ele nunca poderá jogar c4 contra o cavalo de d5.}
+5. cxd4 d6 {Atacamos o peão de e5.} 6. Nf3 Nc6 {A mesma posição da Alapin. Smith-Morra: ...Cf6. Depois de e5: ...Cd5 e o plano da Alapin.}
+7. Bc4 Nb6 {Recuo com ataque ao bispo.} 8. Bb5 Bd7 {O bispo defende c6 e mantém a tensão.}
+9. exd6 {Ele trocou em d6. Recapturamos já?} 9... e6 {Isso: ...e6, e o bispo recaptura em d6 depois.}
+10. Bg5 f6 {Fecha a diagonal da dama.} 11. Bh4 Bxd6 {O peão volta, e o peão de d4 dele ficou isolado.}
+12. Nc3 O-O {Alapin: ...Cf6, ...Cd5, ...cxd4, ...d6 e cobrar o peão isolado de d4.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Rossolimo 3.Bb5 — g5"]
+[Categoria "desvio"]
+[Ordem "54"]
+[Capitulo "E28R"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. Bb5 {O bispo prega o cavalo. Qual é o nosso lance?} 3... g6 {Isso: o bispo vai para g7.}
+4. Bxc6 {Ele trocou em c6. Com qual peão recapturamos aqui?} 4... dxc6 {Isso: ...dxc6 abre a dama e o bispo de c8. O peão de c6 guarda d5 e b5.}
+5. d3 Bg7 6. h3 Qc7 {A dama primeiro, apoiando ...e5. O cavalo decide depois.}
+7. Nc3 e5 {Peões em c5 e e5: a estrutura preferida do campeão do mundo.} 8. Be3
+b6 {Defende c5 e abre b7 para o bispo.} 9. Qd2 h6 {Tira g5 e o Bh6 dele.} 10. a3
+Ne7 {O cavalo vai por e7 e deixa o peão de f7 passar.} 11. b4 {Ele ataca na ala da dama. Qual é o nosso avanço?}
+11... f5 {Isso: cada um ataca de um lado, e o nosso é o do rei dele.} 12. Qc1 f4
+13. Bd2 cxb4 14. axb4 g5 {Rossolimo: ...g6. Com Bxc6: ...dxc6, ...Dc7, ...e5 e o ataque com ...f5. Com roque: ...Bg7, ...Cf6, roque e ...d5 quando ele jogar d4.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Rossolimo 3.Bb5 — gxf5"]
+[Categoria "desvio"]
+[Ordem "55"]
+[Capitulo "E28R"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. Bb5 {O bispo prega o cavalo. Qual é o nosso lance?} 3... g6 {Isso: o bispo vai para g7.}
+4. O-O Bg7 5. c3 Nf6 6. Re1 O-O 7. d4 {Ele montou o centro com c3 e d4. Qual é a resposta?}
+7... d5 {Isso: ...d5 antes que o centro cresça.} 8. e5 Ne4 9. Nbd2 Bf5 10. Nxe4
+dxe4 11. Nh4 cxd4 12. Nxf5 gxf5 {Os peões de e4 e f5 tomam conta do centro.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.Cc3 e 3.Cf3 — Bf5"]
+[Categoria "desvio"]
+[Ordem "56"]
+[Capitulo "E28S"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nc3 Nc6 3. Nf3 {Ele voltou ao Cf3. Qual é o nosso lance?} 3... g6 4. d4 cxd4
+5. Nxd4 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Be2 {Qual é o próximo lance do nosso esquema?} 7... O-O {Isso: rei seguro antes de abrir o centro.}
+8. O-O {O rei está seguro. Qual lance o Dragão Acelerado procura?} 8... d5 $1 {...d5 em um lance só. Agora é ele quem tem de resolver o centro. ...Bg7, ...Cf6, roque, ...d5.}
+9. Nxc6 bxc6 10. e5 {O cavalo foi atacado. Para onde?} 10... Ne8 $1 {Isso: em e8 o cavalo fica seguro e deixa o peão de f7 livre para ...f6.}
+(10... Nd7 $6 {Natural, mas 11.f4 f6 12.Cxd5! e o peão de d5 cai.}) 11. f4 f6 $1 {O único contra-ataque: atacar a ponta da corrente, o peão de e5.}
+12. exf6 Bxf6 {O bispo volta à diagonal grande.} 13. Bd4 Bf5 {Rei primeiro, ...d5, ...Ce8 e ...f6. Os dois bispos apontam para o lado dele. Se ele tomar em d5: ...Cb4!?.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.Cc3 e 3.Cf3 — Nf6"]
+[Categoria "desvio"]
+[Ordem "57"]
+[Capitulo "E28S"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nc3 Nc6 3. Bc4 {O bispo mira f7. Qual peão fecha a diagonal?} 3... e6 {Isso: ...e6.}
+4. Nf3 Nf6 {A mesma posição do capítulo do bispo em c4.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Grande Prêmio e Fechada — b5"]
+[Categoria "desvio"]
+[Ordem "58"]
+[Capitulo "E28T"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nc3 Nc6 3. f4 {Ele quer atacar com f4, Bc4 e Dh4. Qual é o nosso lance?} 3... g6
+4. Nf3 Bg7 5. Bc4 {O bispo mira f7 de novo. Qual peão fecha a diagonal?} 5... e6
+$1 {Isso: ...e6 segura d5.} 6. O-O Nge7 $1 {O cavalo vai por e7 para não tapar o bispo de g7.}
+7. d3 d5 8. Bb3 O-O 9. Qe1 {A dama vai para h4. Qual cavalo ocupa o centro com ameaça?}
+9... Nd4 $1 10. Nxd4 cxd4 $1 {Com o peão: abre a coluna c.} (10... Bxd4+ $6) 11. Ne2 {Qual troca no centro abre o jogo?}
+11... dxe4 $1 {Isso: o centro dele se desfaz.} (11... b5 $2 {Cedo: 12.e5! fecha o centro e o bispo de g7 fica sem jogo.})
+12. dxe4 b5 $15 {Grande Prêmio: ...g6, ...e6, ...Cge7, ...d5 e ...Cd4. Contra 3.Bb5: ...Cd4!.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Grande Prêmio e Fechada — Nd4"]
+[Categoria "desvio"]
+[Ordem "59"]
+[Capitulo "E28T"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nc3 Nc6 3. f4 {Ele quer atacar com f4, Bc4 e Dh4. Qual é o nosso lance?} 3... g6
+4. Nf3 Bg7 5. Bb5 Nd4 $1 {O cavalo pula para d4 e ataca o bispo.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Grande Prêmio e Fechada — Bg7"]
+[Categoria "desvio"]
+[Ordem "60"]
+[Capitulo "E28T"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nc3 Nc6 3. Bb5 {O bispo prega o cavalo. Qual casa central o cavalo ocupa?}
+3... Nd4 $1 4. Nf3 a6 $1 {Perguntamos ao bispo para onde ele vai.} (4... Nxb5 $6)
+(4... Nxf3+ $2) 5. Bd3 g6 $5 6. Nxd4 cxd4 7. Ne2 d5 $1 {...d5 libera as nossas peças.}
+8. c3 dxc3 9. bxc3 Bg7 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Grande Prêmio e Fechada — h5"]
+[Categoria "desvio"]
+[Ordem "61"]
+[Capitulo "E28T"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nc3 Nc6 3. g3 {A Siciliana Fechada.} 3... g6 $1 4. Bg2 Bg7 5. d3 d6 6. Be3 {Qual torre prepara o avanço ...b5?}
+6... Rb8 7. Qd2 b5 {Espaço na ala da dama.} 8. Nge2 Nd4 $5 9. O-O b4 10. Nd1 h5
+$1 {Na Fechada: ...g6, ...Bg7, ...d6, ...Tb8 e ...b5.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.d4 e 3.Dxd4 — Nf6"]
+[Categoria "desvio"]
+[Ordem "62"]
+[Capitulo "E28U"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. d4 cxd4 3. Qxd4 {A dama dele saiu cedo para o centro. Qual peça sai atacando a dama?}
+3... Nc6 {Isso: ...Cc6 ganha tempo.} 4. Qd1 {A dama voltou. Qual peça ataca e4?}
+4... Nf6 {Isso: ...Cf6. Ele gastou dois lances com a dama, e nós desenvolvemos dois cavalos. 3.Dxd4: ...Cc6 e ...Cf6.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.d4 e 3.Dxd4 — Nf6"]
+[Categoria "desvio"]
+[Ordem "63"]
+[Capitulo "E28U"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. d4 cxd4 3. Qxd4 {A dama dele saiu cedo para o centro. Qual peça sai atacando a dama?}
+3... Nc6 {Isso: ...Cc6 ganha tempo.} 4. Qe3 Nf6 {A mesma resposta: ...Cf6.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.d4 e 3.Dxd4 — Nf6"]
+[Categoria "desvio"]
+[Ordem "64"]
+[Capitulo "E28U"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. d4 cxd4 3. Qxd4 {A dama dele saiu cedo para o centro. Qual peça sai atacando a dama?}
+3... Nc6 {Isso: ...Cc6 ganha tempo.} 4. Qa4 Nf6 {De novo ...Cf6.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.d4 e 3.Dxd4 — g6"]
+[Categoria "desvio"]
+[Ordem "65"]
+[Capitulo "E28U"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. d4 cxd4 3. Nf3 Nc6 4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Smith-Morra 3.c3 — Nc6"]
+[Categoria "desvio"]
+[Ordem "66"]
+[Capitulo "E28V"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. d4 cxd4 3. c3 {Ele oferece um peão para ganhar tempo. Qual lance ataca e4 e recusa o gambito?}
+3... Nf6 4. e5 Nd5 5. cxd4 d6 {Atacamos o peão de e5.} 6. Nf3 Nc6 {A mesma posição da Alapin. Smith-Morra: ...Cf6. Depois de e5: ...Cd5 e o plano da Alapin.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Smith-Morra 3.c3 — Nc6"]
+[Categoria "desvio"]
+[Ordem "67"]
+[Capitulo "E28V"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. d4 cxd4 3. c3 {Ele oferece um peão para ganhar tempo. Qual lance ataca e4 e recusa o gambito?}
+3... Nf6 4. e5 Nd5 5. Qxd4 e6 6. Nf3 Nc6 {A dama é atacada de novo.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: Smith-Morra 3.c3 — Nf6"]
+[Categoria "desvio"]
+[Ordem "68"]
+[Capitulo "E28V"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. d4 cxd4 3. c3 {Ele oferece um peão para ganhar tempo. Qual lance ataca e4 e recusa o gambito?}
+3... Nf6 4. cxd4 {Ele recapturou e deixou e4 sem defesa. Qual é o lance?} 4... Nxe4 {Isso: ganhamos o peão central.}
+5. Bd3 Nf6 *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.f4 — Bf5"]
+[Categoria "desvio"]
+[Ordem "69"]
+[Capitulo "E28W"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. f4 {Ele avançou o peão de f. Qual peão ataca e4 já?} 2... d5 3. e5 {O peão passou por nós.}
+3... Nc6 4. Nf3 Bf5 {O bispo sai antes do ...e6. 2.f4: ...d5!. Se e5: ...Cc6 e ...Bf5. Se exd5: ...Dxd5 e a dama volta.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Desvio: 2.f4 — Qd8"]
+[Categoria "desvio"]
+[Ordem "70"]
+[Capitulo "E28W"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. f4 {Ele avançou o peão de f. Qual peão ataca e4 já?} 2... d5 3. exd5 {Ele trocou. Qual peça recaptura?}
+3... Qxd5 4. Nf3 Nc6 5. Nc3 Qd8 {A dama volta para casa, e o centro é nosso.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Se eu esquecer a teoria — d5"]
+[Categoria "se-esquecer"]
+[Ordem "71"]
+[Capitulo "E28X"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
+6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
+7. Qd2 {A dama sai antes do f3.} 7... O-O {Regra 1: bispo em g7, cavalo em f6, rei rocado.}
+8. O-O-O d5 {Regra 2: rei seguro? Procure ...d5. Aqui ele rocou grande, e o ...d5 abre o centro na frente do rei dele. Rei primeiro; ...d5 quando der; ...Db6 contra c4; ...Cf6 contra c3; ...e6 contra f7.}
+*
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Se eu esquecer a teoria — Qb6"]
+[Categoria "se-esquecer"]
+[Ordem "72"]
+[Capitulo "E28X"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
+3. d4 {As Brancas abriram o centro. O que fazemos?} 3... cxd4 {Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.}
+4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
+5. c4 $1 {O Maróczy: os peões de c4 e e4 seguram d5. Aqui o ...d5 não sai tão cedo.}
+5... Bg7 6. Be3 {O bispo de e3 deixou b2 sem defesa. Qual lance de dama ataca d4 e b2?}
+6... Qb6 {Isso: ...Db6.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Se eu esquecer a teoria — Nf6"]
+[Categoria "se-esquecer"]
+[Ordem "73"]
+[Capitulo "E28X"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. c3 {Ele quer jogar d4 e ter dois peões no centro. Qual peça ataca e4 agora?}
+2... Nf6 $1 {Isso: ...Cf6. Ele quase sempre responde 3.e5, e o peão avançado vira alvo.}
+(2... d5 $1 {Também é uma boa resposta, mas a aula segue por ...Cf6.}) (2... e5
+$5 {Jogável, mas ...Cf6 rende mais na faixa de vocês.}) (2... g6 $6 {Deixa 3.d4 e o centro grande.})
+(2... d6 $6 {Lento: 3.d4 e o centro é dele.}) *
+
+[Abertura "siciliana"]
+[Nome "Siciliana: Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "estudo local v1.0 — Siciliana: Dragão Acelerado"]
+[Linha "Se eu esquecer a teoria — e6"]
+[Categoria "se-esquecer"]
+[Ordem "74"]
+[Capitulo "E28X"]
+[Result "*"]
+
+1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
+2. Bc4 {A outra ordem.} 2... Nc6 3. Nf3 Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. Ng5 {O cavalo ataca f7 junto com o bispo. Como defendemos?}
+4... e6 $1 {Isso: f7 está seguro, e ...d5 vem com tempo no bispo.} *

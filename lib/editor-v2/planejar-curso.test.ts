@@ -196,3 +196,33 @@ test("treino da aula de abertura leva os símbolos dos lances e liga a escada de
   assert.ok(Object.entries(simbolos).some(([chave, nag]) => chave.endsWith("|c2c3") && nag === 1), "e o 5.c3! do acerto do aluno");
   for (const chave of Object.keys(simbolos)) assert.match(chave, /^[^|]+ [wb] [KQkq-]+ [a-h1-8-]+\|[a-h][1-8][a-h][1-8][qrbn]?$/);
 });
+
+test("curso das Pretas: o título da aula e o aviso do treino guiado falam do adversário certo (18/9/2026)", () => {
+  const estudo = `[Event "Mini"]
+[White "A01"]
+[Black "Nossa arma"]
+
+{[OBJETIVO] Jogar 1...c5.} 1. e4 c5 { A Siciliana. } *
+
+[Event "Mini"]
+[White "C02"]
+[Black "Quando as Brancas jogam bem"]
+
+{[OBJETIVO] Responder a 2.Cf3.} 1. e4 c5 2. Nf3 { O lance mais comum. } 2... Nc6 { Nosso cavalo. } *
+
+[Event "Mini"]
+[White "E22A"]
+[Black "Move Trainer — Arma: 1...c5"]
+
+1. e4 c5 2. Nf3 (2. Nc3 Nc6) (2. c3 Nf6) (2. d4 cxd4) (2. f4 g6) 2... Nc6 *
+`;
+  const curso = planejarCursoDeAbertura(estudo, { cor: "pretas", abertura: "mini", nomeDaAbertura: "Mini", agora: new Date("2026-09-18T00:00:00Z") });
+  const titulos = curso.aulas.map((a) => a.aula.titulo).join(" | ");
+  assert.doesNotMatch(titulos, /Pretas/, titulos);
+  assert.match(aula(curso, "C").titulo, /Quando as Brancas jogam bem/);
+  const demais = curso.avisos.filter((a) => a.codigo === "DEFESAS_DEMAIS").map((a) => a.mensagem);
+  assert.ok(demais.length > 0, "cinco respostas depois de 1...c5");
+  for (const mensagem of demais) assert.match(mensagem, /respostas das Brancas/, mensagem);
+  // E o curso das Brancas continua como estava.
+  assert.match(aula(cursos[0][1], "C").titulo, /Quando as Pretas jogam bem/);
+});
