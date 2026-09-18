@@ -279,7 +279,10 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
   if (comando.tipo === "MOVER_CAPITULO") {
     const etapas = aula.fluxo.filter((etapa) => etapa.tipo === "capitulo");
     const de = etapas.findIndex((etapa) => etapa.entidadeId === comando.capituloId);
-    if (de < 0) throw new Error("esse capítulo não está no fluxo da aula");
+    if (de < 0) {
+      if (aula.fluxo.some((etapa) => etapa.comparacoes?.includes(comando.capituloId))) throw new Error("esta variante é tocada dentro do capítulo de onde ela sai: mova o capítulo, e ela vai junto");
+      throw new Error("esse capítulo não está no fluxo da aula");
+    }
     if (!Number.isInteger(comando.vao) || comando.vao < 0 || comando.vao > etapas.length) {
       throw new Error("o destino do capítulo não existe");
     }

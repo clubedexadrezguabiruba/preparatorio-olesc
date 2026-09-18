@@ -74,7 +74,7 @@ export function Previa({ previa, aoFechar }: { previa: PreviaV2; aoFechar: () =>
     if (!trecho) return null;
     return {
       technique: { name: trecho.titulo, summary: resumo },
-      roteiro: trecho.passos.map((passo) => ({ fala: passo.fala, lance: passo.lance }) as RoteiroPasso),
+      roteiro: trecho.passos.map((passo) => ({ fala: passo.fala, lance: passo.lance, ...(passo.recuo ? { recuo: true } : {}) }) as RoteiroPasso),
     } as unknown as ObjectiveStageData;
   }, [trecho, resumo]);
 

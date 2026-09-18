@@ -64,6 +64,8 @@ export type PassoDoCapituloDoAlunoV2 = {
   pausaManual: boolean;
   /** O rótulo da fala, quando o estudo a marcou (§13.3.5). */
   rotulo?: string;
+  /** A fita voltando um lance até o ponto de escolha (18/9/2026) — ver `PassoDaPrevia.recuo`. */
+  recuo?: true;
 };
 
 export type EtapaDoAlunoV2 =
@@ -243,6 +245,7 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
           ...(passo.nags ? { nags: passo.nags } : {}),
           pausaManual: passo.pausaManual,
           ...(passo.rotulo ? { rotulo: passo.rotulo } : {}),
+          ...(passo.recuo ? { recuo: true as const } : {}),
         })),
       });
     } else if (etapa.tipo === "treino") {

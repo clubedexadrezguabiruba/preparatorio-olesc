@@ -9,6 +9,9 @@ import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { aulaDoAlunoV2, etapasDoAlunoV2 } from "./fluxo-do-aluno.ts";
 import { percursoDoCapitulo, previaDoCapitulo } from "./previa.ts";
 import { montarPacoteV2 } from "./pacote.ts";
+import { executarComando } from "./comandos.ts";
+import { lerEstudo, planejarEstudo } from "./importar-estudo.ts";
+import type { AulaV2, RevisaoDaFenV2 } from "./modelo.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N0-LADDER.json", "utf8")));
 const position = positionSchema.parse(JSON.parse(readFileSync("content/positions/N0/pos-n0-ladder-silman-yk7.json", "utf8")));
@@ -95,4 +98,22 @@ test("o símbolo do lance chega ao passo do aluno e da prévia, também na segun
 
   const daPrevia = previaDoCapitulo(aula, positions, capitulo.id).trechos[0].passos;
   assert.deepEqual(daPrevia.filter((passo) => passo.nodeId === comLance).map((passo) => passo.nags), [[3, 14], [3, 14]]);
+});
+
+test("a fita voltando chega ao aluno: o passo de recuo atravessa, mudo, e a variante não vira etapa (18/9/2026)", () => {
+  const leitura = lerEstudo(readFileSync("content/finais/estudos-aula/N1-SQUARE.pgn", "utf8"));
+  const vazia: AulaV2 = {
+    schemaVersion: 2, id: "N1-SQUARE", titulo: "A regra do quadrado",
+    metadados: { orientacaoPadrao: "white", criterioDominio: "D1", estadoEditorial: "rascunho", classe: "E" },
+    proveniencia: [], excecoes: [], analises: [], introducoes: [], capitulos: [], treinos: [], praticas: [], fluxo: [],
+  };
+  const revisao: RevisaoDaFenV2 = { origem: "estudo-lichess", autor: "x", obra: "x", fenRevisada: "x", revisadoEm: "2026-09-18T12:00:00.000Z", professor: "Doug", mostrarCredito: false, direitoDosTextos: true };
+  const plano = planejarEstudo(vazia, leitura, { destinos: {}, revisao }, {});
+  assert.ok(plano.ok);
+  const aula = executarComando(vazia, { tipo: "IMPORTAR_ESTUDO", plano: plano.plano }, {});
+  const capitulos = etapasDoAlunoV2(aula, {}, {}).filter((e) => e.tipo === "capitulo");
+  assert.deepEqual(capitulos.filter((e) => e.titulo.startsWith("Comparação:")).map((e) => e.titulo), []);
+  const recuos = capitulos.flatMap((e) => e.tipo === "capitulo" ? e.passos.filter((p) => p.recuo) : []);
+  assert.ok(recuos.length > 0, "a N1-SQUARE tem três variantes: a fita volta");
+  assert.ok(recuos.every((p) => !p.fala && !p.lance && !p.desenhos && !p.nags), "o recuo é mudo, sem lance e sem desenho");
 });

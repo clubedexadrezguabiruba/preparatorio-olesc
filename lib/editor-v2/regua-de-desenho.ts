@@ -175,7 +175,7 @@ function casasCitadasEDesenhadas(aula: AulaV2, positions: Record<string, Positio
   const problemas: ProblemaV2[] = [];
   for (const trecho of previaDaAula(aula, positions).trechos) {
     for (const [i, passo] of trecho.passos.entries()) {
-      if (passo.retorno) continue;
+      if (passo.retorno || passo.recuo) continue;
       const desenhadas = casasDoDesenho(passo.desenhos);
       const citadas = casasCitadas(passo.fala);
       const doLance = passo.lance ? [passo.lance.slice(0, 2), passo.lance.slice(2, 4)] : [];

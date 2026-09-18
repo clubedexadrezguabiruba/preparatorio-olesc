@@ -950,7 +950,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
 function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar }: { etapa: Extract<EtapaDoAlunoV2, { tipo: "capitulo" }>; trilha: ReactNode; rodape: ReactNode; aoTerminar?: () => void; aoContinuar?: () => void }) {
   const stage = useMemo(() => ({
     technique: { name: etapa.titulo, summary: etapa.resumo },
-    roteiro: etapa.passos.map((passo) => ({ fala: passo.fala, ...(passo.lance ? { lance: passo.lance } : {}), ...(passo.espera ? { espera: passo.espera } : {}) })),
+    roteiro: etapa.passos.map((passo) => ({ fala: passo.fala, ...(passo.lance ? { lance: passo.lance } : {}), ...(passo.espera ? { espera: passo.espera } : {}), ...(passo.recuo ? { recuo: true } : {}) })),
   }) as unknown as ObjectiveStageData, [etapa]);
   const position = useMemo(() => ({ fen: etapa.fen }) as unknown as Position, [etapa.fen]);
   const autoria = useCallback((n: number): DrawShape[] => desenhoDaAutoriaV2(etapa.passos[n]?.desenhos), [etapa]);

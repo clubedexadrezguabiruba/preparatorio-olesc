@@ -33,6 +33,9 @@ import type { RoteiroPasso } from "./schema.ts";
  * autoria, e quem recusa roteiro que não fecha é a `lessonSchema`.
  */
 
+/** O que o quadro lê de um passo: o lance, e se ele é a fita voltando (`recuo`, aula v2). */
+export type PassoDoQuadro = Pick<RoteiroPasso, "lance"> & { recuo?: boolean };
+
 /** Uma posição do roteiro, pronta para o tabuleiro. */
 export type Quadro = {
   fen: string;
@@ -51,36 +54,44 @@ export type Quadro = {
  * posição do anterior e **zera o `lastMove`**: manter aceso o lance passado
  * enquanto o professor fala de outra coisa é apontar para o lugar errado.
  */
-export function montarQuadros(fenInicial: string, roteiro: RoteiroPasso[]): Quadro[] {
+export function montarQuadros(fenInicial: string, roteiro: readonly PassoDoQuadro[]): Quadro[] {
   const game = new Chess(fenInicial);
   const quadros: Quadro[] = [];
+  /**
+   * O quadro de antes de cada lance jogado, para a fita voltar (18/9/2026): o passo de `recuo`
+   * desfaz o último lance e mostra o tabuleiro **exatamente** como estava — com o lance anterior
+   * aceso, que é o que o aluno viu naquela hora. A peça voltando, o chessground anima sozinho.
+   */
+  const antes: Quadro[] = [];
+  let atual: Quadro = { fen: game.fen(), lastMove: null, check: game.isCheck(), capture: false, mate: false, matedColor: null };
   for (const passo of roteiro) {
-    if (!passo.lance) {
-      quadros.push({
-        fen: game.fen(),
-        lastMove: null,
-        check: game.isCheck(),
-        capture: false,
-        mate: false,
-        matedColor: null,
+    if (passo.recuo) {
+      const anterior = antes.pop();
+      if (anterior) {
+        game.undo();
+        atual = anterior;
+      }
+    } else if (!passo.lance) {
+      atual = { fen: game.fen(), lastMove: null, check: game.isCheck(), capture: false, mate: false, matedColor: null };
+    } else {
+      antes.push(atual);
+      const jogado = game.move({
+        from: passo.lance.slice(0, 2),
+        to: passo.lance.slice(2, 4),
+        promotion: passo.lance.length > 4 ? passo.lance.slice(4) : undefined,
       });
-      continue;
+      const mate = game.isCheckmate();
+      atual = {
+        fen: game.fen(),
+        lastMove: [passo.lance.slice(0, 2) as Key, passo.lance.slice(2, 4) as Key],
+        check: game.isCheck(),
+        capture: Boolean(jogado.captured),
+        mate,
+        // Quem está para jogar num mate é o lado matado.
+        matedColor: mate ? toBoardColor(game.turn()) : null,
+      };
     }
-    const jogado = game.move({
-      from: passo.lance.slice(0, 2),
-      to: passo.lance.slice(2, 4),
-      promotion: passo.lance.length > 4 ? passo.lance.slice(4) : undefined,
-    });
-    const mate = game.isCheckmate();
-    quadros.push({
-      fen: game.fen(),
-      lastMove: [passo.lance.slice(0, 2) as Key, passo.lance.slice(2, 4) as Key],
-      check: game.isCheck(),
-      capture: Boolean(jogado.captured),
-      mate,
-      // Quem está para jogar num mate é o lado matado.
-      matedColor: mate ? toBoardColor(game.turn()) : null,
-    });
+    quadros.push(atual);
   }
   return quadros;
 }
@@ -125,6 +136,14 @@ export function pausaDoPasso(passo: RoteiroPasso): number {
   const leitura = Math.max(PAUSA_MINIMA_MS, passo.fala.length * MS_DE_LEITURA_POR_CARACTERE);
   return leitura + (passo.espera ?? 0);
 }
+
+/**
+ * **A fita voltando** (regra do Doug, 18/9/2026): o passo de `recuo` desfaz um lance, mais rápido do
+ * que ele foi feito, sem som, sem desenho e sem fala. O lance que só acontece leva 1000 ms e anima em
+ * 180 ms; a volta leva `msPorLance` e anima em `animacaoMs`. Os dois números são para o Doug calibrar
+ * olhando — mudar a velocidade da volta é editar aqui.
+ */
+export const RECUO = { msPorLance: 250, animacaoMs: 120 } as const;
 
 /**
  * Quanto o roteiro inteiro leva, em ms — a estimativa que a revisão mede contra

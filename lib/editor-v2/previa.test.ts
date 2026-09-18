@@ -15,7 +15,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { Chess } from "chess.js";
 import type { AulaV2, CapituloV2, NoV2 } from "./modelo.ts";
-import { pausaDoPasso } from "../lesson/roteiro.ts";
+import { montarQuadros, pausaDoPasso } from "../lesson/roteiro.ts";
+import { mapaDaAnalise } from "./arvore.ts";
 import {
   animacaoDaPrevia,
   INTERVALO_SEM_FALA_MS,
@@ -451,4 +452,68 @@ test("caso de aceite §15.3: a prévia do capítulo sozinho não inventa compara
   assert.equal(previa.trechos.length, 1);
   assert.equal(previa.trechos[0].comparacao, undefined, "só a aula inteira mostra o retorno");
   assert.equal(previa.rotulo, "«O engano: a derrota»");
+});
+
+/* ------------------------------------------------------------------ *
+ * Na hora, e a fita volta (regra do Doug, 18/9/2026)
+ * ------------------------------------------------------------------ */
+
+/** Linha principal e2e4 Rg2 e5; a variante 1... Rh2 sai depois de e4, e dentro dela 2. Rf2 sai depois de Rh2. */
+function aulaComVariantes(): AulaV2 {
+  const base = aula({
+    fen: PARTIDA,
+    ramos: [
+      { prefixo: "a", ucis: ["e2e4", "h1g2", "e4e5"] },
+      { prefixo: "v", ucis: ["h1h2", "e4e5", "h2g3"], de: "a1" },
+      { prefixo: "w", ucis: ["e1f2", "h2h3"], de: "v1" },
+    ],
+    capitulos: (ids) => [
+      { id: "cap-1", titulo: "A linha", analiseId: "an-1", inicioNodeId: "r", caminho: ids.a, orientacao: "white", narracoes: [{ id: "n-a1", nodeId: "a1", texto: "O peão sai.", pausa: "temporizada" }] },
+      { id: "cap-v", titulo: "Comparação: 1... Rh2", analiseId: "an-1", inicioNodeId: "r", caminho: ["a1", ...ids.v], orientacao: "white", narracoes: [{ id: "n-v1", nodeId: "v1", texto: "O rei foge para h2.", pausa: "temporizada" }] },
+      { id: "cap-w", titulo: "Comparação: 2. Rf2", analiseId: "an-1", inicioNodeId: "r", caminho: ["a1", "v1", ...ids.w], orientacao: "white", narracoes: [] },
+    ] as CapituloV2[],
+  });
+  return { ...base, fluxo: [{ id: "et-1", tipo: "capitulo", entidadeId: "cap-1", comparacoes: ["cap-v", "cap-w"] }] };
+}
+
+const roteiroDe = (passos: PassoDaPrevia[]) => passos.map((p) => (p.recuo ? `<${p.nodeId}` : p.retorno ? `@${p.nodeId}` : p.lance ? p.nodeId : "partida"));
+
+test("na hora: a variante toca no ponto de escolha, a fita volta lance a lance, e a linha segue — com a variante de dentro, dentro", () => {
+  const previa = previaDaAula(aulaComVariantes(), {});
+  assert.equal(previa.trechos.length, 1, "as variantes não são trechos à parte");
+  const passos = previa.trechos[0].passos;
+  assert.deepEqual(roteiroDe(passos), [
+    "partida", "a1",
+    "v1", "w1", "w2", "<w1", "<v1", "@v1",
+    "v2", "v3", "<v2", "<v1", "<a1", "@a1",
+    "a2", "a3",
+  ]);
+  const retornos = passos.filter((p) => p.retorno).map((p) => p.fala);
+  assert.match(retornos[0], /^Voltamos a 1.*Rh2\. A outra escolha: 2.*e5\.$/, "a de dentro volta ao ponto dela, e anuncia o lance da mãe");
+  assert.match(retornos[1], /^Voltamos a 1.*e4\. A outra escolha: 1.*Rg2\.$/);
+  assert.equal(passos.find((p) => p.nodeId === "v1" && p.lance)!.fala, "O rei foge para h2.", "a fala da variante vem do cadastro dela");
+  assert.ok(passos.filter((p) => p.recuo).every((p) => !p.fala && !p.lance && !p.desenhos), "a volta é muda e sem desenho");
+});
+
+test("na hora: cada passo, de ida ou de volta, mostra no tabuleiro a posição do nó dele", () => {
+  const documento = aulaComVariantes();
+  const trecho = previaDaAula(documento, {}).trechos[0];
+  const quadros = montarQuadros(trecho.fen, trecho.passos);
+  const mapa = mapaDaAnalise(documento, "an-1", {});
+  trecho.passos.forEach((passo, i) => assert.equal(quadros[i].fen, mapa.quadros[passo.nodeId].fen, `passo ${i + 1} (${roteiroDe([passo])[0]})`));
+});
+
+test("na hora: a variante que sai antes do «daqui» não toca; a prévia do capítulo sozinho toca as que vêm depois", () => {
+  const documento = aulaComVariantes();
+  assert.deepEqual(roteiroDe(previaDoCapitulo(documento, {}, "cap-1", "a2").trechos[0].passos), ["partida", "a3"]);
+  assert.equal(previaDoCapitulo(documento, {}, "cap-1").trechos[0].passos.filter((p) => p.recuo).length, 5);
+});
+
+test("sem `comparacoes` na etapa, nada muda: a variante com etapa própria continua sendo um trecho com retorno", () => {
+  const documento = aulaComVariantes();
+  const semNaHora = { ...documento, fluxo: [{ id: "et-1", tipo: "capitulo" as const, entidadeId: "cap-1" }, { id: "et-2", tipo: "capitulo" as const, entidadeId: "cap-v" }] };
+  const previa = previaDaAula(semNaHora, {});
+  assert.deepEqual(previa.trechos.map((t) => t.capituloId), ["cap-1", "cap-v", "cap-w"]);
+  assert.equal(previa.trechos[0].passos.some((p) => p.recuo), false);
+  assert.ok(previa.trechos[1].passos.some((p) => p.retorno));
 });

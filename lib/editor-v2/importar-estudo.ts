@@ -263,17 +263,20 @@ const NAGS_DE_LANCE = new Set([1, 2, 3, 4, 5, 6]);
 const GRAFIA_DO_NAG: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
 
 /**
- * As variantes de um capítulo-aula como **capítulos de comparação** (18/9/2026).
+ * As variantes de um capítulo-aula como **capítulos-variante**, tocados dentro da etapa da mãe.
  *
  * A aula de finais mostra o lance que ganha e, ao lado, o que perde. No estudo, o que perde é a
  * variante (`1. Kd6! (1. Ke6? …)`); sem isto a importação levava só a linha principal e a variante
  * ficava invisível para o aluno. Cada variante que o professor marcou — com símbolo ou comentário —
- * vira um capítulo que percorre a mesma análise da raiz até ela, e a prévia (`previa.ts`) reconhece a
- * bifurcação e diz "Voltamos a…". É o mesmo capítulo que "Mostrar esta variante na aula" cria
- * (`prepararMostrarVariante`), agora feito pela importação.
+ * vira um capítulo que percorre a mesma análise da raiz até ela: é o cadastro, onde o professor edita
+ * a fala dela.
  *
- * Só as falas **da variante** entram: o começo comum já foi narrado no capítulo de antes. Variante
- * dentro de variante vira capítulo também, logo depois da mãe, e compara com ela.
+ * **Ela não ganha etapa** (regra do Doug, 18/9/2026, que revoga o "capítulo de comparação"): a etapa
+ * da mãe a lista em `comparacoes`, e a prévia (`previa.ts`) a toca na hora — ao chegar ao ponto de
+ * escolha, joga a variante, a fita volta até ali, "Voltamos a…", e a linha segue.
+ *
+ * Só as falas **da variante** entram. Variante dentro de variante vira capítulo também, logo depois
+ * da mãe, e é tocada dentro dela.
  */
 export function capitulosDasVariantes(analise: AnaliseV2, capitulo: CapituloV2, usados: Set<string>): CapituloV2[] {
   const livre = (base: string) => { let id = base; for (let n = 2; usados.has(id); n += 1) id = `${base}-${n}`; usados.add(id); return id; };
@@ -417,9 +420,13 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
 
   // A ordem das etapas segue a do estudo.
   const ordem = new Map(escolhidos.map((c, i) => [c.jogo.capitulo?.id ?? c.parado?.capitulo.id ?? `#${c.numero}`, i]));
-  // As comparações vêm logo depois do capítulo delas, na ordem da árvore.
-  for (const [principalId, variantes] of comparacoes) variantes.forEach((id, k) => ordem.set(id, (ordem.get(principalId) ?? 0) + (k + 1) / 1000));
-  for (const capitulo of capitulos) etapas.push({ id: `etapa-${capitulo.id}`, tipo: "capitulo", entidadeId: capitulo.id });
+  // As variantes não têm etapa: a etapa da mãe as toca na hora, com a fita voltando (Doug, 18/9/2026).
+  const variantesDeAlguem = new Set([...comparacoes.values()].flat());
+  for (const capitulo of capitulos) {
+    if (variantesDeAlguem.has(capitulo.id)) continue;
+    const variantes = comparacoes.get(capitulo.id) ?? [];
+    etapas.push({ id: `etapa-${capitulo.id}`, tipo: "capitulo", entidadeId: capitulo.id, ...(variantes.length ? { comparacoes: variantes } : {}) });
+  }
   const posicaoNoEstudo = (etapa: AulaV2["fluxo"][number]) => {
     if (etapa.tipo === "capitulo") return ordem.get(etapa.entidadeId) ?? 0;
     const treino = treinos.find((t) => t.id === etapa.entidadeId);

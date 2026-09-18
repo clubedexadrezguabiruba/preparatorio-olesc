@@ -128,3 +128,29 @@ test("a linha do roteiro é a linha que a etapa 2 cobra", () => {
     "o que a etapa 1 mostra e o que a etapa 2 pede têm de ser a MESMA linha",
   );
 });
+
+test("o passo de recuo desfaz um lance e mostra o tabuleiro exatamente como estava (18/9/2026)", () => {
+  const inicial = "8/4k3/2K5/8/8/8/1P6/8 w - - 0 1";
+  const quadros = montarQuadros(inicial, [
+    passo({}),
+    passo({ lance: "c6c7" }),
+    passo({ lance: "e7e6" }),
+    passo({ lance: "b2b4" }),
+    { recuo: true },
+    { recuo: true },
+    passo({}),
+    passo({ lance: "e7e8" }),
+  ]);
+  assert.equal(quadros.length, 8);
+  assert.deepEqual(quadros[4], quadros[2], "o primeiro recuo volta ao quadro de antes de b4, com e6 aceso");
+  assert.deepEqual(quadros[5], quadros[1], "o segundo, ao de antes de Re6");
+  assert.equal(quadros[6].fen, quadros[1].fen, "o retorno fala da posição da escolha");
+  assert.equal(quadros[6].lastMove, null);
+  assert.deepEqual(quadros[7].lastMove, ["e7", "e8"], "e a outra escolha é jogada dali");
+});
+
+test("recuo sem lance para desfazer fica parado — nunca quebra o roteiro", () => {
+  const inicial = "8/4k3/2K5/8/8/8/1P6/8 w - - 0 1";
+  const quadros = montarQuadros(inicial, [passo({}), { recuo: true }]);
+  assert.equal(quadros[1].fen, inicial);
+});

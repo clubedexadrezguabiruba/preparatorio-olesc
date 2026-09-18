@@ -85,7 +85,7 @@ test("capítulo → treino → capítulo: as variantes viram respostas, e na vol
 
 test("capítulo → introdução → capítulo: o quadro entra no fim da introdução, e os lances voltam", () => {
   const aula = importada();
-  // Desde 18/9/2026 cada aula traz o capítulo de comparação do Qg6?? logo depois dela: a segunda aula é achada pelo título.
+  // Desde 18/9/2026 cada aula traz a variante do Qg6?? no cadastro, logo depois dela: a segunda aula é achada pelo título.
   const original = aula.capitulos.find((c) => c.titulo === "AULA EXPLICADA - O método completo")!;
   const quadrosAntes = aula.introducoes[0].quadros.length;
   const capitulosAntes = aula.fluxo.filter((e) => e.tipo === "capitulo").length;
@@ -94,7 +94,11 @@ test("capítulo → introdução → capítulo: o quadro entra no fim da introdu
   assert.ok(paraQuadro.ok, !paraQuadro.ok ? paraQuadro.mensagem : "");
   const comQuadro = paraQuadro.mudanca.aula;
   assert.equal(comQuadro.introducoes[0].quadros.length, quadrosAntes + 1);
-  assert.equal(comQuadro.fluxo.filter((e) => e.tipo === "capitulo").length, capitulosAntes - 1);
+  // A variante que o capítulo tocava na hora não fica sem lugar: ganha etapa própria (18/9/2026).
+  const variantes = aula.fluxo.find((e) => e.entidadeId === original.id)?.comparacoes ?? [];
+  assert.equal(variantes.length, 1, "o Qg6?? é tocado dentro do capítulo");
+  assert.equal(comQuadro.fluxo.filter((e) => e.tipo === "capitulo").length, capitulosAntes - 1 + variantes.length);
+  assert.ok(comQuadro.fluxo.some((e) => e.entidadeId === variantes[0]), "a variante continua na aula");
   assert.ok(comQuadro.analises.some((a) => a.id === original.analiseId), "a análise continua na aula");
   assert.ok(paraQuadro.mudanca.saem.some((s) => /deixa de ver/.test(s)), "a janela avisa que o aluno deixa de ver os lances");
   assert.deepEqual(erros(comQuadro), []);

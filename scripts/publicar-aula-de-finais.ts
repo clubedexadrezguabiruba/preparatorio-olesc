@@ -117,7 +117,7 @@ async function main() {
   if (seco) {
     console.log(`\n${id} — «${titulo}» (só conferir: nada gravado)`);
     console.log(`fluxo: ${aula.fluxo.map((e) => e.tipo).join(" → ")} → ${plano.plano.praticas.length} prática(s)`);
-    console.log(`capítulos: ${aula.capitulos.length} (${aula.capitulos.filter((c) => c.titulo.startsWith("Comparação")).length} de comparação), treinos: ${aula.treinos.length}`);
+    console.log(`capítulos: ${aula.capitulos.length} (${aula.fluxo.flatMap((e) => e.comparacoes ?? []).length} variante(s) tocada(s) na hora, sem etapa própria), treinos: ${aula.treinos.length}`);
     if (plano.plano.avisos.length) console.log(`avisos da importação:\n  - ${plano.plano.avisos.join("\n  - ")}`);
     // As perdas de cada capítulo (lance que não pôde ser jogado, token não lido), menos as que todo estudo tem.
     const comuns = /dicas e os textos de desvio|praticar contra o computador|a prática desta versão não mostra texto/;

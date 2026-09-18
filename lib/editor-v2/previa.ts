@@ -70,6 +70,12 @@ export type PassoDaPrevia = {
    * momento em que ele é o argumento.
    */
   retorno?: boolean;
+  /**
+   * A fita voltando (regra do Doug, 18/9/2026): este passo desfaz **um** lance, rápido, sem fala,
+   * sem som e sem desenho, até o ponto de escolha de uma variante tocada na hora. O `nodeId` é a
+   * posição a que ele volta. Como o retorno, nasce aqui e nunca entra no documento.
+   */
+  recuo?: boolean;
 };
 
 /** §15.3: este trecho volta a uma posição já mostrada, para mostrar a outra linha. */
@@ -134,8 +140,10 @@ function capitulosNoFluxo(aula: AulaV2): CapituloV2[] {
   }
   // Capítulo fora do fluxo é um problema que o diagnóstico acusa; aqui ele não some,
   // porque uma prévia que esconde conteúdo faria o professor procurar o defeito errado.
+  // A variante tocada dentro de uma etapa tem lugar: não é "fora do fluxo".
+  const tocadas = new Set(aula.fluxo.flatMap((etapa) => etapa.comparacoes ?? []));
   for (const capitulo of aula.capitulos) {
-    if (!ordenados.some((item) => item.id === capitulo.id)) ordenados.push(capitulo);
+    if (!tocadas.has(capitulo.id) && !ordenados.some((item) => item.id === capitulo.id)) ordenados.push(capitulo);
   }
   return ordenados;
 }
@@ -154,34 +162,102 @@ function passosDoTrecho(aula: AulaV2, capitulo: CapituloV2, de: string): PassoDa
   const percurso = percursoDoCapitulo(capitulo);
   const inicio = Math.max(0, percurso.indexOf(de));
   const passos: PassoDaPrevia[] = [];
-  for (let i = inicio; i < percurso.length; i += 1) {
-    const nodeId = percurso[i];
-    const no = analise.nos[nodeId];
-    if (!no) continue;
-    const falas = capitulo.narracoes.filter((narracao) => narracao.nodeId === nodeId);
-    const lance = i > inicio ? no.uci : undefined;
-    // O símbolo é do lance, e vale em toda fala parada na posição que ele criou.
-    const nags = i > inicio && no.nags?.length ? { nags: no.nags } : {};
-    if (!falas.length) {
-      passos.push({ nodeId, lance, fala: "", desenhos: no.desenhos, pausaManual: false, ...nags });
-      continue;
+  for (let i = inicio; i < percurso.length; i += 1) passos.push(...passosDoNo(analise, capitulo, percurso[i], i > inicio));
+  return passos;
+}
+
+/** Os passos de um nó do percurso: um por narração, ou um mudo. `comLance`: o nó entra jogando o lance que leva a ele. */
+function passosDoNo(analise: AulaV2["analises"][number], capitulo: CapituloV2, nodeId: string, comLance: boolean): PassoDaPrevia[] {
+  const no = analise.nos[nodeId];
+  if (!no) return [];
+  const falas = capitulo.narracoes.filter((narracao) => narracao.nodeId === nodeId);
+  const lance = comLance ? no.uci : undefined;
+  // O símbolo é do lance, e vale em toda fala parada na posição que ele criou.
+  const nags = comLance && no.nags?.length ? { nags: no.nags } : {};
+  if (!falas.length) return [{ nodeId, lance, fala: "", desenhos: no.desenhos, pausaManual: false, ...nags }];
+  return falas.map((narracao, ordem) => ({
+    nodeId,
+    // Só a primeira narração do nó carrega o lance; as seguintes falam da mesma
+    // posição. Repetir o lance o jogaria duas vezes.
+    lance: ordem === 0 ? lance : undefined,
+    fala: narracao.texto,
+    // A fala com desenho próprio manda nele; sem, vale o desenho da posição.
+    desenhos: narracao.desenhos ?? no.desenhos,
+    pausaManual: narracao.pausa === "manual",
+    ...(narracao.rotulo ? { rotulo: narracao.rotulo } : {}),
+    ...(narracao.esperaMs ? { esperaMs: narracao.esperaMs } : {}),
+    ...nags,
+  }));
+}
+
+/** As variantes que a etapa deste capítulo toca na hora — só as da mesma análise, na ordem da etapa. */
+function variantesDaEtapa(aula: AulaV2, capitulo: CapituloV2): CapituloV2[] {
+  const etapa = aula.fluxo.find((item) => item.tipo === "capitulo" && item.entidadeId === capitulo.id);
+  return (etapa?.comparacoes ?? []).flatMap((id) => aula.capitulos.find((item) => item.id === id && item.analiseId === capitulo.analiseId) ?? []);
+}
+
+const GRAFIA_DO_SIMBOLO: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
+
+/**
+ * O capítulo com as variantes tocadas **na hora** — a regra do Doug de 18/9/2026, e a decisão dele
+ * de 17/9 sobre o momento: quando a aula chega à posição da escolha,
+ *
+ * 1. joga a variante até a consequência (as falas dela, do cadastro dela);
+ * 2. a fita volta, um passo de `recuo` por lance, até a posição da escolha;
+ * 3. o passo de retorno diz "Voltamos a…";
+ * 4. a linha segue com o lance dela.
+ *
+ * Variante dentro de variante é a mesma coisa, uma dentro da outra. A mãe de cada variante é a
+ * linha **anterior** a ela na lista com o começo comum mais longo — a importação lista a mãe antes
+ * das filhas (`capitulosDasVariantes`), e no empate fica a linha principal, que vem primeiro. Duas
+ * variantes do mesmo ponto tocam uma depois da outra, e o retorno de cada uma anuncia a seguinte.
+ */
+function passosNaHora(
+  aula: AulaV2,
+  capitulo: CapituloV2,
+  variantes: readonly CapituloV2[],
+  de: string,
+  rotuloDoNo: (id: string) => string,
+): PassoDaPrevia[] {
+  const analise = aula.analises.find((item) => item.id === capitulo.analiseId);
+  if (!analise) return [];
+  const linhas = [capitulo, ...variantes];
+  const filhas = new Map<string, { variante: CapituloV2; ponto: number }[]>();
+  linhas.forEach((variante, k) => {
+    if (k === 0) return;
+    const meu = percursoDoCapitulo(variante);
+    let melhor: { mae: CapituloV2; n: number } | null = null;
+    for (const mae of linhas.slice(0, k)) {
+      const seu = percursoDoCapitulo(mae);
+      const n = comecoComum(meu, seu);
+      if (n === 0 || n >= meu.length || n >= seu.length) continue;
+      if (!melhor || n > melhor.n) melhor = { mae, n };
     }
-    falas.forEach((narracao, ordem) => {
-      passos.push({
-        nodeId,
-        // Só a primeira narração do nó carrega o lance; as seguintes falam da mesma
-        // posição. Repetir o lance o jogaria duas vezes.
-        lance: ordem === 0 ? lance : undefined,
-        fala: narracao.texto,
-        // A fala com desenho próprio manda nele; sem, vale o desenho da posição.
-        desenhos: narracao.desenhos ?? no.desenhos,
-        pausaManual: narracao.pausa === "manual",
-        ...(narracao.rotulo ? { rotulo: narracao.rotulo } : {}),
-        ...(narracao.esperaMs ? { esperaMs: narracao.esperaMs } : {}),
-        ...nags,
+    // Variante que não sai de linha nenhuma desta etapa não tem onde tocar.
+    if (melhor) filhas.set(melhor.mae.id, [...(filhas.get(melhor.mae.id) ?? []), { variante, ponto: melhor.n - 1 }]);
+  });
+
+  const passos: PassoDaPrevia[] = [];
+  const tocar = (linha: CapituloV2, desde: number, entraJogando: boolean) => {
+    const percurso = percursoDoCapitulo(linha);
+    for (let i = desde; i < percurso.length; i += 1) {
+      passos.push(...passosDoNo(analise, linha, percurso[i], i > desde || entraJogando));
+      const aqui = (filhas.get(linha.id) ?? []).filter((filha) => filha.ponto === i);
+      aqui.forEach(({ variante }, k) => {
+        tocar(variante, i + 1, true);
+        const dela = percursoDoCapitulo(variante);
+        for (let j = dela.length - 1; j > i; j -= 1) passos.push({ nodeId: dela[j - 1], fala: "", pausaManual: false, recuo: true });
+        // O que se joga dali: a próxima variante do mesmo ponto, se houver, ou a própria linha.
+        const seguinte = aqui[k + 1] ? percursoDoCapitulo(aqui[k + 1].variante)[i + 1] : percurso[i + 1];
+        const simbolo = analise.nos[seguinte]?.nags?.map((n) => GRAFIA_DO_SIMBOLO[n]).find(Boolean) ?? "";
+        const rotulo = rotuloDoNo(percurso[i]);
+        const onde = rotulo === "a posição inicial" ? "à posição inicial" : `a ${rotulo}`;
+        passos.push({ nodeId: percurso[i], fala: `Voltamos ${onde}. A outra escolha: ${rotuloDoNo(seguinte)}${simbolo}.`, pausaManual: false, retorno: true });
       });
-    });
-  }
+    }
+  };
+  const percurso = percursoDoCapitulo(capitulo);
+  tocar(capitulo, Math.max(0, percurso.indexOf(de)), false);
   return passos;
 }
 
@@ -213,6 +289,14 @@ function percursoParaComparar(aula: AulaV2, capitulo: CapituloV2): string[] {
   return antes[0] === analise.raizId ? [...antes, ...percurso] : percurso;
 }
 
+/** Como o aluno lê um nó: "1. Rd6", "1... Re8", ou "a posição inicial". */
+function rotuloDoNo(mapa: ReturnType<typeof mapaDaAnalise>, id: string): string {
+  const san = mapa.sans[id];
+  if (!san) return "a posição inicial";
+  // Em português (18/9/2026): a frase é lida pelo aluno, que conhece o rei como R e a dama como D.
+  return `${mapa.rotulos[id] ?? ""} ${sanEmPortugues(san)}`.trim();
+}
+
 function comparacaoDoTrecho(
   aula: AulaV2,
   capitulo: CapituloV2,
@@ -235,15 +319,9 @@ function comparacaoDoTrecho(
   const mapa = mapaDaAnalise(aula, capitulo.analiseId, positions);
   const bifurcacao = meu[melhor.n - 1];
   const seu = percursoParaComparar(aula, melhor.outro);
-  const rotuloDoNo = (id: string) => {
-    const san = mapa.sans[id];
-    if (!san) return "a posição inicial";
-    // Em português (18/9/2026): a frase é lida pelo aluno, que conhece o rei como R e a dama como D.
-    return `${mapa.rotulos[id] ?? ""} ${sanEmPortugues(san)}`.trim();
-  };
-  const rotulo = rotuloDoNo(bifurcacao);
-  const outraSegue = rotuloDoNo(seu[melhor.n]);
-  const estaSegue = rotuloDoNo(meu[melhor.n]);
+  const rotulo = rotuloDoNo(mapa, bifurcacao);
+  const outraSegue = rotuloDoNo(mapa, seu[melhor.n]);
+  const estaSegue = rotuloDoNo(mapa, meu[melhor.n]);
   // "Voltamos a a posição inicial" não é frase. A preposição muda com o rótulo, e
   // isto é a única contração do arquivo — não vale uma biblioteca.
   const onde = rotulo === "a posição inicial" ? "à posição inicial" : `a ${rotulo}`;
@@ -289,12 +367,13 @@ function trechoDoCapitulo(
   const mapa = mapaDaAnalise(aula, capitulo.analiseId, positions);
   const percurso = percursoDoCapitulo(capitulo);
   const partida = de && percurso.includes(de) ? de : percurso[0];
+  const variantes = variantesDaEtapa(aula, capitulo);
   return {
     capituloId: capitulo.id,
     titulo: capitulo.titulo,
     fen: mapa.quadros[partida]?.fen ?? "",
     orientacao: capitulo.orientacao,
-    passos: passosDoTrecho(aula, capitulo, partida),
+    passos: variantes.length ? passosNaHora(aula, capitulo, variantes, partida, (id) => rotuloDoNo(mapa, id)) : passosDoTrecho(aula, capitulo, partida),
   };
 }
 

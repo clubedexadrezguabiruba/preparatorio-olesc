@@ -62,6 +62,7 @@ import {
   type ResolucoesV2,
 } from "./impacto.ts";
 import { fenInicialDaAnalise } from "./arvore.ts";
+import { fluxoSemCapitulos } from "./fluxo.ts";
 import { problemasDeLimiteV2 } from "./limites.ts";
 import type { Position } from "../lesson/schema.ts";
 import type { AnaliseV2, AulaV2, CapituloV2, NarracaoV2, NoV2 } from "./modelo.ts";
@@ -375,7 +376,7 @@ export function aplicarExclusaoDeCapitulo(aula: AulaV2, plano: PlanoDeExclusaoV2
   const semCapitulo: AulaV2 = {
     ...comDependentesResolvidos,
     capitulos: comDependentesResolvidos.capitulos.filter((item) => item.id !== plano.capituloId),
-    fluxo: comDependentesResolvidos.fluxo.filter((etapa) => !(etapa.tipo === "capitulo" && etapa.entidadeId === plano.capituloId)),
+    fluxo: fluxoSemCapitulos(comDependentesResolvidos.fluxo, [plano.capituloId]),
   };
 
   if (!plano.excluirAnalise) return { ok: true, aula: semCapitulo };

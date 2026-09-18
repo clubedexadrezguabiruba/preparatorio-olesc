@@ -149,7 +149,10 @@ function capitulosNaOrdemDaAula(aula: AulaV2): AulaV2["capitulos"] {
   return aula.fluxo.flatMap((etapa) => {
     if (etapa.tipo !== "capitulo") return [];
     const item = porId.get(etapa.entidadeId);
-    return item ? [item] : [];
+    // As variantes que a etapa toca na hora vêm logo abaixo da mãe: sem etapa própria, é aqui que o
+    // professor as alcança para editar a fala (18/9/2026).
+    const variantes = (etapa.comparacoes ?? []).flatMap((id) => porId.get(id) ?? []);
+    return item ? [item, ...variantes] : [];
   });
 }
 
@@ -1670,7 +1673,11 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
               capitulos={capitulosOrdenados}
               atualId={capitulo.id}
               aoEscolher={(item) => { setCapituloId(item.id); setNodeId(item.inicioNodeId); }}
-              aoMover={(id, vao) => aplicar({ tipo: "MOVER_CAPITULO", capituloId: id, vao })}
+              aoMover={(id, vao) => {
+                // O vão é da lista, que mostra as variantes abaixo da mãe; o comando conta só as etapas.
+                const comEtapa = new Set(historico.presente.fluxo.map((etapa) => etapa.entidadeId));
+                aplicar({ tipo: "MOVER_CAPITULO", capituloId: id, vao: capitulosOrdenados.slice(0, vao).filter((item) => comEtapa.has(item.id)).length });
+              }}
               aoDuplicar={setDuplicandoCapitulo}
               aoExcluir={setExcluindoCapitulo}
               aoRenomear={(id, titulo) => aplicar({ tipo: "RENOMEAR_CAPITULO", capituloId: id, titulo })}

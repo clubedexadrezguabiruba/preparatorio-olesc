@@ -7452,6 +7452,59 @@ frase — "o rei preto em g8 não tem casa" —, que é mudança de fala e não 
 Com a regra nova, o rei mateado devia estar em vermelho nos oito. **Não foi feito:** pôr os oito é
 autoria, não restauração, e o Doug decidiu um caso nomeado. Fica a lista.
 
+## O rewind das comparações — montagem e sequência, 17/9/2026 (noite)
+
+A fatia de `docs/FILA-DO-DOUG.md` §1, pelo plano aprovado pelo Doug
+(`~/.claude/plans/vamos-implementar-o-rewind-inherited-duckling.md`). **Decisão dele, 17/9: "na
+hora"** — quando a aula chega à posição da escolha, joga o lance que perde até a consequência, a fita
+volta até a posição da escolha, a fala diz "Voltamos a…", e a aula segue com o lance certo. Variante
+dentro de variante, uma dentro da outra.
+
+### Ponto de parada 1 — a montagem
+
+- **`etapaV2Schema.comparacoes`** (`modelo.ts`), opcional e aditivo: os ids dos capítulos-variante
+  que a etapa toca. O capítulo-variante continua no cadastro (o professor edita a fala dele), só perde
+  a etapa. O diagnóstico conta a variante listada como "no fluxo" e acusa `COMPARACAO_INVALIDA`
+  (id inexistente ou de outra análise).
+- **Por que declarado, e não deduzido da árvore:** o curso de abertura usa os mesmos percursos e
+  **quer** o ramo como capítulo separado. Só `planejarEstudo` preenche o campo; a abertura não muda.
+- **A variante nunca fica sem lugar:** `fluxoSemCapitulos` e `soltarVariantes` (`fluxo.ts`). Quando
+  a mãe sai do fluxo — excluída, virou quadro ou treino —, cada variante dela ganha etapa própria logo
+  depois, e nada do que o professor escreveu se perde. É o único caminho pelo qual uma etapa de
+  variante volta a existir, e só por gesto do professor.
+- **O editor** lista as variantes logo abaixo da mãe (`capitulosNaOrdemDaAula`); arrastar converte o
+  vão da lista para o vão das etapas, e mover uma variante sozinha é recusado com frase.
+- **A trava:** `lib/editor-v2/finais-sem-comparacao.test.ts` monta as 11 aulas em memória, sem banco.
+
+**Número:** etapas "Comparação" nas 11 montagens **45 → 0**; variantes preservadas no cadastro **45 = 45**
+(LADDER 5, MATING-MATERIAL 1, Q-MATE 2, R-MATE 4, STALEMATE 5, DIRECT-OPPOSITION 8, KEY-SQUARES 3,
+KING-ACTIVITY 4, KPK-RANKS 4, ROOK-PAWN 6, SQUARE 3).
+
+### Ponto de parada 2 — a sequência
+
+- **`passosNaHora`** (`previa.ts`): percorre a linha principal; no ponto de escolha toca a variante
+  (só a parte dela, a partir da bifurcação), um **passo de recuo por lance** até a posição da escolha,
+  e o passo de retorno "Voltamos a X. A outra escolha: Y." — sem o "Em «título»", e com o símbolo do
+  lance que segue. Duas variantes do mesmo ponto tocam em fila, e o retorno da primeira anuncia a
+  segunda. A mãe de cada variante é a linha **anterior** na lista com o começo comum mais longo.
+- **`recuo: true`** atravessa `PassoDaPrevia` → `PassoDoCapituloDoAlunoV2` → roteiro do player.
+  `montarQuadros` guarda o quadro de antes de cada lance e o recuo devolve **exatamente** aquele
+  quadro. A régua de desenho ignora o recuo, como já ignorava o retorno.
+- **O player** (`ObjectiveStage`): no recuo, relógio de `RECUO.msPorLance` (250 ms), animação de
+  `RECUO.animacaoMs` (120 ms; o normal é 1000 e 180), sem som, sem desenho, sem fala. Os dois números
+  estão em `lib/lesson/roteiro.ts`, juntos, para o Doug calibrar olhando.
+
+**Número:** nas 11 aulas em memória, **45 de 45** voltas terminam na posição exata da escolha — e mais:
+**cada passo**, de ida ou de volta, mostra a FEN do nó dele. Passos de recuo **187 = 187** lances de
+variante jogados. **0** lances da linha principal jogados duas vezes (antes, cada comparação refazia a
+linha desde o começo).
+
+### O que ainda não foi feito
+
+- **Ponto 3** (republicar a N0-LADDER, medir no navegador, o Doug olhar a velocidade) e **ponto 4**
+  (as outras 10, e os papéis: `FILA-DO-DOUG` §1, `COMO-FAZER` §1, `AGENTS.md`).
+- `--so-conferir` da N0-LADDER com o código novo: **0 erros, 5 avisos** `CASA_ACESA_SEM_CITACAO`.
+
 ## Siciliana no modelo da Francesa — Dragão Acelerado, 18/9/2026 (madrugada)
 
 Plano em `~/.claude/plans/quero-arrumar-as-aberturas-quiet-hamster.md` (decisões do Doug: eu escrevo o estudo, faixa

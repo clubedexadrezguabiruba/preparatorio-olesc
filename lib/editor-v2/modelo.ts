@@ -521,6 +521,14 @@ export const etapaV2Schema = z.strictObject({
   id: idV2Schema,
   tipo: z.enum(["introducao", "capitulo", "treino", "pratica", "treinador"]),
   entidadeId: idV2Schema,
+  /**
+   * As variantes que esta etapa de capítulo toca **na hora**, dentro dela (regra do Doug, 18/9/2026):
+   * ao chegar ao ponto de escolha, a aula joga a variante, a fita volta até ali e a linha segue. Os
+   * ids são de capítulos da mesma análise, que continuam no cadastro — o professor edita a fala
+   * deles —, mas não têm etapa própria. Só a importação de estudo preenche; o curso de abertura quer
+   * o ramo como capítulo separado e não usa (`previa.ts`).
+   */
+  comparacoes: z.array(idV2Schema).optional(),
 });
 
 export const aulaV2Schema = z.strictObject({
@@ -1113,6 +1121,14 @@ export function problemasDaAulaV2(
     if (etapa.tipo === "treino" && !treinos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINO", mensagem: "o fluxo aponta para treino inexistente", etapaId: etapa.id, campo: "entidadeId" });
     if (etapa.tipo === "pratica" && !praticas.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_PRATICA", mensagem: "o fluxo aponta para prática inexistente", etapaId: etapa.id, campo: "entidadeId" });
     if (etapa.tipo === "treinador" && !treinadores.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINADOR", mensagem: "o fluxo aponta para move trainer inexistente", etapaId: etapa.id, campo: "entidadeId" });
+    // A variante tocada dentro da etapa conta como "no fluxo": ela tem lugar, só não tem etapa própria.
+    const mae = etapa.tipo === "capitulo" ? aula.capitulos.find((c) => c.id === etapa.entidadeId) : undefined;
+    for (const id of etapa.comparacoes ?? []) {
+      aparicoesNoFluxo.set(id, (aparicoesNoFluxo.get(id) ?? 0) + 1);
+      if ((aparicoesNoFluxo.get(id) ?? 0) > 1) problemas.push({ codigo: "FLUXO_REPETE_ENTIDADE", mensagem: `o fluxo repete a entidade ${id}`, etapaId: etapa.id, campo: "comparacoes" });
+      const variante = aula.capitulos.find((c) => c.id === id);
+      if (!variante || !mae || variante.analiseId !== mae.analiseId) problemas.push({ codigo: "COMPARACAO_INVALIDA", mensagem: variante ? `a variante ${id} é de outra análise, e não sai da linha desta etapa` : `a etapa toca a variante ${id}, que não existe`, etapaId: etapa.id, campo: "comparacoes" });
+    }
   }
   for (const treinador of aula.treinadores ?? []) if (!aparicoesNoFluxo.has(treinador.id)) problemas.push({ codigo: "TREINADOR_FORA_DO_FLUXO", mensagem: "o move trainer não tem lugar no fluxo da aula", treinadorId: treinador.id });
   for (const introducao of aula.introducoes) if (!aparicoesNoFluxo.has(introducao.id)) problemas.push({ codigo: "INTRODUCAO_FORA_DO_FLUXO", mensagem: "a introdução não tem lugar no fluxo da aula", introducaoId: introducao.id });

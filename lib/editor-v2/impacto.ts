@@ -34,6 +34,7 @@
  * de um nó que já não existe.
  */
 import { quadroDoNo } from "./arvore.ts";
+import { fluxoSemCapitulos } from "./fluxo.ts";
 import type { Position } from "../lesson/schema.ts";
 import type { AulaV2, IntroducaoV2, TreinoV2 } from "./modelo.ts";
 import { comCopiaMaterializada } from "./propriedade-treino.ts";
@@ -312,7 +313,7 @@ function remover(aula: AulaV2, dependente: DependenteV2): AulaV2 {
     ...aula,
     analises: aula.analises.filter((item) => item.id !== dependente.id),
     capitulos: aula.capitulos.filter((c) => c.analiseId !== dependente.id),
-    fluxo: aula.fluxo.filter((etapa) => !(etapa.tipo === "capitulo" && capitulos.includes(etapa.entidadeId))),
+    fluxo: fluxoSemCapitulos(aula.fluxo, capitulos),
   };
 }
 

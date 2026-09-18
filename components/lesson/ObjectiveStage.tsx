@@ -12,7 +12,7 @@ import { LessonButton } from "@/components/lesson/LessonButton";
 import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
 import { desenhoDaAutoria, teachingShapes } from "@/lib/chess/annotations";
 import { simboloDoSinal, simboloNaCasa } from "@/lib/chess/desenhos-do-tabuleiro";
-import { montarQuadros, pausaDoPasso } from "@/lib/lesson/roteiro";
+import { montarQuadros, pausaDoPasso, RECUO, type PassoDoQuadro } from "@/lib/lesson/roteiro";
 import type { ObjectiveStage as ObjectiveStageData, Position } from "@/lib/lesson/schema";
 import { playForMove } from "@/lib/sound";
 
@@ -228,6 +228,8 @@ export function ObjectiveStage({
 
   const atual = stage.roteiro[passo];
   const quadro = quadros[passo];
+  /** A fita voltando até o ponto de escolha (aula v2, 18/9/2026): rápido, mudo e sem desenho. */
+  const recuando = Boolean((atual as PassoDoQuadro).recuo);
   const ultimo = passo >= stage.roteiro.length - 1;
 
   const comentario = useComentarioPaginado(atual.fala);
@@ -270,7 +272,8 @@ export function ObjectiveStage({
     if (ultimo && naUltima) return;
     // Na prévia o relógio é o de §15.2: a leitura fica intacta, o intervalo obedece à
     // velocidade, e `null` é a pausa manual — que não anda até o professor mandar.
-    const espera = previa ? previa.relogio(passo) : relogioDoPasso ? relogioDoPasso(passo) : pausaDoPasso(atual);
+    // A fita voltando tem relógio próprio, curto e fixo: não há fala para ler (18/9/2026).
+    const espera = recuando ? RECUO.msPorLance : previa ? previa.relogio(passo) : relogioDoPasso ? relogioDoPasso(passo) : pausaDoPasso(atual);
     if (espera === null) return;
     const relogio = setTimeout(() => {
       // Página antes de passo: uma fala partida é lida inteira, e só então o
@@ -279,7 +282,7 @@ export function ObjectiveStage({
       else setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
     }, espera);
     return () => clearTimeout(relogio);
-  }, [tocando, digitando, naUltima, ultimo, atual, passo, previa, relogioDoPasso, stage.roteiro.length]);
+  }, [tocando, digitando, naUltima, ultimo, atual, passo, previa, relogioDoPasso, stage.roteiro.length, recuando]);
 
   /**
    * O som do lance, por passo.
@@ -290,9 +293,10 @@ export function ObjectiveStage({
    */
   useEffect(() => {
     const q = quadros[passo];
-    if (!q?.lastMove) return;
+    // A fita voltando é muda: o som diria que um lance foi jogado.
+    if (!q?.lastMove || (stage.roteiro[passo] as PassoDoQuadro | undefined)?.recuo) return;
     playForMove({ capture: q.capture, check: q.check });
-  }, [passo, quadros]);
+  }, [passo, quadros, stage.roteiro]);
 
   /**
    * O que se desenha por cima, em duas camadas: a de baixo é deduzida da
@@ -393,7 +397,7 @@ export function ObjectiveStage({
           shapes={shapes}
           matedKing={quadro.matedColor}
           desenhavel={marcacao}
-          animacaoMs={previa?.animacaoMs}
+          animacaoMs={recuando ? RECUO.animacaoMs : previa?.animacaoMs}
           viewOnly
         />
       }

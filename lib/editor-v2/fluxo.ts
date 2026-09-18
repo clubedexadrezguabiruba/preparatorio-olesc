@@ -15,6 +15,40 @@ export function indiceAntesDaPratica(fluxo: Etapa[]): number {
   return pratica < 0 ? fluxo.length : pratica;
 }
 
+/**
+ * O fluxo sem estes capítulos: sai a etapa de cada um, e sai também a menção dele no `comparacoes`
+ * de outra etapa — a variante que some do cadastro não pode continuar sendo tocada (18/9/2026).
+ */
+export function fluxoSemCapitulos(fluxo: Etapa[], ids: Iterable<string>): Etapa[] {
+  const fora = new Set(ids);
+  let solto = fluxo;
+  for (const id of fora) solto = soltarVariantes(solto, id);
+  return solto
+    .filter((etapa) => !(etapa.tipo === "capitulo" && fora.has(etapa.entidadeId)))
+    .map((etapa) => {
+      if (!etapa.comparacoes?.some((id) => fora.has(id))) return etapa;
+      const { comparacoes, ...resto } = etapa;
+      const ficam = comparacoes.filter((id) => !fora.has(id));
+      return ficam.length ? { ...resto, comparacoes: ficam } : resto;
+    });
+}
+
+/**
+ * A etapa deste capítulo larga as variantes que tocava: cada uma ganha etapa própria logo depois.
+ * É o que acontece quando a mãe sai do fluxo (excluída, ou virou quadro ou treino) — sem isto a
+ * variante ficaria no cadastro sem lugar na aula, e a fala que o professor escreveu nela, perdida.
+ */
+export function soltarVariantes(fluxo: Etapa[], capituloId: string): Etapa[] {
+  const indice = fluxo.findIndex((etapa) => etapa.tipo === "capitulo" && etapa.entidadeId === capituloId);
+  const mae = fluxo[indice];
+  if (!mae?.comparacoes?.length) return fluxo;
+  const usados = new Set(fluxo.map((etapa) => etapa.id));
+  const livre = (base: string) => { let id = base; for (let n = 2; usados.has(id); n += 1) id = `${base}-${n}`; usados.add(id); return id; };
+  const { comparacoes, ...semElas } = mae;
+  const soltas = comparacoes.map((id) => ({ id: livre(`etapa-${id}`), tipo: "capitulo" as const, entidadeId: id }));
+  return [...fluxo.slice(0, indice), semElas, ...soltas, ...fluxo.slice(indice + 1)];
+}
+
 /** Move a etapa para a posição `para` (0 = primeira). Mesma posição não é edição. */
 export function moverEtapa(aula: AulaV2, etapaId: string, para: number): AulaV2 {
   const de = aula.fluxo.findIndex((etapa) => etapa.id === etapaId);

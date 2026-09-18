@@ -32,6 +32,7 @@
 import type { Position } from "../lesson/schema.ts";
 import { comErrosNoCatalogo, completarTreino } from "./importar-estudo.ts";
 import { comoId, idsDaAulaV2 } from "./ids.ts";
+import { fluxoSemCapitulos, soltarVariantes } from "./fluxo.ts";
 import type { AnaliseV2, AulaV2, CapituloV2, IntroducaoV2, NarracaoV2, QuadroIntroducaoV2, TreinoV2 } from "./modelo.ts";
 import { tornarTreinoIndependente } from "./propriedade-treino.ts";
 import { aplicarTreinosPreparados, prepararTreinosDaqui } from "./treinos.ts";
@@ -321,6 +322,8 @@ function capituloParaTreino(aula: AulaV2, capitulo: CapituloV2, positions: Recor
   }
   const saem: string[] = [];
   let rascunho = soltarTreinosDoCapitulo(aula, capitulo.id, positions, saem);
+  // As variantes que o capítulo tocava ganham etapa própria; o treino entra antes delas, no lugar dele.
+  rascunho = { ...rascunho, fluxo: soltarVariantes(rascunho.fluxo, capitulo.id) };
   rascunho = aplicarTreinosPreparados(rascunho, preparo.preparo);
   const treinoId = preparo.preparo.treinos[0].id;
   rascunho = tornarTreinoIndependente(rascunho, treinoId, positions);
@@ -379,7 +382,7 @@ function capituloParaTreino(aula: AulaV2, capitulo: CapituloV2, positions: Recor
       treinos: rascunho.treinos.map((item) => (item.id === treinoId ? treino : item)),
       capitulos: rascunho.capitulos.filter((item) => item.id !== capitulo.id),
       // O treino entrou logo depois do capítulo; tirar a etapa do capítulo o deixa no mesmo lugar.
-      fluxo: rascunho.fluxo.filter((etapa) => !(etapa.tipo === "capitulo" && etapa.entidadeId === capitulo.id)),
+      fluxo: fluxoSemCapitulos(rascunho.fluxo, [capitulo.id]),
     },
     treinoId,
     saem,
@@ -406,6 +409,8 @@ function capituloParaQuadro(aula: AulaV2, capitulo: CapituloV2, positions: Recor
 
   const saem: string[] = [];
   let atual = soltarTreinosDoCapitulo(aula, capitulo.id, positions, saem);
+  // As variantes que o capítulo tocava ganham etapa própria antes de ele sair do fluxo.
+  atual = { ...atual, fluxo: soltarVariantes(atual.fluxo, capitulo.id) };
   if (capitulo.caminho.length) saem.push(`o aluno deixa de ver ${plural(capitulo.caminho.length, "lance", "lances")} — continuam guardados na aula, e "Mudar para capítulo" os traz de volta`);
   const outras = capitulo.narracoes.filter((n) => n.nodeId !== capitulo.inicioNodeId);
   if (outras.length) saem.push(`${plural(outras.length, "texto dos lances", "textos dos lances")}: ${outras.slice(0, 3).map((n) => trecho(n.texto)).join(", ")}${outras.length > 3 ? "…" : ""}`);
