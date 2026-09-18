@@ -38,9 +38,9 @@ export default async function Partidas() {
         atual="partidas"
         nivel={cabecalho.nivel}
         sequencia={cabecalho.sequencia}
-        largura="leitura"
+        largura="larga"
       />
-      <Moldura largura="leitura" barraInferior className="gap-5">
+      <Moldura largura="larga" barraInferior className="gap-5">
       <header className="flex flex-col gap-1">
         <h1 className="titulo text-tinta">Partidas instrutivas</h1>
         <p className="text-xs text-tinta-fraca">

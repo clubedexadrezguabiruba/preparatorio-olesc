@@ -798,6 +798,9 @@
 html {
   /* Evita o zoom por duplo toque atrapalhar o arraste das peças no celular. */
   touch-action: manipulation;
+  /* Reserva o lugar da barra de rolagem mesmo na página curta, que não rola:
+     sem isto, Partidas e Turma centravam 7 px à direita das abas vizinhas. */
+  scrollbar-gutter: stable;
 }
 
 body {

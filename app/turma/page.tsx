@@ -32,8 +32,8 @@ export default async function Turma() {
 
   return (
     <>
-      <Cabecalho atual="turma" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
-      <Moldura largura="painel" barraInferior className="gap-6">
+      <Cabecalho atual="turma" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} largura="larga" />
+      <Moldura largura="larga" barraInferior className="gap-6">
         <header className="flex flex-col gap-2">
           <h1 className="titulo text-tinta">A turma</h1>
           <p className="max-w-prose text-sm text-tinta-media">

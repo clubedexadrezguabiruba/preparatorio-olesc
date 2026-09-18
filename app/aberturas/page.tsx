@@ -98,8 +98,8 @@ export default async function Aberturas() {
 
   return (
     <>
-      <Cabecalho atual="aberturas" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
-      <Moldura largura="painel" barraInferior>
+      <Cabecalho atual="aberturas" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} largura="larga" />
+      <Moldura largura="larga" barraInferior>
       <header className="flex flex-col gap-2">
         <h1 className="titulo text-tinta">Repertório do clube</h1>
         <p className="text-sm text-tinta-media">

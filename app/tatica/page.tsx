@@ -76,7 +76,7 @@ export default async function Tatica() {
 
   return (
     <>
-      <Cabecalho atual="tatica" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
+      <Cabecalho atual="tatica" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} largura="larga" />
       <Moldura largura="larga" barraInferior>
         <header className="flex flex-col gap-2">
           <h1 className="titulo text-tinta">Curso de tática</h1>
