@@ -442,11 +442,12 @@ export function Comentario({
      * coluna, e não rasgo no meio dela (ver `AulaShell`). Com o teto na caixa e
      * não na linha, a linha comeria a altura toda e o botão iria para o pé.
      *
-     * **Abaixo de `lg` o retrato e o bico somem.** Lá o painel tem 328 px e 96
-     * deles seriam um quarto da tela do telefone, tirados justamente do texto.
+     * **Abaixo de `lg` o retrato encolhe e o bico some.** O painel tem cerca de
+     * 328 px; os 112 px do desktop tirariam um terço da largura do texto. O CSS
+     * do palco reduz o retrato para 64 px, mantendo visível quem está falando.
      */
-    <div className={`flex min-h-0 flex-1 gap-4 ${compacto ? "lg:max-h-56" : "lg:max-h-88"}`}>
-      {retrato ? <div className="hidden shrink-0 lg:block">{retrato}</div> : null}
+    <div className={`aula-fala flex min-h-0 flex-1 gap-3 lg:gap-4 ${compacto ? "lg:max-h-56" : "lg:max-h-88"}`}>
+      {retrato ? <div className="aula-retrato shrink-0">{retrato}</div> : null}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5">
         {/*
          * Duas camadas, e a de fora é invisível.

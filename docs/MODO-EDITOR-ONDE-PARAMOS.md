@@ -7871,3 +7871,17 @@ explicação curta antes de começar. Aquecimento apresenta os 5 problemas mais 
 os 24 problemas em dificuldade crescente; Prova deixa claro que mistura o tema atual com temas já
 estudados para treinar o reconhecimento sem pista, como numa partida. Depois da primeira leitura,
 a janela não abre sozinha e o ícone “?” no cabeçalho permite reler a explicação quando quiser.
+## Professor e fala visíveis no celular — 19/9/2026
+
+Relato dos alunos: nas aulas de finais, em telefone baixo, era preciso rolar para baixo para ver o
+professor explicando; assim não dava para acompanhar fala e lance no tabuleiro ao mesmo tempo. A causa
+era dupla: no fluxo móvel o painel vinha inteiro depois do tabuleiro, com trilha, título e resumo antes
+da fala, e o retrato usava `hidden lg:block`.
+
+No mobile, a fala agora é o primeiro item do painel e o retrato continua visível em 64 px; trilha,
+título, resumo e controles permanecem logo abaixo. O desktop não mudou. `Comentario` e
+`FeedbackPanel` compartilham as classes do palco, portanto a correção cobre capítulos, introduções,
+treinos e práticas, nas aulas publicadas e na prévia do Editor v2.
+
+Evidência: ensaio Playwright da `N0-LADDER` em **360×640**, com tabuleiro, fala e retrato inteiros na
+mesma viewport e sem rolagem; `npm run typecheck`; `npm run lint`; `npm test` **1743/1743**; `npm run build`.

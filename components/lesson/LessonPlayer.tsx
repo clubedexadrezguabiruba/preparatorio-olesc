@@ -834,7 +834,10 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
   const saida = !proxima && !aoSair ? { rotulo: VOLTAR_AS_AULAS, acao: () => router.push(voltar?.href ?? "/finais") } : undefined;
 
   return (
-    <div className="flex w-full flex-1 flex-col gap-3">
+    // `aula-com-etapa`: o desconto extra do cabeçalho de duas linhas, em
+    // `app/globals.css` — este cabeçalho sempre traz "Etapa X de Y" abaixo do
+    // título (ver o <p basis-full> logo adiante), diferente do v1.
+    <div className="aula-com-etapa flex w-full flex-1 flex-col gap-3">
       <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
         {aoSair ? (
           <button type="button" onClick={aoSair} className="foco rotulo text-tinta-fraca hover:underline">

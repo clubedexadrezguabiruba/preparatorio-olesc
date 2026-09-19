@@ -715,6 +715,25 @@
     align-self: start;
   }
 
+  /* O cabeçalho da aula v2 (`PlayerDoFluxoV2`, `components/lesson/LessonPlayer.tsx`)
+     tem uma SEGUNDA linha — "Etapa X de Y" — que o `<p className="basis-full">`
+     da fatia 10 sempre força para baixo, mesmo quando o resto do cabeçalho
+     caberia numa linha só. O cálculo acima, de `cabeçalho de uma linha (36)`,
+     é do cabeçalho v1 (`LessonPlayerV1`, sem essa linha) — a promessa dele
+     continua valendo lá, mas nunca valeu para o v2.
+
+     Medido em 1366×768, na Escocesa: cabeçalho de 58 px (36 da linha 1 + 2 de
+     vão + 20 da linha 2) contra os 36 que o teto reservava — 22 px que a
+     página devolvia como rolagem, em TODA aula de abertura e de finais no
+     desktop, não só nesta. Os 22 px = 1,375rem viram este desconto a mais. */
+  .aula-com-etapa .aula-palco {
+    --aula-teto: min(
+      calc(100dvh - 6.875rem),
+      48rem,
+      calc(100vw - 2.5rem - 2.5rem - var(--aula-painel))
+    );
+  }
+
 }
 
 /* O tabuleiro nunca passa do teto de altura, e nunca passa da sua coluna.
@@ -740,6 +759,30 @@
   flex-direction: column;
   gap: 0.75rem;
   min-height: 0;
+}
+
+/* No telefone, a aula continua em uma coluna — tabuleiro em cima e painel
+   embaixo —, mas a fala não pode ficar atrás da trilha, do título e do resumo.
+   Em aparelhos baixos (360×640), essa ordem antiga empurrava justamente o
+   professor para fora da janela: o aluno via o lance ou a explicação, nunca os
+   dois ao mesmo tempo. A fala passa a ser o primeiro item do painel no mobile.
+   Os controles e metadados continuam logo abaixo e o desktop não muda. */
+@media (width < 64rem) {
+  .aula-fala {
+    order: -1;
+  }
+
+  /* O retrato de 112 px é proporcional ao painel largo do desktop. No celular,
+     64 px preservam a presença do professor e deixam cerca de 250 px para a
+     fala em uma tela de 360 px. O `!important` vence a largura inline calculada
+     pelo `next/image`; altura continua automática, sem deformar a ilustração. */
+  .aula-retrato {
+    width: 4rem;
+  }
+
+  .aula-retrato img {
+    width: 4rem !important;
+  }
 }
 
 /* --------------------------------------------------------------------------

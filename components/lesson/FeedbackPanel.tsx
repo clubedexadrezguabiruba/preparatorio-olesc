@@ -44,8 +44,9 @@ export function FeedbackPanel({
    * vem depois do desenho, e assim a instrução lê como alguém falando em vez de
    * como aviso de sistema.
    *
-   * **Abaixo de `lg` ele some.** No celular o painel tem 328 px, e 112 deles
-   * seriam um terço da tela tirados justamente do texto.
+   * **Abaixo de `lg` ele encolhe.** No celular, 112 px tirariam um terço da
+   * largura do texto; o CSS do palco reduz o retrato para 64 px, mas mantém
+   * visível quem está falando enquanto o aluno acompanha o tabuleiro.
    *
    * O retrato fica FORA do `aria-live`, e isso não é detalhe: a região viva
    * anuncia tudo que muda dentro dela, e um desenho que não fala não pode
@@ -85,8 +86,8 @@ export function FeedbackPanel({
 
   if (!retrato) return fala;
   return (
-    <div className="flex gap-4">
-      <div className="hidden shrink-0 lg:block">{retrato}</div>
+    <div className="aula-fala flex gap-3 lg:gap-4">
+      <div className="aula-retrato shrink-0">{retrato}</div>
       <div className="min-w-0 flex-1">{fala}</div>
     </div>
   );

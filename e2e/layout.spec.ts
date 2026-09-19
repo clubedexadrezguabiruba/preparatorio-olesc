@@ -57,6 +57,29 @@ for (const tela of [...TELAS_DO_ALUNO, "/entrar"]) {
         await expect(pagina.getByText(new RegExp(`Etapa ${i + 1} de ${total}`))).toBeVisible();
         expect((await larguraDaPagina(pagina)).transborda).toBe(0);
       }
+
+      // O caso relatado pelos alunos: num telefone baixo, o professor e a fala
+      // precisam continuar visíveis junto do tabuleiro, sem rolar a página.
+      await pagina.setViewportSize({ width: 360, height: 640 });
+      await pagina.goto("/finais/N0-LADDER");
+      await expect(pagina.locator(".aula-tabuleiro").first()).toBeVisible();
+      await expect(pagina.locator(".aula-fala").first()).toBeVisible();
+      await expect(pagina.getByAltText("O professor Douglas").first()).toBeVisible();
+      const simultaneos = await pagina.evaluate(() => {
+        const tabuleiro = document.querySelector(".aula-tabuleiro")?.getBoundingClientRect();
+        const fala = document.querySelector(".aula-fala")?.getBoundingClientRect();
+        return {
+          tabuleiro: tabuleiro ? { top: tabuleiro.top, bottom: tabuleiro.bottom } : null,
+          fala: fala ? { top: fala.top, bottom: fala.bottom } : null,
+          altura: innerHeight,
+        };
+      });
+      expect(simultaneos.tabuleiro).not.toBeNull();
+      expect(simultaneos.fala).not.toBeNull();
+      expect(simultaneos.tabuleiro!.top).toBeGreaterThanOrEqual(0);
+      expect(simultaneos.tabuleiro!.bottom).toBeLessThanOrEqual(simultaneos.altura);
+      expect(simultaneos.fala!.top).toBeLessThan(simultaneos.altura);
+      expect(simultaneos.fala!.bottom).toBeLessThanOrEqual(simultaneos.altura);
     }
   });
 }
