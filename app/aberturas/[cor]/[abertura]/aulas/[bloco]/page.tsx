@@ -72,7 +72,7 @@ export default async function AulaDeAbertura({ params }: PageProps<"/aberturas/[
   const progressoDasLinhas = Object.fromEntries([...progresso].filter(([linhaId]) => idsDoTreinador.has(linhaId)));
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
+    <main className="aula-publicada mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
       <AulaDeAberturaNoNavegador
         aula={aula}
         vez={rodada.vez}

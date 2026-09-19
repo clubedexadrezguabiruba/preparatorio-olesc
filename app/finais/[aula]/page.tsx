@@ -81,7 +81,7 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
     const semPratica = !doAluno.aula.etapas.some((etapa) => etapa.tipo === "pratica");
     const naTrilhaV2 = aulaDaTrilha(aula, aulasExtras()) !== undefined;
     return (
-      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
+      <main className="aula-publicada mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
         <Suspense fallback={null}>
           <AulaNoNavegador aulaV2={doAluno.aula} leitura={semPratica && naTrilhaV2 ? <Leitura key="leitura" aula={aula} /> : undefined} navegacaoEntreAulas={navegacaoEntreAulas} />
         </Suspense>
@@ -122,7 +122,7 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
      * desktop (40 + 36 + 12) e 6rem no celular (32 + 50 + 12) — e errar para
      * baixo devolve a rolagem que o palco existe para matar.
      */
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
+    <main className="aula-publicada mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
       {/* O caminho de volta é o do próprio motor (LessonPlayer:121): dois links
           de voltar na mesma tela seriam duas respostas para a mesma pergunta. */}
       {/* O Suspense é obrigatório: `useSearchParams` numa rota estática exige

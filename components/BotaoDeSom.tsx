@@ -19,7 +19,7 @@ export function BotaoDeSom() {
       type="button"
       onClick={() => setSoundOn(!ligado)}
       aria-pressed={ligado}
-      className="foco min-h-11 shrink-0 rounded-lg px-2 text-lg leading-none transition-colors hover:bg-carta-toque"
+      className="botao-som-aula foco min-h-11 shrink-0 rounded-lg px-2 text-lg leading-none transition-colors hover:bg-carta-toque"
     >
       <span aria-hidden>{ligado ? "🔊" : "🔇"}</span>
       <span className="sr-only">{ligado ? "Desligar o som" : "Ligar o som"}</span>

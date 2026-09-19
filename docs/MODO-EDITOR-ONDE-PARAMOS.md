@@ -7871,17 +7871,21 @@ explicação curta antes de começar. Aquecimento apresenta os 5 problemas mais 
 os 24 problemas em dificuldade crescente; Prova deixa claro que mistura o tema atual com temas já
 estudados para treinar o reconhecimento sem pista, como numa partida. Depois da primeira leitura,
 a janela não abre sozinha e o ícone “?” no cabeçalho permite reler a explicação quando quiser.
-## Professor e fala visíveis no celular — 19/9/2026
+## Aula inteira no celular, com prioridade visual — 19/9/2026
 
-Relato dos alunos: nas aulas de finais, em telefone baixo, era preciso rolar para baixo para ver o
-professor explicando; assim não dava para acompanhar fala e lance no tabuleiro ao mesmo tempo. A causa
-era dupla: no fluxo móvel o painel vinha inteiro depois do tabuleiro, com trilha, título e resumo antes
-da fala, e o retrato usava `hidden lg:block`.
+Regra global das aulas publicadas de finais, abertura, tática, rating, revisão e prova: no celular a
+página ocupa exatamente uma viewport e não rola. A hierarquia é tabuleiro, explicação do professor e
+controles necessários; título, som, trilha e metadados cedem espaço. Em **360×640**, o tabuleiro mede
+**328×328 px**, o professor fica visível com **36 px** de largura, a fala é paginada no espaço restante
+e os botões inferiores ficam inteiros dentro da tela. Uma fala vazia não reserva retrato nem balão.
 
-No mobile, a fala agora é o primeiro item do painel e o retrato continua visível em 64 px; trilha,
-título, resumo e controles permanecem logo abaixo. O desktop não mudou. `Comentario` e
-`FeedbackPanel` compartilham as classes do palco, portanto a correção cobre capítulos, introduções,
-treinos e práticas, nas aulas publicadas e na prévia do Editor v2.
+O cabeçalho ganhou título menor e truncável, som de 32 px e indicador de etapa numa segunda linha
+curta. A trilha usa o seletor compacto também nas aulas com poucas etapas. Rodapé, resumo e cartões
+secundários foram enxugados, mantendo contraste, ritmo e alvos de toque. O desktop não mudou e a
+prévia do Editor v2 não é presa à altura do painel de autoria.
 
-Evidência: ensaio Playwright da `N0-LADDER` em **360×640**, com tabuleiro, fala e retrato inteiros na
-mesma viewport e sem rolagem; `npm run typecheck`; `npm run lint`; `npm test` **1743/1743**; `npm run build`.
+Evidência: Playwright em **360×640** percorreu as 15 etapas de `N0-LADDER` e conferiu abertura A e
+tática `mateIn1`: tabuleiro com pelo menos 320 px, professor/fala quando existentes, todos os controles
+e `scrollHeight <= innerHeight`. O recorte direcionado passou **3/3**. A matriz completa de layout
+passou nas rotas de aula; ficaram dois estouros já existentes e fora deste escopo em `/painel` e
+`/entrar`. `npm run typecheck`; `npm run lint`; `npm test` **1752/1752**; `npm run build`.

@@ -444,9 +444,9 @@ export function Comentario({
      *
      * **Abaixo de `lg` o retrato encolhe e o bico some.** O painel tem cerca de
      * 328 px; os 112 px do desktop tirariam um terço da largura do texto. O CSS
-     * do palco reduz o retrato para 64 px, mantendo visível quem está falando.
+     * do palco reduz o retrato para 36 px, mantendo visível quem está falando.
      */
-    <div className={`aula-fala flex min-h-0 flex-1 gap-3 lg:gap-4 ${compacto ? "lg:max-h-56" : "lg:max-h-88"}`}>
+    <div className={`aula-fala${pagina ? "" : " aula-fala-vazia"} flex min-h-0 flex-1 gap-3 lg:gap-4 ${compacto ? "lg:max-h-56" : "lg:max-h-88"}`}>
       {retrato ? <div className="aula-retrato shrink-0">{retrato}</div> : null}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5">
         {/*

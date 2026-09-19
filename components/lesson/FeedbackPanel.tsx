@@ -45,7 +45,7 @@ export function FeedbackPanel({
    * como aviso de sistema.
    *
    * **Abaixo de `lg` ele encolhe.** No celular, 112 px tirariam um terço da
-   * largura do texto; o CSS do palco reduz o retrato para 64 px, mas mantém
+   * largura do texto; o CSS do palco reduz o retrato para 36 px, mas mantém
    * visível quem está falando enquanto o aluno acompanha o tabuleiro.
    *
    * O retrato fica FORA do `aria-live`, e isso não é detalhe: a região viva

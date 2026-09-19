@@ -84,5 +84,5 @@ export function AulaShell({
  * painel cheio torna a âncora possível; ela continua não sendo melhor.
  */
 export function AulaRodape({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-wrap items-center gap-2 lg:pt-1">{children}</div>;
+  return <div className="aula-rodape flex flex-wrap items-center gap-2 lg:pt-1">{children}</div>;
 }

@@ -32,8 +32,8 @@ export default async function TaticaRating() {
   const [servido, feitosHoje] = await Promise.all([garantirPendente(perfil.id), problemasDeHoje(perfil.id)]);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
-      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+    <main className="aula-publicada mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
+      <header className="cabecalho-aula flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
         <Link href="/tatica" className="foco rotulo text-metodo-tinta hover:underline">
           ← Tática
         </Link>

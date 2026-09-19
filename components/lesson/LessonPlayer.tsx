@@ -334,7 +334,7 @@ function LessonPlayerV1({
   );
 
   return (
-    <div className="flex w-full flex-1 flex-col gap-3">
+    <div className="player-aula flex w-full flex-1 flex-col gap-3">
       {/*
        * **O cabeçalho é uma LINHA, e isso é altura de tabuleiro.**
        *
@@ -350,7 +350,7 @@ function LessonPlayerV1({
        * caixa — que é o que faz um título de 20 px e um link de 12 parecerem a
        * mesma linha. Os 6rem do celular já contam com essa quebra.
        */}
-      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+      <header className="cabecalho-aula flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
         {/* No laboratório este link ia para `/`, que era o índice de aulas.
             Aqui `/` é a porta do site e o índice é `/finais` — apontar para a
             raiz mandaria o aluno para fora do curso no meio da aula. */}
@@ -363,7 +363,7 @@ function LessonPlayerV1({
         </div>
       </header>
 
-      <section className="flex flex-1 flex-col">
+      <section className="corpo-aula flex flex-1 flex-col">
         {stage === "intro" && lesson.stages.intro && (
           <IntroStage
             stage={lesson.stages.intro}
@@ -488,8 +488,8 @@ function TrilhaDaAula({ itens, ativa, aoIr, trancada }: {
   trancada?: (index: number) => boolean;
 }) {
   if (itens.length > TRILHA_ABERTA_ATE) return <TrilhaCompacta itens={itens} ativa={ativa} aoIr={aoIr} trancada={trancada} />;
-  return (
-    <nav aria-label="Etapas da aula" className="flex flex-wrap gap-2">
+  const completa = (
+    <nav aria-label="Etapas da aula" className="hidden flex-wrap gap-2 lg:flex">
       {itens.map(({ key, rotulo }, index) => {
         const active = key === ativa;
         const fechada = !active && Boolean(trancada?.(index));
@@ -521,6 +521,14 @@ function TrilhaDaAula({ itens, ativa, aoIr, trancada }: {
         );
       })}
     </nav>
+  );
+  return (
+    <>
+      <div className="lg:hidden">
+        <TrilhaCompacta itens={itens} ativa={ativa} aoIr={aoIr} trancada={trancada} />
+      </div>
+      {completa}
+    </>
   );
 }
 
@@ -837,8 +845,8 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
     // `aula-com-etapa`: o desconto extra do cabeçalho de duas linhas, em
     // `app/globals.css` — este cabeçalho sempre traz "Etapa X de Y" abaixo do
     // título (ver o <p basis-full> logo adiante), diferente do v1.
-    <div className="aula-com-etapa flex w-full flex-1 flex-col gap-3">
-      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+    <div className="aula-com-etapa player-aula flex w-full flex-1 flex-col gap-3">
+      <header className="cabecalho-aula flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
         {aoSair ? (
           <button type="button" onClick={aoSair} className="foco rotulo text-tinta-fraca hover:underline">
             ← Sair da aula
@@ -853,10 +861,10 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
           <SoundToggle />
         </div>
         {/* Fatia 10: onde o aluno está, em texto, e o caminho de volta sem depender da trilha. */}
-        <p className="basis-full text-sm text-tinta-media" aria-live="polite">
+        <p className="aula-etapa-atual basis-full text-sm text-tinta-media" aria-live="polite">
           Etapa {indice + 1} de {aula.etapas.length}{atual ? ` · ${atual.rotulo}` : ""}
           {indice > 0 ? (
-            <button type="button" onClick={() => goToStage(aula.etapas[indice - 1].id)} className="foco ml-3 rounded-md px-2 py-1 text-sm text-tinta-media underline hover:text-tinta">
+            <button type="button" onClick={() => goToStage(aula.etapas[indice - 1].id)} className="aula-etapa-anterior foco ml-3 rounded-md px-2 py-1 text-sm text-tinta-media underline hover:text-tinta">
               ← Etapa anterior
             </button>
           ) : null}
@@ -888,7 +896,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
         </section>
       ) : null}
 
-      <section className={`flex flex-1 flex-col ${naEntrada && treinadorDaAula && rodada ? "hidden" : ""}`}>
+      <section className={`corpo-aula flex flex-1 flex-col ${naEntrada && treinadorDaAula && rodada ? "hidden" : ""}`}>
         {atual && capa && !(naEntrada && treinadorDaAula && rodada) ? (
           <CapaDeSecao
             key={`capa-${atual.id}`}
@@ -1217,7 +1225,7 @@ function SoundToggle() {
        * celular (6rem) já conta com um cabeçalho de 50. No desktop há ponteiro,
        * e 36 px fica bem acima do mínimo AA de 24 (2.5.8).
        */
-      className="min-h-11 shrink-0 rounded-md bg-carta px-3 py-2 text-lg leading-none ring-1 ring-borda transition hover:bg-carta-alta foco lg:min-h-9 lg:py-1"
+      className="botao-som-aula min-h-11 shrink-0 rounded-md bg-carta px-3 py-2 text-lg leading-none ring-1 ring-borda transition hover:bg-carta-alta foco lg:min-h-9 lg:py-1"
     >
       <span aria-hidden>{on ? "🔊" : "🔇"}</span>
       <span className="sr-only">{on ? "Desligar o som" : "Ligar o som"}</span>

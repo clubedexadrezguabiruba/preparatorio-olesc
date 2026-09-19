@@ -761,27 +761,176 @@
   min-height: 0;
 }
 
-/* No telefone, a aula continua em uma coluna — tabuleiro em cima e painel
-   embaixo —, mas a fala não pode ficar atrás da trilha, do título e do resumo.
-   Em aparelhos baixos (360×640), essa ordem antiga empurrava justamente o
-   professor para fora da janela: o aluno via o lance ou a explicação, nunca os
-   dois ao mesmo tempo. A fala passa a ser o primeiro item do painel no mobile.
-   Os controles e metadados continuam logo abaixo e o desktop não muda. */
+/* --------------------------------------------------------------------------
+   Aula no celular: um viewport, sem rolagem
+
+   Ordem de prioridade decidida pelo Doug em 19/9/2026:
+   1. tabuleiro, no maior tamanho que a largura permitir;
+   2. fala do professor;
+   3. botões necessários para continuar;
+   4. título, som, trilha e metadados, compactados para pagar os três primeiros.
+
+   A regra fica no palco compartilhado e nas molduras `.aula-publicada`: finais,
+   aberturas, tática, rating, revisão e prova usam a mesma conta. A página tem
+   exatamente `100dvh` e não rola; textos longos paginam dentro do espaço da
+   fala. O editor não recebe `.aula-publicada`, então sua prévia não é presa ao
+   viewport do painel de autoria. */
 @media (width < 64rem) {
-  .aula-fala {
+  .aula-publicada {
+    height: 100dvh;
+    min-height: 0;
+    gap: 0.375rem;
+    overflow: hidden;
+    padding: 0.5rem;
+  }
+
+  .aula-publicada .player-aula,
+  .aula-publicada .corpo-aula {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .aula-publicada .player-aula {
+    gap: 0.375rem;
+  }
+
+  /* Voltar, título e som numa linha; a posição da etapa ocupa uma segunda
+     linha curta. O título perde tamanho e pode truncar — nunca o tabuleiro. */
+  .aula-publicada .cabecalho-aula {
+    display: grid;
+    flex: none;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.125rem 0.5rem;
+    min-height: 2rem;
+  }
+
+  .aula-publicada .cabecalho-aula > .titulo {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 1rem;
+    line-height: 1.125rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .aula-publicada .cabecalho-aula > .rotulo {
+    font-size: 0.625rem;
+    line-height: 0.875rem;
+  }
+
+  .aula-publicada .cabecalho-aula > :last-child:not(.aula-etapa-atual) {
+    min-width: 0;
+  }
+
+  .aula-publicada .aula-etapa-atual {
+    grid-column: 1 / -1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.6875rem;
+    line-height: 0.875rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .aula-publicada .aula-etapa-anterior {
+    display: none;
+  }
+
+  .aula-publicada .botao-som-aula {
+    width: 2rem;
+    min-height: 2rem;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+
+  /* 19,5rem reservam cabeçalhos, fala, trilha compacta e botões. Em 360×640
+     sobram 328 px: o tabuleiro cresce 88 px em relação ao piso anterior de
+     240, e ainda cabe com todo o painel na mesma janela. Em telas mais altas,
+     a largura disponível passa a ser o teto e ele ocupa tudo que pode. */
+  .aula-publicada .aula-palco {
+    --aula-teto: min(calc(100vw - 1rem), calc(100dvh - 19.5rem));
+    height: calc(100dvh - 4.375rem);
+    max-height: calc(100dvh - 4.375rem);
+    min-height: 0;
+    flex: 1;
+    gap: 0.375rem;
+    overflow: hidden;
+  }
+
+  .aula-publicada .aula-tabuleiro {
+    flex: none;
+    min-height: 0;
+  }
+
+  .aula-publicada .aula-painel {
+    gap: 0.375rem;
+    overflow: hidden;
+  }
+
+  .aula-publicada .aula-fala {
     order: -1;
   }
 
-  /* O retrato de 112 px é proporcional ao painel largo do desktop. No celular,
-     64 px preservam a presença do professor e deixam cerca de 250 px para a
-     fala em uma tela de 360 px. O `!important` vence a largura inline calculada
-     pelo `next/image`; altura continua automática, sem deformar a ilustração. */
-  .aula-retrato {
-    width: 4rem;
+  /* O professor continua identificando a voz, mas deixa o protagonismo com o
+     tabuleiro e a explicação. 36 px de largura viram cerca de 63 px de altura. */
+  .aula-publicada .aula-retrato {
+    width: 2.25rem;
   }
 
-  .aula-retrato img {
-    width: 4rem !important;
+  .aula-publicada .aula-retrato img {
+    width: 2.25rem !important;
+  }
+
+  .aula-publicada .aula-fala {
+    flex: 1 1 4rem;
+    max-height: 5.25rem;
+    min-height: 0;
+    gap: 0.5rem;
+  }
+
+  /* Sem fala não há professor esperando ao lado de um balão vazio. O espaço
+     volta para o painel até o roteiro chegar ao próximo comentário. */
+  .aula-publicada .aula-fala-vazia {
+    display: none;
+  }
+
+  .aula-publicada .aula-fala .rounded-lg {
+    min-height: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  /* Etapas curtas usam a mesma barra compacta das aulas longas no mobile.
+     Títulos auxiliares e resumos cedem altura sem sumir. */
+  .aula-publicada .aula-painel h2 {
+    font-size: 0.875rem;
+    line-height: 1rem;
+  }
+
+  .aula-publicada .aula-painel h2 + div {
+    max-height: 2rem;
+    overflow: hidden;
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  .aula-publicada .aula-painel .text-4xl {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  .aula-publicada .aula-rodape {
+    flex: none;
+    gap: 0.25rem;
+  }
+
+  .aula-publicada .aula-rodape :is(button, a) {
+    min-height: 2.25rem;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 }
 
