@@ -8,19 +8,24 @@ import {
   type CursoParaOSelo,
   type Familia,
 } from "../curso/selos.ts";
+import {
+  ATIVIDADE_ZERADA,
+  ordenarPorTempo,
+  type ResumoDeAtividade,
+} from "./atividade.ts";
 
 /**
  * A turma e a vitrine de um colega (Doug, 17/9/2026) — as regras, sem banco.
  *
  * ## O que um colega vê de outro
  *
- * **A vitrine, e só ela:** avatar, nome, nível com o metal, e os selos ganhos. O que o
- * aluno *fez*, e nada de *quanto* nem *onde ele está contra os outros*.
+ * **A vitrine pública da turma:** avatar, nome, nível, selos e atividade objetiva: tempo
+ * registrado, rating de tática, puzzles, linhas estudadas e linhas dominadas.
  *
  * Fica de fora, e por quê:
  *
- * - **graus, erros, acertos, revisões, minutos**: são o caderno do aluno, não a vitrine;
- * - **rating** — e a família de selos `rating`, que é o rating com outras palavras;
+ * Continua privado: graus por conteúdo, fila de revisão, erros por tema, datas e histórico.
+ * O rating de entrada continua privado; o rating atual da Tática Rating é atividade pública.
  * - **`usuario`**: é metade do login (a outra metade é um PIN de seis dígitos);
  * - **equipe e tabuleiro**: o tabuleiro **é** uma ordem de força (o 1.º tabuleiro é o mais
  *   forte da equipe) — mostrá-lo seria um ranking pela porta dos fundos. A equipe não ordena
@@ -28,8 +33,8 @@ import {
  * - **a data de cada selo**: no perfil do próprio aluno ela é memória; na vitrine vira
  *   comparação ("ele ganhou antes de mim").
  *
- * Sem ranking, sem ordenação por desempenho, sem contagem comparativa: a turma é em ordem
- * alfabética, e a vitrine não diz "12 de 40".
+ * Desde 19/9/2026, por decisão do Doug, a lista ordena pelo tempo medido, do maior para o menor.
+ * Não há pontos nem posição calculada. Empate de tempo fica em ordem alfabética.
  *
  * ## A conta de ensaio
  *
@@ -69,14 +74,13 @@ export const CAMPOS_PROIBIDOS: readonly string[] = [
   "turma",
   "papel",
   "graus",
-  "erros",
-  "acertos",
   "revisoes",
-  "minutos",
+  "grausPorConteudo",
+  "historico",
 ];
 
 /** As chaves exatas de uma {@link Vitrine}. O teste confere que o objeto montado tem só estas. */
-export const CAMPOS_DA_VITRINE = ["id", "nome", "avatar", "nivel", "metal", "selos"] as const;
+export const CAMPOS_DA_VITRINE = ["id", "nome", "avatar", "nivel", "metal", "selos", "atividade"] as const;
 
 const USUARIOS_DE_ENSAIO: ReadonlySet<string> = new Set(["alunoteste"]);
 const PREFIXO_DAS_COBAIAS = "zz.teste.";
@@ -120,6 +124,7 @@ export type ColegaNaTurma = {
   readonly avatar: string | null;
   /** O próprio aluno: o cartão dele leva a "Meu perfil". */
   readonly ehVoce: boolean;
+  readonly atividade: ResumoDeAtividade;
 };
 
 /**
@@ -132,8 +137,31 @@ export function turmaEmOrdem(
 ): ColegaNaTurma[] {
   const ordem = new Intl.Collator("pt-BR", { sensitivity: "base" });
   return linhas
-    .map((l) => ({ id: l.id, nome: l.nome, avatar: l.avatar, ehVoce: l.id === eu }))
+    .map((l) => ({
+      id: l.id,
+      nome: l.nome,
+      avatar: l.avatar,
+      ehVoce: l.id === eu,
+      atividade: ATIVIDADE_ZERADA,
+    }))
     .sort((a, b) => ordem.compare(a.nome, b.nome) || a.id.localeCompare(b.id));
+}
+
+/** Ordena por tempo medido e anexa somente as métricas públicas de cada aluno. */
+export function turmaPorTempo(
+  linhas: readonly { readonly id: string; readonly nome: string; readonly avatar: string | null }[],
+  eu: string,
+  atividades: ReadonlyMap<string, ResumoDeAtividade>,
+): ColegaNaTurma[] {
+  return ordenarPorTempo(
+    linhas.map((linha) => ({
+      id: linha.id,
+      nome: linha.nome,
+      avatar: linha.avatar,
+      ehVoce: linha.id === eu,
+      atividade: atividades.get(linha.id) ?? ATIVIDADE_ZERADA,
+    })),
+  );
 }
 
 export type GrupoDaTurma = { readonly turma: Turma; readonly nome: string; readonly colegas: ColegaNaTurma[] };
@@ -156,6 +184,22 @@ export function turmasEmOrdem(
   })).filter((g) => g.colegas.length > 0);
 }
 
+export function turmasPorTempo(
+  linhas: readonly { readonly id: string; readonly nome: string; readonly avatar: string | null; readonly turma: Turma }[],
+  eu: string,
+  atividades: ReadonlyMap<string, ResumoDeAtividade>,
+): GrupoDaTurma[] {
+  return TURMAS.map((turma) => ({
+    turma,
+    nome: NOME_DA_TURMA[turma],
+    colegas: turmaPorTempo(
+      linhas.filter((linha) => linha.turma === turma),
+      eu,
+      atividades,
+    ),
+  })).filter((grupo) => grupo.colegas.length > 0);
+}
+
 export type SeloDaVitrine = {
   readonly id: string;
   readonly familia: Familia;
@@ -170,6 +214,7 @@ export type Vitrine = {
   readonly nivel: Nivel;
   readonly metal: string;
   readonly selos: readonly SeloDaVitrine[];
+  readonly atividade: ResumoDeAtividade;
 };
 
 /**
@@ -186,6 +231,7 @@ export function montarVitrine(
   gravados: readonly SeloGravado[],
   cursos: readonly CursoParaOSelo[],
   aberturas: readonly AberturaParaOSelo[] = [],
+  atividade: ResumoDeAtividade = ATIVIDADE_ZERADA,
 ): Vitrine {
   const catalogo = selos(entradaZerada(cursos, aberturas));
   const ganhos = comDatas(catalogo, gravados)
@@ -198,5 +244,6 @@ export function montarVitrine(
     nivel,
     metal: METAL[nivel],
     selos: ganhos,
+    atividade,
   };
 }

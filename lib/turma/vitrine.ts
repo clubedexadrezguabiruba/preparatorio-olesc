@@ -7,13 +7,22 @@ import { aberturasDoRepertorio } from "@/lib/curso/selos-repertorio";
 import type { SeloGravado } from "@/lib/curso/selos-gravados";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { criarClienteAdmin } from "@/lib/supabase/admin";
+import { todasAsPaginas } from "@/lib/supabase/paginar";
+import {
+  resumirAtividades,
+  type LinhaDeAbertura,
+  type LinhaDePuzzle,
+  type LinhaDeRating,
+  type LinhaDeTempo,
+  type ResumoDeAtividade,
+} from "./atividade.ts";
 import {
   COLUNAS_DO_COLEGA,
   ehIdDeConta,
   ehTurma,
   FILTRO_DE_ENSAIO,
   montarVitrine,
-  turmasEmOrdem,
+  turmasPorTempo,
   type GrupoDaTurma,
   type Vitrine,
 } from "./turma.ts";
@@ -40,7 +49,7 @@ import {
  *
  * ## O que nunca se lê de um colega
  *
- * `usuario`, `rating`, `equipe`, `tabuleiro`, graus, tentativas, minutos. O filtro de conta de
+ * `usuario`, rating de entrada, `equipe`, `tabuleiro`, graus e histórico detalhado. O filtro de conta de
  * ensaio usa `usuario` **dentro do `where`** — o PostgREST filtra por ele sem devolvê-lo. A turma
  * (18/9/2026) também vai no `where` para o aluno: ele só vê a própria. Só o professor, que vê as
  * duas separadas, lê a coluna `turma` — e dela sai o nome do grupo, nada mais.
@@ -52,8 +61,58 @@ type LinhaDoColega = { id: string; nome: string; avatar: string | null };
 const ENSAIO_EM_LISTA = `(${FILTRO_DE_ENSAIO.usuarios.map((u) => `"${u}"`).join(",")})`;
 
 /**
- * Os alunos que `quem` pode ver, por turma e em ordem alfabética, sem número nenhum. O aluno
- * recebe um grupo só, o dele; o professor, um por turma que tenha gente.
+ * As métricas públicas, sempre limitadas aos ids que a regra de turma já autorizou.
+ * As consultas são paginadas: o repertório passa de mil linhas quando a turma cresce, e o
+ * PostgREST cortaria o restante sem erro nem aviso.
+ */
+async function atividadesDosAlunos(ids: readonly string[]): Promise<Map<string, ResumoDeAtividade>> {
+  if (ids.length === 0) return new Map();
+  const admin = criarClienteAdmin();
+  const [puzzles, tempos, aberturas, ratings] = await Promise.all([
+    todasAsPaginas<LinhaDePuzzle>((de, ate) =>
+      admin
+        .from("progresso_tema")
+        .select("aluno, tentativas, acertos")
+        .in("aluno", [...ids])
+        .order("aluno")
+        .order("tema")
+        .order("modo")
+        .range(de, ate),
+    ),
+    todasAsPaginas<LinhaDeTempo>((de, ate) =>
+      admin
+        .from("minutos_por_dia")
+        .select("aluno, tempo_ms")
+        .in("aluno", [...ids])
+        .order("aluno")
+        .order("dia")
+        .order("bloco")
+        .range(de, ate),
+    ),
+    todasAsPaginas<LinhaDeAbertura>((de, ate) =>
+      admin
+        .from("repertorio_progresso")
+        .select("aluno, tentativas, aprendida_em")
+        .in("aluno", [...ids])
+        .order("aluno")
+        .order("linha")
+        .range(de, ate),
+    ),
+    todasAsPaginas<LinhaDeRating>((de, ate) =>
+      admin
+        .from("rating_tatica")
+        .select("aluno, rating")
+        .in("aluno", [...ids])
+        .order("aluno")
+        .range(de, ate),
+    ),
+  ]);
+  return resumirAtividades(ids, puzzles, tempos, aberturas, ratings);
+}
+
+/**
+ * Os alunos que `quem` pode ver, por turma e por tempo estudado. O aluno recebe um grupo só,
+ * o dele; o professor, um por turma que tenha gente.
  */
 export async function turmaVisivel(
   quem: Pick<Perfil, "id" | "papel" | "nome" | "avatar" | "turma">,
@@ -84,7 +143,8 @@ export async function turmaVisivel(
   if (quem.papel === "aluno" && !linhas.some((l) => l.id === quem.id)) {
     linhas.push({ id: quem.id, nome: quem.nome, avatar: quem.avatar, turma: quem.turma });
   }
-  return turmasEmOrdem(linhas, quem.id);
+  const atividades = await atividadesDosAlunos(linhas.map((linha) => linha.id));
+  return turmasPorTempo(linhas, quem.id, atividades);
 }
 
 /**
@@ -94,7 +154,10 @@ export async function turmaVisivel(
  *
  * Quem chama já conferiu a sessão (`perfilAtual`) e já mandou o próprio aluno para `/perfil`.
  */
-export async function vitrineDoColega(quem: Pick<Perfil, "id" | "papel" | "turma">, id: string): Promise<Vitrine | null> {
+export async function vitrineDoColega(
+  quem: Pick<Perfil, "id" | "papel" | "nome" | "avatar" | "turma">,
+  id: string,
+): Promise<Vitrine | null> {
   if (!ehIdDeConta(id)) return null;
   const admin = criarClienteAdmin();
 
@@ -110,11 +173,12 @@ export async function vitrineDoColega(quem: Pick<Perfil, "id" | "papel" | "turma
   if (error) throw new Error(`não foi possível ler o colega: ${error.message}`);
   if (!linha) return null;
 
-  const [niveis, gravados, indice] = await Promise.all([
+  const [niveis, gravados, indice, grupos] = await Promise.all([
     admin.from("nivel_conquistado").select("nivel").eq("aluno", id),
     // Só o id do selo: a data fica de fora da vitrine, e nem chega a ser lida.
     admin.from("selo_conquistado").select("selo").eq("aluno", id),
     lerIndice(),
+    turmaVisivel(quem),
   ]);
   if (niveis.error) throw new Error(`não foi possível ler o nível do colega: ${niveis.error.message}`);
   if (gravados.error) throw new Error(`não foi possível ler os selos do colega: ${gravados.error.message}`);
@@ -136,5 +200,7 @@ export async function vitrineDoColega(quem: Pick<Perfil, "id" | "papel" | "turma
   // O índice só dá nome aos selos de repertório; o progresso do colega não é lido.
   const aberturas = aberturasDoRepertorio(indice, new Map(), new Set());
 
-  return montarVitrine(linha as LinhaDoColega, nivelDoAluno(conquistado), selos, cursos, aberturas);
+  const colegaVisivel = grupos.flatMap((grupo) => grupo.colegas).find((colega) => colega.id === id);
+  if (!colegaVisivel) return null;
+  return montarVitrine(linha as LinhaDoColega, nivelDoAluno(conquistado), selos, cursos, aberturas, colegaVisivel.atividade);
 }

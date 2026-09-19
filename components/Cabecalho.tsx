@@ -107,8 +107,8 @@ const SECUNDARIOS: Item[] = [
   { id: "trilha", nome: "A trilha", href: "/trilha" },
   { id: "partidas", nome: "Partidas", href: "/partidas" },
   { id: "meio-jogo", nome: "Meio-jogo", href: "/meio-jogo" },
-  // A turma: os colegas, em ordem alfabética, e a vitrine de cada um (17/9/2026).
-  { id: "turma", nome: "Turma", href: "/turma" },
+  // A equipe: os companheiros e a atividade real de cada um (19/9/2026).
+  { id: "turma", nome: "Equipe", href: "/turma" },
 ];
 
 const TODOS = [...PRINCIPAIS, ...SECUNDARIOS];

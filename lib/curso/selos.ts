@@ -75,9 +75,9 @@ export const FAMILIAS: readonly Familia[] = [
 /**
  * As famílias que **não** aparecem na vitrine de um colega (`/turma/[id]`).
  *
- * Só a tática rating: "Rating 1200 na tática" é o rating escrito com outras palavras, e o
- * colega não vê rating de ninguém (Doug, 17/9/2026 — o aluno não tem ranking). As outras
- * famílias dizem o que o aluno **fez**, e não onde ele está numa régua contra os outros.
+ * Só a família de selos de rating: a turma mostra o número atual da Tática Rating, mas não
+ * transforma cada marco histórico (1000, 1200, +100) em outra medalha comparativa. As outras
+ * famílias dizem o que o aluno **fez**.
  */
 export const FAMILIAS_FORA_DA_VITRINE: ReadonlySet<Familia> = new Set<Familia>(["rating"]);
 

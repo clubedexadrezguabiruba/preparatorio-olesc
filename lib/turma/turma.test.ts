@@ -11,12 +11,12 @@ import {
   quemAparece,
   TURMAS,
   turmaEmOrdem,
+  turmaPorTempo,
   turmasEmOrdem,
 } from "./turma.ts";
 
 /**
- * A vitrine de um colega e a grade da turma (17/9/2026). O que se cobra aqui é o que **não**
- * pode sair: nenhum número de desempenho, nenhuma ordem por desempenho, e metade do login nunca.
+ * A vitrine e a lista pública da turma. Metade do login e o caderno detalhado nunca saem.
  */
 
 test("a coluna lida do colega nunca inclui campo proibido", () => {
@@ -56,7 +56,7 @@ test("a vitrine monta só os campos permitidos, mesmo se a linha vier com mais",
   assert.equal(vitrine.metal, "Ferro");
 });
 
-test("a turma sai em ordem alfabética, sem número nenhum, e o próprio aluno é marcado", () => {
+test("a montagem alfabética legada continua estável e marca o próprio aluno", () => {
   const turma = turmaEmOrdem(
     [
       { id: "a1", nome: "Otávio", avatar: null },
@@ -69,9 +69,27 @@ test("a turma sai em ordem alfabética, sem número nenhum, e o próprio aluno �
   assert.deepEqual(turma.map((c) => c.nome), ["Álvaro", "ana Clara", "Bruno", "Otávio"]);
   assert.deepEqual(turma.map((c) => c.ehVoce), [false, true, false, false]);
   for (const c of turma) {
-    assert.deepEqual(Object.keys(c).sort(), ["avatar", "ehVoce", "id", "nome"]);
-    assert.ok(!Object.values(c).some((v) => typeof v === "number"), "número na grade da turma");
+    assert.deepEqual(Object.keys(c).sort(), ["atividade", "avatar", "ehVoce", "id", "nome"]);
   }
+});
+
+test("a lista pública sai por tempo estudado com os totais permitidos", () => {
+  const atividades = new Map([
+    ["a", { puzzlesFeitos: 10, puzzlesCertos: 8, puzzlesErrados: 2, tempoMs: 3_600_000, linhasEstudadas: 2, linhasDominadas: 1, ratingTatica: 700 }],
+    ["b", { puzzlesFeitos: 20, puzzlesCertos: 5, puzzlesErrados: 15, tempoMs: 7_200_000, linhasEstudadas: 5, linhasDominadas: 3, ratingTatica: 820 }],
+  ]);
+  const lista = turmaPorTempo(
+    [
+      { id: "b", nome: "Bia", avatar: null },
+      { id: "a", nome: "Ana", avatar: null },
+    ],
+    "b",
+    atividades,
+  );
+  assert.deepEqual(lista.map((c) => [c.nome, c.atividade.tempoMs, c.ehVoce]), [
+    ["Bia", 7_200_000, true],
+    ["Ana", 3_600_000, false],
+  ]);
 });
 
 test("conta de ensaio: some para o aluno, aparece para o professor, e o próprio aluno sempre se vê", () => {

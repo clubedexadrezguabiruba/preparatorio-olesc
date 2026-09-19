@@ -148,7 +148,9 @@ muda nela não mexe na pasta principal), seguindo `docs/COMO-TRABALHAR-COM-BRANC
   - o mesmo gráfico e os temas fracos.
 - **Tabela da turma** em `app/professor/page.tsx`: aluno, rating de tática, variação nos últimos 7 dias e resolvidos.
   - Quem nunca jogou aparece com "—".
-  - Só o professor vê; o aluno não tem ranking.
+  - Só o professor vê esta **ordem por rating**. Desde 19/9/2026 o aluno vê o rating atual dos
+    colegas da própria turma na lista de atividade; essa lista ordena por tempo estudado, sem
+    pontos nem posição calculada.
 
 ### 6. Painel e selos
 - **`app/painel/page.tsx`:** o rating de tática com uma minicurva de 30 dias, usando o mesmo `GraficoRating` em versão compacta, com link para a evolução.

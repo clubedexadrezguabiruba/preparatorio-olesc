@@ -13,7 +13,7 @@ import { entradaZerada, selos } from "@/lib/curso/selos";
 import { GRAUS, NOME_DO_GRAU } from "@/lib/progresso/grau";
 import { resumoDosGraus } from "@/lib/progresso/resumo";
 import { grausDosTemas } from "@/lib/progresso/tatica-banco";
-import { lerIndice } from "@/lib/repertorio/banco";
+import { lerIndice, linhasDaAbertura } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { professorAtual } from "@/lib/auth/perfil";
 import { hojeNoBrasil, porExtenso, somarDias } from "@/lib/curso/calendario";
@@ -44,6 +44,8 @@ import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, soOServivel, te
 import { filaCompleta, INTERVALOS_DA_REVISAO } from "@/lib/tatica/revisao";
 import { evolucaoDoAluno } from "@/lib/tatica/rating-leitura";
 import { EvolucaoDoRating } from "@/components/tatica/EvolucaoDoRating";
+import { formatarTempoEstudo, percentualDeAcerto } from "@/lib/turma/atividade";
+import { turmaVisivel } from "@/lib/turma/vitrine";
 import { GerirConta } from "./GerirConta";
 
 /**
@@ -80,7 +82,7 @@ const EQUIPE = { M: "Masculina", F: "Feminina" } as const;
 const DIAS = 14;
 
 export default async function RelatorioDoAluno({ params }: PageProps<"/professor/[aluno]">) {
-  await professorAtual();
+  const professor = await professorAtual();
   const { aluno: id } = await params;
 
   const supabase = await criarClienteServidor();
@@ -107,6 +109,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
     indice,
     repertorio,
     grausDeTatica,
+    gruposDaTurma,
   ] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
@@ -125,6 +128,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
     // Com o id, sempre: na sessão do professor, sem ele, a leitura devolveria a turma inteira.
     progressoDoRepertorio(id),
     grausDosTemas(id),
+    turmaVisivel(professor),
   ]);
 
   const nivel = nivelDoAluno(conquistado);
@@ -170,41 +174,163 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
     agora: agoraNosFinais,
   });
   const aulasDeAbertura = trava.aulas.filter((a) => trava.concluidas.has(a.id));
+  const naTurma = gruposDaTurma.flatMap((grupo) => grupo.colegas).find((colega) => colega.id === id);
+  const acertoGeral = naTurma ? percentualDeAcerto(naTurma.atividade) : null;
+
+  const linhasPorAbertura = (
+    await Promise.all(
+      indice.map(async (abertura) => {
+        const linhasAtuais = await linhasDaAbertura(abertura.cor, abertura.abertura);
+        const treinadas = linhasAtuais.flatMap((linha) => {
+          const progresso = repertorio.get(linha.id);
+          if (!progresso || progresso.tentativas === 0) return [];
+          return [{
+            id: linha.id,
+            nome: linha.nome,
+            tentativas: progresso.tentativas,
+            certas: Math.max(0, progresso.tentativas - progresso.erros),
+            erros: progresso.erros,
+          }];
+        });
+        return { id: `${abertura.cor}/${abertura.abertura}`, nome: abertura.nome, linhas: treinadas };
+      }),
+    )
+  ).filter((abertura) => abertura.linhas.length > 0);
+  const finaisPraticados = abertas.filter((aula) => {
+    const progresso = finais.get(aula.id);
+    return Boolean(progresso && (progresso.tentativas > 0 || progresso.lida));
+  });
 
   const temasComTrabalho = BLOCOS.flatMap((bloco) =>
     bloco.temas.map((tema) => ({ bloco, tema, p: tatica.get(tema.tag) ?? temaZerado() })),
   ).filter((t) => t.p.tentativas > 0);
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-5 py-10">
-      <header className="flex flex-col gap-2">
-        <Link href="/professor" className="foco rotulo w-fit text-metodo-tinta hover:underline">
-          ← Alunos
-        </Link>
-        <div className="flex items-center gap-4">
-          <Avatar id={aluno.avatar as string | null} tamanho={56} />
-          <h1 className="titulo text-tinta">{aluno.nome}</h1>
+    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-5 py-10">
+      <header className="cartao overflow-hidden">
+        <div className="flex flex-col gap-5 bg-gradient-to-br from-metodo-superficie/12 to-transparent px-5 py-5 sm:px-6 sm:py-6">
+          <Link href="/professor" className="foco rotulo w-fit text-metodo-tinta hover:underline">
+            ← Alunos
+          </Link>
+          <div className="flex items-center gap-4 sm:gap-5">
+            <Avatar id={aluno.avatar as string | null} tamanho={68} />
+            <div className="min-w-0">
+              <p className="rotulo mb-1 text-tinta-fraca">Relatório do aluno</p>
+              <h1 className="titulo truncate text-tinta">{aluno.nome}</h1>
+              <p className="mt-1 text-xs text-tinta-fraca">Nível {nivel} de 5 · {porExtenso(desde)} a {porExtenso(hoje)}</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-1.5 text-xs text-tinta-media">
+            <span className="rounded-full border border-borda-fraca bg-papel/20 px-2.5 py-1 font-mono">@{aluno.usuario}</span>
+            {aluno.turma === "testadores" ? <span className="rounded-full border border-borda-fraca bg-papel/20 px-2.5 py-1">Turma de testadores</span> : null}
+            {aluno.equipe ? <span className="rounded-full border border-borda-fraca bg-papel/20 px-2.5 py-1">Equipe {EQUIPE[aluno.equipe as "M" | "F"]}</span> : null}
+            {aluno.tabuleiro ? <span className="rounded-full border border-borda-fraca bg-papel/20 px-2.5 py-1">Tabuleiro {aluno.tabuleiro}</span> : null}
+            {aluno.rating ? <span className="rounded-full border border-borda-fraca bg-papel/20 px-2.5 py-1">Rating de entrada {aluno.rating}</span> : null}
+          </div>
         </div>
-        <p className="text-sm text-tinta-media">
-          <span className="font-mono text-xs">{aluno.usuario}</span>
-          {aluno.turma === "testadores" ? " · turma de testadores" : ""}
-          {aluno.equipe ? ` · equipe ${EQUIPE[aluno.equipe as "M" | "F"]}` : ""}
-          {aluno.tabuleiro ? ` · tabuleiro ${aluno.tabuleiro}` : ""}
-          {/* "de entrada", porque a página agora mostra também o rating de tática,
-              que é outro número: o que o professor anotou na matrícula não se mexe. */}
-          {aluno.rating ? ` · rating de entrada ${aluno.rating}` : ""}
-        </p>
-        <p className="text-xs text-tinta-fraca">
-          Nível {nivel} de 5 · dados de {porExtenso(desde)} a {porExtenso(hoje)}.
-        </p>
+        <nav aria-label="Seções do relatório" className="flex gap-1 overflow-x-auto border-t border-borda-fraca bg-carta-alta/20 px-3 py-2 text-sm sm:px-5">
+          {[["#resumo", "Resumo"], ["#conquistas", "Conquistas"], ["#tatica", "Tática"], ["#revisao", "Revisão"], ["#finais", "Finais"]].map(([href, nome]) => (
+            <a key={href} href={href} className="foco shrink-0 rounded-lg px-3 py-2 font-medium text-tinta-media hover:bg-carta-toque hover:text-tinta">{nome}</a>
+          ))}
+        </nav>
       </header>
+
+      <section id="resumo" aria-labelledby="titulo-resumo" className="flex scroll-mt-4 flex-col gap-4">
+        <div>
+          <h2 id="titulo-resumo" className="rotulo text-tinta-fraca">Resumo geral</h2>
+          <p className="text-sm text-tinta-media">Toda a atividade registrada desde a criação da conta.</p>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <NumeroPrincipal valor={formatarTempoEstudo(naTurma?.atividade.tempoMs ?? 0)} rotulo="Tempo de estudo" detalhe="atividade registrada" destaque />
+          <NumeroPrincipal valor={naTurma?.atividade.ratingTatica === null || naTurma?.atividade.ratingTatica === undefined ? "—" : Math.round(naTurma.atividade.ratingTatica)} rotulo="Rating de tática" detalhe="rating atual" />
+          <div className="cartao overflow-hidden md:col-span-2">
+            <div className="border-b border-borda-fraca px-4 py-3">
+              <p className="text-xs font-medium text-tinta-fraca">Puzzles</p>
+            </div>
+            <dl className="grid grid-cols-2 divide-x divide-borda-fraca sm:grid-cols-4">
+              <DadoCompacto valor={naTurma?.atividade.puzzlesFeitos ?? 0} rotulo="feitos" />
+              <DadoCompacto valor={acertoGeral === null ? "—" : `${acertoGeral}%`} rotulo="de acerto" destaque />
+              <DadoCompacto valor={naTurma?.atividade.puzzlesCertos ?? 0} rotulo="certos" />
+              <DadoCompacto valor={naTurma?.atividade.puzzlesErrados ?? 0} rotulo="errados" />
+            </dl>
+          </div>
+          <div className="cartao flex items-center justify-between gap-5 px-4 py-4 md:col-span-2 xl:col-span-4">
+            <div>
+              <p className="text-sm font-semibold text-tinta">Linhas de abertura</p>
+              <p className="mt-0.5 text-xs text-tinta-fraca">Da primeira tentativa até o domínio</p>
+            </div>
+            <dl className="flex shrink-0 gap-6 sm:gap-10">
+              <DadoEmLinha valor={naTurma?.atividade.linhasEstudadas ?? 0} rotulo="estudadas" />
+              <DadoEmLinha valor={naTurma?.atividade.linhasDominadas ?? 0} rotulo="dominadas" destaque />
+            </dl>
+          </div>
+        </div>
+        <p className="text-xs text-tinta-fraca">
+          Números acumulados dos treinos. A lista da equipe usa somente o tempo registrado para ordenar, sem pontos.
+        </p>
+
+        <div className="grid gap-3 lg:grid-cols-2">
+          <div className="cartao flex flex-col gap-3 px-4 py-4">
+            <div>
+              <h3 className="font-semibold text-tinta">Linhas de abertura estudadas</h3>
+              <p className="text-xs text-tinta-fraca tabular-nums">
+                {naTurma?.atividade.linhasEstudadas ?? 0} estudadas · {naTurma?.atividade.linhasDominadas ?? 0} dominadas
+              </p>
+            </div>
+            {linhasPorAbertura.length === 0 ? (
+              <p className="text-sm text-tinta-fraca">Nenhuma linha treinada ainda.</p>
+            ) : (
+              <div className="flex max-h-80 flex-col gap-4 overflow-y-auto pr-1">
+                {linhasPorAbertura.map((abertura) => (
+                  <div key={abertura.id} className="flex flex-col gap-1.5">
+                    <h4 className="text-xs font-semibold text-tinta-media">{abertura.nome}</h4>
+                    <ul className="flex flex-col gap-1">
+                      {abertura.linhas.map((linha) => (
+                        <li key={linha.id} className="flex items-start justify-between gap-3 rounded-lg bg-carta-alta/25 px-3 py-2 text-sm">
+                          <span className="min-w-0 text-tinta">{linha.nome}</span>
+                          <span className="shrink-0 text-xs text-tinta-fraca tabular-nums">
+                            {linha.certas} certas · {linha.erros} erros
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="cartao flex flex-col gap-3 px-4 py-4">
+            <div>
+              <h3 className="font-semibold text-tinta">Finais praticados</h3>
+              <p className="text-xs text-tinta-fraca tabular-nums">{finaisPraticados.length} de {abertas.length} aulas publicadas</p>
+            </div>
+            {finaisPraticados.length === 0 ? (
+              <p className="text-sm text-tinta-fraca">Nenhum final praticado ainda.</p>
+            ) : (
+              <ul className="grid gap-1.5 sm:grid-cols-2">
+                {finaisPraticados.map((aula) => {
+                  const progresso = finais.get(aula.id) ?? AULA_ZERADA;
+                  const estado = estadoDaAula(comPratica.has(aula.id), progresso);
+                  return (
+                    <li key={aula.id} className="rounded-lg border border-borda-fraca bg-carta-alta/20 px-3 py-2.5 text-sm">
+                      <span className="block text-tinta">{aula.nome}</span>
+                      <span className="text-xs text-tinta-fraca tabular-nums">{estado} · {progresso.tentativas} tentativas</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* ---------------------------------------------------------------- *
        * O que o aluno vê em "Meu perfil" (17/9/2026): selos com data, graus e
        * aulas de abertura. Antes da rotina, porque é por aqui que a conversa de
        * sábado costuma começar — pelo que ele conquistou.
        * ---------------------------------------------------------------- */}
-      <section className="flex flex-col gap-3">
+      <section id="conquistas" className="flex scroll-mt-4 flex-col gap-3">
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">Conquistas</h2>
           <p className="text-sm text-tinta-media">
@@ -383,7 +509,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
       {/* ---------------------------------------------------------------- */}
       <section className="flex flex-col gap-3">
         <div className="flex flex-col gap-0.5">
-          <h2 className="rotulo text-tinta-fraca">Tática, tema a tema</h2>
+          <h2 id="tatica" className="scroll-mt-4 rotulo text-tinta-fraca">Tática, tema a tema</h2>
           <p className="text-sm text-tinta-media">
             O acerto da <strong>prova</strong> é a coluna que decide: ela é a única em que o
             aluno resolve sem tema anunciado, e ela inclui de propósito os puzzles que ele
@@ -494,7 +620,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
       {/* ---------------------------------------------------------------- */}
       <section className="flex flex-col gap-3">
         <div className="flex flex-col gap-0.5">
-          <h2 className="rotulo text-tinta-fraca">Fila de revisão</h2>
+          <h2 id="revisao" className="scroll-mt-4 rotulo text-tinta-fraca">Fila de revisão</h2>
           <p className="text-sm text-tinta-media">
             Tática: errou, volta em {INTERVALOS_DA_REVISAO[0]} dias; acertou no prazo, em{" "}
             {INTERVALOS_DA_REVISAO[1]}, depois em {INTERVALOS_DA_REVISAO[2]}. Finais: uma escada de{" "}
@@ -554,7 +680,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
       {/* ---------------------------------------------------------------- */}
       <section className="flex flex-col gap-3">
         <div className="flex flex-col gap-0.5">
-          <h2 className="rotulo text-tinta-fraca">Finais, aula a aula</h2>
+          <h2 id="finais" className="scroll-mt-4 rotulo text-tinta-fraca">Finais, aula a aula</h2>
           <p className="text-sm text-tinta-media">
             Só as {abertas.length} aulas publicadas. O critério de domínio é o do formato de
             cada uma — o mesmo que a trilha do aluno usa.
@@ -622,6 +748,44 @@ function Percentual({ valor }: { valor: number }) {
     >
       {valor}%
     </span>
+  );
+}
+
+function NumeroPrincipal({
+  valor,
+  rotulo,
+  detalhe,
+  destaque = false,
+}: {
+  valor: React.ReactNode;
+  rotulo: string;
+  detalhe: string;
+  destaque?: boolean;
+}) {
+  return (
+    <div className={`cartao px-4 py-4 ${destaque ? "border-metodo-cheio bg-metodo-superficie/10" : ""}`}>
+      <span className="text-xs font-medium text-tinta-fraca">{rotulo}</span>
+      <strong className={`mt-1 block text-2xl tabular-nums ${destaque ? "text-metodo-tinta" : "text-tinta"}`}>{valor}</strong>
+      <span className="mt-1 block text-xs text-tinta-fraca">{detalhe}</span>
+    </div>
+  );
+}
+
+function DadoCompacto({ valor, rotulo, destaque = false }: { valor: React.ReactNode; rotulo: string; destaque?: boolean }) {
+  return (
+    <div className="px-4 py-3">
+      <dt className="text-xs text-tinta-fraca">{rotulo}</dt>
+      <dd className={`mt-0.5 text-lg font-semibold tabular-nums ${destaque ? "text-metodo-tinta" : "text-tinta"}`}>{valor}</dd>
+    </div>
+  );
+}
+
+function DadoEmLinha({ valor, rotulo, destaque = false }: { valor: number; rotulo: string; destaque?: boolean }) {
+  return (
+    <div className="text-right">
+      <dt className="text-xs text-tinta-fraca">{rotulo}</dt>
+      <dd className={`mt-0.5 text-xl font-semibold tabular-nums ${destaque ? "text-metodo-tinta" : "text-tinta"}`}>{valor}</dd>
+    </div>
   );
 }
 

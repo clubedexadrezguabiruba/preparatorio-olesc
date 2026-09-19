@@ -24,6 +24,8 @@ import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
 import { ratingDoAluno } from "@/lib/tatica/rating-leitura";
+import { formatarTempoEstudo, percentualDeAcerto } from "@/lib/turma/atividade";
+import { turmaVisivel } from "@/lib/turma/vitrine";
 import { CabecaDoBloco, Graus, RevisarHoje } from "./Graus";
 import { TrocaDeAvatar } from "./TrocaDeAvatar";
 
@@ -66,7 +68,7 @@ export default async function Perfil() {
   const perfil = await perfilAtual();
   const hoje = hojeNoBrasil();
 
-  const [indice, repertorio, trava, finais, devidosDeTatica, grausDeTatica, progresso, minutos, conquistado, ratingTatica, puzzles] =
+  const [indice, repertorio, trava, finais, devidosDeTatica, grausDeTatica, progresso, minutos, conquistado, ratingTatica, puzzles, gruposDaTurma] =
     await Promise.all([
       lerIndice(),
       progressoDoRepertorio(perfil.id),
@@ -80,6 +82,7 @@ export default async function Perfil() {
       nivelConquistado(perfil.id),
       ratingDoAluno(perfil.id),
       puzzlesDoAluno(perfil.id),
+      perfil.papel === "aluno" ? turmaVisivel(perfil) : Promise.resolve([]),
     ]);
 
   const nivel = nivelDoAluno(conquistado);
@@ -135,6 +138,8 @@ export default async function Perfil() {
   ].filter(Boolean);
 
   const recordeDoRating = ratingTatica && ratingTatica.resolvidos > 0 ? Math.round(ratingTatica.ratingMaximo) : null;
+  const naTurma = gruposDaTurma.flatMap((grupo) => grupo.colegas).find((colega) => colega.id === perfil.id);
+  const acertoGeral = naTurma ? percentualDeAcerto(naTurma.atividade) : null;
 
   return (
     <>
@@ -187,6 +192,41 @@ export default async function Perfil() {
           </div>
         </dl>
 
+        {perfil.papel === "aluno" ? <section aria-labelledby="minha-atividade" className="flex flex-col gap-3">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 id="minha-atividade" className="rotulo text-tinta-fraca">Minha atividade</h2>
+            <Link href="/turma" className="foco text-xs font-medium text-metodo-tinta hover:underline">Ver a equipe →</Link>
+          </div>
+          <dl className="cartao grid overflow-hidden sm:grid-cols-3 sm:divide-x sm:divide-borda-fraca">
+            <div className="border-b border-borda-fraca bg-metodo-superficie/10 px-4 py-4 sm:border-b-0">
+              <dt className="text-xs font-medium text-tinta-fraca">Estudo</dt>
+              <dd className="mt-1 text-2xl font-semibold text-metodo-tinta tabular-nums">
+                {formatarTempoEstudo(naTurma?.atividade.tempoMs ?? 0)}
+              </dd>
+              <p className="mt-1 text-xs text-tinta-fraca tabular-nums">
+                Rating de tática {naTurma?.atividade.ratingTatica === null || naTurma?.atividade.ratingTatica === undefined ? "—" : Math.round(naTurma.atividade.ratingTatica)}
+              </p>
+            </div>
+            <div className="border-b border-borda-fraca px-4 py-4 sm:border-b-0">
+              <dt className="text-xs font-medium text-tinta-fraca">Puzzles</dt>
+              <dd className="mt-1 flex items-baseline gap-2 tabular-nums">
+                <span className="text-2xl font-semibold text-tinta">{naTurma?.atividade.puzzlesFeitos ?? 0}</span>
+                <span className="text-sm font-semibold text-metodo-tinta">{acertoGeral === null ? "—" : `${acertoGeral}%`}</span>
+              </dd>
+              <p className="mt-1 text-xs text-tinta-fraca tabular-nums">
+                {naTurma?.atividade.puzzlesCertos ?? 0} certos · {naTurma?.atividade.puzzlesErrados ?? 0} errados
+              </p>
+            </div>
+            <div className="px-4 py-4">
+              <dt className="text-xs font-medium text-tinta-fraca">Linhas de abertura</dt>
+              <dd className="mt-1 flex items-baseline gap-4 tabular-nums">
+                <ValorAtividade valor={naTurma?.atividade.linhasEstudadas ?? 0} rotulo="estudadas" />
+                <ValorAtividade valor={naTurma?.atividade.linhasDominadas ?? 0} rotulo="dominadas" destaque />
+              </dd>
+            </div>
+          </dl>
+        </section> : null}
+
         {novos.length > 0 ? (
           <AvisoDeSeloNovo selos={novos.map(({ id, familia, nome, conta }) => ({ id, familia, nome, conta }))} />
         ) : null}
@@ -219,5 +259,14 @@ export default async function Perfil() {
         </footer>
       </Moldura>
     </>
+  );
+}
+
+function ValorAtividade({ valor, rotulo, destaque = false }: { valor: number; rotulo: string; destaque?: boolean }) {
+  return (
+    <span className="flex items-baseline gap-1">
+      <strong className={`text-2xl font-semibold ${destaque ? "text-metodo-tinta" : "text-tinta"}`}>{valor}</strong>
+      <span className="text-xs text-tinta-fraca">{rotulo}</span>
+    </span>
   );
 }

@@ -47,8 +47,8 @@ export default async function Professor() {
   const abertas = aulasAbertas(aulasPublicadas(), aulasExtras());
   const comPratica = aulasComPratica();
   const [finais, niveis, ratings] = await Promise.all([finaisDaTurma(), niveisDaTurma(), ratingsDaTurma()]);
-  // Maior rating primeiro, e quem nunca jogou no fim. A ordem é do professor:
-  // o aluno não vê esta tabela, e não há ranking na tela dele.
+  // Maior rating primeiro, e quem nunca jogou no fim. Esta tabela continua sendo o diagnóstico
+  // semanal do professor; a lista pública da turma ordena somente por tempo estudado.
   const turmaNoRating = [...(alunos ?? [])].sort(
     (a, b) => (ratings.get(b.id)?.rating ?? -1) - (ratings.get(a.id)?.rating ?? -1) || a.nome.localeCompare(b.nome),
   );
